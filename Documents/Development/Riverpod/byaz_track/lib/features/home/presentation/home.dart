@@ -1,0 +1,99 @@
+// features/home/presentation/home.dart
+import 'package:byaz_track/core/constants/app_colors.dart';
+import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/dashboard/presentation/widgets/feature_card.dart';
+// import 'package:byaz_track/features/dashboard/presentation/widgets/square_feature_card.dart';
+import 'package:flutter/material.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Optional: Greeting or Title
+              Text(
+                'Welcome Back!',
+                style: context.text.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.neutral900,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'What would you like to do today?',
+                style: context.text.bodyLarge?.copyWith(
+                  color: AppColors.neutral600,
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              // 2x2 Grid of Square Cards
+              GridView.count(
+                crossAxisCount: 2,
+                shrinkWrap:
+                    true, // Important: makes GridView scrollable inside SingleChildScrollView
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 20,
+                crossAxisSpacing: 20,
+                childAspectRatio: 1.0, // Ensures perfect squares
+                children: [
+                  SquareFeatureCard(
+                    title: 'Dashboard\nSummary',
+                    icon: Icons.dashboard_outlined,
+                    onTap: () {},
+                  ),
+                  SquareFeatureCard(
+                    title: 'Dashboard\nSummary',
+                    icon: Icons.dashboard_outlined,
+                    onTap: () {},
+                  ),
+                  SquareFeatureCard(
+                    title: 'Dashboard\nSummary',
+                    icon: Icons.dashboard_outlined,
+                    onTap: () {},
+                  ),
+                  SquareFeatureCard(
+                    title: 'Dashboard\nSummary',
+                    icon: Icons.dashboard_outlined,
+                    onTap: () {},
+                  ),
+                  SquareFeatureCard(
+                    title: 'Transactions',
+                    icon: Icons.receipt_long_outlined,
+                    onTap: () {},
+                  ),
+                  SquareFeatureCard(
+                    title: 'Quick\nCalculate',
+                    icon: Icons.calculate_outlined,
+                    onTap: () {},
+                  ),
+                  SquareFeatureCard(
+                    title: 'My Profile',
+                    icon: Icons.person_outline,
+                    onTap: () {},
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 40),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
