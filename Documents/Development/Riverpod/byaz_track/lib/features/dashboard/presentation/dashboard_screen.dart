@@ -5,6 +5,7 @@ import 'package:byaz_track/features/calculator/presentation/calculator_screen.da
 import 'package:byaz_track/features/create/presentation/create_screen.dart';
 import 'package:byaz_track/features/home/presentation/home.dart';
 import 'package:byaz_track/features/profile/presentation/profile_screen.dart';
+import 'package:byaz_track/features/theme_example/theme_example_screen.dart';
 import 'package:byaz_track/features/transactions/presentation/transactions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,7 +52,8 @@ class _DashboardScreenState extends State<DashboardScreen>
       const HomeScreen(),
       const TransactionsScreen(),
       CreateScreen(),
-      ProfileScreen(),
+      // ProfileScreen(),
+      ThemeExampleScreen(),
       CalculatorScreen(),
     ];
   }
@@ -82,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   Widget _buildErrorScreen() {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -138,7 +140,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         key: _scaffoldKey,
         extendBody: true,
         body: IndexedStack(
@@ -190,6 +192,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       isActive
                           ? coloredImageList[index]
                           : unColoredImageList[index],
+                      color: color,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -225,10 +228,12 @@ class _DashboardScreenState extends State<DashboardScreen>
               ),
             );
           },
-          backgroundColor: AppColors.white,
+          backgroundColor:
+              Theme.of(context).bottomNavigationBarTheme.backgroundColor ??
+              Theme.of(context).cardColor,
           activeIndex: _isShowingDefaultPage ? _bottomNavIndex : -1,
-          splashColor: AppColors.white,
-          splashSpeedInMilliseconds: 300,
+          // splashColor: Theme.of(context).splashColor,
+          // splashSpeedInMilliseconds: 300,
           notchSmoothness: NotchSmoothness.smoothEdge,
           gapLocation: GapLocation.center,
           onTap: (index) => onItemTapped(index),

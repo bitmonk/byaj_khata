@@ -16,82 +16,84 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Optional: Greeting or Title
-              Text(
-                'Welcome Back!',
-                style: context.text.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.neutral900,
-                ),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(
+          20,
+        ).copyWith(top: context.devicePaddingTop),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Optional: Greeting or Title
+            Text(
+              'Welcome Back!',
+              style: context.text.headlineLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).textTheme.headlineLarge?.color,
               ),
-              const SizedBox(height: 8),
-              Text(
-                'What would you like to do today?',
-                style: context.text.bodyLarge?.copyWith(
-                  color: AppColors.neutral600,
-                ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'What would you like to do today?',
+              style: context.text.bodyLarge?.copyWith(
+                color: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
               ),
-              const SizedBox(height: 32),
+            ),
+            const SizedBox(height: 32),
 
-              // 2x2 Grid of Square Cards
-              GridView.count(
-                crossAxisCount: 2,
-                shrinkWrap:
-                    true, // Important: makes GridView scrollable inside SingleChildScrollView
-                physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                childAspectRatio: 1.0, // Ensures perfect squares
-                children: [
-                  SquareFeatureCard(
-                    title: 'Dashboard\nSummary',
-                    icon: Icons.dashboard_outlined,
-                    onTap: () {},
-                  ),
-                  SquareFeatureCard(
-                    title: 'Dashboard\nSummary',
-                    icon: Icons.dashboard_outlined,
-                    onTap: () {},
-                  ),
-                  SquareFeatureCard(
-                    title: 'Dashboard\nSummary',
-                    icon: Icons.dashboard_outlined,
-                    onTap: () {},
-                  ),
-                  SquareFeatureCard(
-                    title: 'Dashboard\nSummary',
-                    icon: Icons.dashboard_outlined,
-                    onTap: () {},
-                  ),
-                  SquareFeatureCard(
-                    title: 'Transactions',
-                    icon: Icons.receipt_long_outlined,
-                    onTap: () {},
-                  ),
-                  SquareFeatureCard(
-                    title: 'Quick\nCalculate',
-                    icon: Icons.calculate_outlined,
-                    onTap: () {},
-                  ),
-                  SquareFeatureCard(
-                    title: 'My Profile',
-                    icon: Icons.person_outline,
-                    onTap: () {},
-                  ),
-                ],
-              ),
+            // 2x2 Grid of Square Cards
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap:
+                  true, // Important: makes GridView scrollable inside SingleChildScrollView
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 20,
+              childAspectRatio: 1.0, // Ensures perfect squares
+              children: [
+                SquareFeatureCard(
+                  title: 'Dashboard\nSummary',
+                  icon: Icons.dashboard_outlined,
+                  onTap: () {},
+                ),
+                SquareFeatureCard(
+                  title: 'Dashboard\nSummary',
+                  icon: Icons.dashboard_outlined,
+                  onTap: () {},
+                ),
+                SquareFeatureCard(
+                  title: 'Dashboard\nSummary',
+                  icon: Icons.dashboard_outlined,
+                  onTap: () {},
+                ),
+                SquareFeatureCard(
+                  title: 'Dashboard\nSummary',
+                  icon: Icons.dashboard_outlined,
+                  onTap: () {},
+                ),
+                SquareFeatureCard(
+                  title: 'Transactions',
+                  icon: Icons.receipt_long_outlined,
+                  onTap: () {},
+                ),
+                SquareFeatureCard(
+                  title: 'Quick\nCalculate',
+                  icon: Icons.calculate_outlined,
+                  onTap: () {},
+                ),
+                SquareFeatureCard(
+                  title: 'My Profile',
+                  icon: Icons.person_outline,
+                  onTap: () {},
+                ),
+              ],
+            ),
 
-              const SizedBox(height: 40),
-            ],
-          ),
+            const SizedBox(height: 40),
+          ],
         ),
       ),
     );

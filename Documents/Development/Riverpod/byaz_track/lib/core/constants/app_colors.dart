@@ -1,10 +1,44 @@
 import 'package:byaz_track/core/extension/extensions.dart';
 
 class AppColors {
+  // Primary Accent (Trust Blue - matches screenshot active tab)
+  static const Color primary500 = Color(0xFF3B82F6); // Main blue
+  static const Color primary400 = Color(0xFF60A5FA); // Lighter hover/active
+  static const Color primary300 = Color(0xFF93BBFB);
+  static const Color primary600 = Color(0xFF2563EB); // Darker variant if needed
+
+  // Backgrounds
+  static const Color scaffoldBackground = Color(0xFFFFFFFF);
+  static const Color cardBackground = Color(0xFFFFFFFF);
+
+  // Text
+  static const Color textPrimary = Color(
+    0xFF1E293B,
+  ); // Dark slate for main text
+  static const Color textSecondary = Color(0xFF64748B); // Subtle gray
+
+  // Neutral / Inactive
+  static const Color neutral600 = Color(0xFF94A3B8); // Inactive icons & labels
+  static const Color neutral500 = Color(0xFF64748B);
+  static const Color neutral400 = Color(0xFFCBD5E1);
+  static const Color neutral300 = Color(0xFFE2E8F0);
+
+  // Dividers & Borders
+  static const Color dividerColor = Color(0xFFE2E8F0);
+
+  // Constants
+  static const Color white = Colors.white;
+  static const Color black = Colors.black;
+  static const Color transparent = Colors.transparent;
+
+  // Success, Error, etc. (keep your existing ones or update)
+  static const Color success500 = Color(0xFF10B981);
+  static const Color error500 = Color(0xFFEF4444);
+  static const Color warning500 = Color(0xFFF59E0B);
   static const Color primary800 = Color(0xFF40246B);
-  static const Color primary500 = Color(0xFF7641C2);
-  static const Color primary400 = Color(0xFF33A3FF);
-  static const Color primary300 = Color(0xFF66BAFF);
+  // static const Color primary500 = Color(0xFF7641C2);
+  // static const Color primary400 = Color(0xFF33A3FF);
+  // static const Color primary300 = Color(0xFF66BAFF);
   static const Color primary200 = Color(0xFFC0A8E3);
   static const Color primary100 = Color(0xFF3629B7);
   static const Color primary50 = Color(0xFFFBEBEA);
@@ -17,10 +51,10 @@ class AppColors {
   static const Color neutral900 = Color(0xFF0E2741);
   static const Color neutral800 = Color(0xff263D54);
   static const Color neutral700 = Color(0xff3E5267);
-  static const Color neutral600 = Color(0xFF56687A);
-  static const Color neutral500 = Color(0xff8793A0);
-  static const Color neutral400 = Color(0xFF9291A5);
-  static const Color neutral300 = Color(0xffB7BEC6);
+  // static const Color neutral600 = Color(0xFF56687A);
+  // static const Color neutral500 = Color(0xff8793A0);
+  // static const Color neutral400 = Color(0xFF9291A5);
+  // static const Color neutral300 = Color(0xffB7BEC6);
   static const Color neutral100 = Color(0xffCFD4D9);
   static const Color neutral50 = Color(0xffE7E9EC);
   static const Color neutral25 = Color(0xFFF8F8F8);
@@ -33,7 +67,7 @@ class AppColors {
   static const appYellow = Color(0xffdf2994a);
   static const textColor50 = Color(0xFFE6ECF1);
 
-  static const white = Colors.white;
+  // static const white = Colors.white;
   static const textColor100 = Color(0xFFD0D8DF);
   static const textColor200 = Color(0xFFC8CED3);
   static const textColor300 = Color(0xFFC1C9D1);
@@ -94,14 +128,14 @@ class AppColors {
   static const Color secondary50 = Color(0xFFEBEAFB);
   static const Color success700 = Color(0xFF027A48);
   static const Color success600 = Color(0xFF30AE6A);
-  static const Color success500 = Color(0xFF3CD984);
+  // static const Color success500 = Color(0xFF3CD984);
   static const Color success100 = Color(0xFFD8F7E6);
   static const Color eEAAFD = Color(0xFFEEAAFD);
   static const Color fDF4FF = Color(0xFFFDF4FF);
-  static const Color error500 = Color(0xFFF93642);
+  // static const Color error500 = Color(0xFFF93642);
   static const Color error200 = Color(0xFFFDAFB3);
   static const Color warning200 = Color(0xFFFDD9AF);
-  static const Color warning500 = Color(0xFFF99F36);
+  // static const Color warning500 = Color(0xFFF99F36);
   static const Color memoryPrimary = Color(0xFFD444F1);
   static const Color e6E6E6 = Color(0xFFE6E6E6);
   static const Color info500 = Color(0xFF225DCF);
@@ -111,7 +145,7 @@ class AppColors {
   static const Color explainerBackground = Color(0xFFFCF9FC);
   static const Color d9d9d9 = Color(0xFFD9D9D9);
   static const Color toggleInactiveTrack = Color(0xFFC8CFD4);
-  static const Color dividerColor = Color(0xFF575766);
+  // static const Color dividerColor = Color(0xFF575766);
 
   // static const Color appBlue = Color(0xFF154EBA);
 
@@ -120,12 +154,12 @@ class AppColors {
   static const Color textFieldGrey = Colors.grey;
   static const Color hintGrey = Color(0xFF6C6B76);
   static const Color lightContainerBackground = Color(0xFFF2F2F3);
-  static const Color transparent = Colors.transparent;
+  // static const Color transparent = Colors.transparent;
   static const Color borderContainerLightGrey = Color(0xFFDBE3E8);
   static const Color bottomScaffoldGradient = Color(0xFFF2F1F6);
 
   static const Color colorRed = Colors.red;
-  static const Color black = Colors.black;
+  // static const Color black = Colors.black;
 
   static const Color blueStart = Color(0xff051264);
   static const Color blueEnd = Color(0xff5C90F1);
@@ -164,42 +198,81 @@ class AppColors {
 
 // Dark Theme Colors
 class AppColorsDark {
+  // Primary Accent (Same blue for brand consistency)
+  static const Color primary500 = Color(0xFF3B82F6);
+  static const Color primary400 = Color(0xFF60A5FA);
+  static const Color primary300 = Color(0xFF93BBFB);
+
+  // Backgrounds
+  static const Color scaffoldBackground = Color(
+    0xFF0F172A,
+  ); // Deep slate blue-black
+  static const Color cardBackground = Color(0xFF1E293B); // Elevated surface
+  static const Color surfaceBackground = Color(0xFF1E293B);
+
+  // Text
+  static const Color textPrimary = Color(
+    0xFFF1F5F9,
+  ); // Light gray (almost white)
+  static const Color textSecondary = Color(0xFF94A3B8); // Muted gray
+
+  // Neutral / Inactive
+  static const Color neutral600 = Color(0xFF64748B); // Inactive icons
+  static const Color neutral500 = Color(0xFF475569);
+  static const Color neutral700 = Color(0xFF334155);
+
+  // Dividers & Borders
+  static const Color dividerColor = Color(0xFF334155);
+  static const Color borderColor = Color(0xFF334155);
+
+  // App Bar
+  static const Color appBarBackground = Color(0xFF0F172A);
+
+  // Constants
+  static const Color white = Colors.white;
+  static const Color black = Colors.black;
+  static const Color transparent = Colors.transparent;
+
+  // Success, Error, etc.
+  static const Color success500 = Color(0xFF10B981);
+  static const Color error500 = Color(0xFFEF4444);
+  static const Color warning500 = Color(0xFFF59E0B);
   // Primary colors for dark theme
   static const Color primary800 = Color(0xFF9D7FD6);
-  static const Color primary500 = Color(0xFF9D7FD6);
-  static const Color primary400 = Color(0xFF66BAFF);
-  static const Color primary300 = Color(0xFF8FCCFF);
+  // static const Color primary500 = Color(0xFF9D7FD6);
+  // static const Color primary400 = Color(0xFF66BAFF);
+  // static const Color primary300 = Color(0xFF8FCCFF);
   static const Color primary200 = Color(0xFFD4C4EC);
   static const Color primary100 = Color(0xFF6E5DD3);
 
   // Backgrounds
-  static const Color scaffoldBackground = Color(0xFF0A0E27);
-  static const Color cardBackground = Color(0xFF151A30);
-  static const Color surfaceBackground = Color(0xFF1E2538);
+  // static const Color scaffoldBackground = Color(0xFF0A0E27);
+  // static const Color cardBackground = Color(0xFF151A30);
+  // static const Color surfaceBackground = Color(0xFF1E2538);
 
   // Neutral colors for dark theme
   static const Color neutral900 = Color(0xFFE7E9EC);
   static const Color neutral800 = Color(0xFFCFD4D9);
-  static const Color neutral700 = Color(0xFFB7BEC6);
-  static const Color neutral600 = Color(0xFF9FA9B3);
-  static const Color neutral500 = Color(0xFF8793A0);
+  // static const Color neutral700 = Color(0xFFB7BEC6);
+  // static const Color neutral600 = Color(0xFF9FA9B3);
+  // static const Color neutral500 = Color(0xFF8793A0);
   static const Color neutral400 = Color(0xFF6E7A87);
   static const Color neutral300 = Color(0xFF56687A);
   static const Color neutral100 = Color(0xFF3E5267);
   static const Color neutral50 = Color(0xFF2A3A4D);
 
   // Text colors
-  static const Color textPrimary = Color(0xFFE7E9EC);
-  static const Color textSecondary = Color(0xFFB7BEC6);
+  // static const Color textPrimary = Color(0xFFE7E9EC);
+  // static const Color textSecondary = Color(0xFFB7BEC6);
   static const Color textTertiary = Color(0xFF8793A0);
   static const Color boldTextColor = Color(0xFFFFFFFF);
   static const Color titleColor = Color(0xFFE7E9EC);
   static const Color subTitle = Color(0xFF8F9AB0);
 
   // UI Elements
-  static const Color dividerColor = Color(0xFF2A3A4D);
-  static const Color borderColor = Color(0xFF2A4051);
-  static const Color appBarBackground = Color(0xFF0A0E27);
+  // static const Color dividerColor = Color(0xFF2A3A4D);
+  // static const Color borderColor = Color(0xFF2A4051);
+  // static const Color appBarBackground = Color(0xFF0A0E27);
 
   // Accent colors
   static const Color appGreen = Color(0xFF5BC67D);
@@ -209,15 +282,15 @@ class AppColorsDark {
   // Success colors
   static const Color success700 = Color(0xFF12B76A);
   static const Color success600 = Color(0xFF30AE6A);
-  static const Color success500 = Color(0xFF3CD984);
+  // static const Color success500 = Color(0xFF3CD984);
   static const Color success100 = Color(0xFF1A4D3A);
 
   // Error colors
-  static const Color error500 = Color(0xFFF93642);
+  // static const Color error500 = Color(0xFFF93642);
   static const Color error200 = Color(0xFF5A1F23);
 
   // Warning colors
-  static const Color warning500 = Color(0xFFF99F36);
+  // static const Color warning500 = Color(0xFFF99F36);
   static const Color warning200 = Color(0xFF5A3F1F);
 
   // Info colors
@@ -225,7 +298,7 @@ class AppColorsDark {
   static const Color info50 = Color(0xFF1A2845);
 
   // Constants
-  static const Color white = Colors.white;
-  static const Color black = Colors.black;
-  static const Color transparent = Colors.transparent;
+  // static const Color white = Colors.white;
+  // static const Color black = Colors.black;
+  // static const Color transparent = Colors.transparent;
 }
