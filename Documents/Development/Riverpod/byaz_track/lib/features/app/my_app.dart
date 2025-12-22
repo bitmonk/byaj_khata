@@ -2,6 +2,7 @@ import 'package:byaz_track/l10n/app_localizations.dart';
 import 'package:byaz_track/l10n/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/core/language/language_controller.dart';
 import 'package:byaz_track/core/theme/app_theme.dart';
 import 'package:byaz_track/core/theme/theme_controller.dart';
 
@@ -33,6 +34,8 @@ class _MyAppState extends State<MyApp> {
         builder: (context, child) {
           // Initialize theme controller
           final themeController = Get.put(ThemeController());
+          // Initialize language controller
+          final languageController = Get.put(LanguageController());
 
           return Obx(
             () => GetMaterialApp(
@@ -43,8 +46,9 @@ class _MyAppState extends State<MyApp> {
               themeMode: themeController.themeMode,
               getPages: AppRoutes.appPages,
               initialRoute: widget.initialRoute,
-              // localizationsDelegates: AppLocalizations.localizationsDelegates,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: L10n.all,
+              locale: languageController.locale,
               home: child,
               defaultTransition: Transition.fadeIn,
             ),

@@ -1,0 +1,19 @@
+{
+    "@@locale": "ne",
+    "language": "नेपाली",
+    "@language": {
+        "description": "नेपालीमा भाषाको नाम"
+    },
+    "helloWorld": "नमस्ते",
+    "@helloWorld": {
+        "description": "एक प्रोग्रामरको अभिवादन"
+    },
+    "multiLanguage": "बहुभाषा",
+    "@multiLanguage": {
+        "description": "एपको शीर्षक"
+    },
+    "selectLanguage": "भाषा छान्नुहोस्",
+    "@selectLanguage": {
+        "description": "भाषा चयन स्क्रिनको लागि शीर्षक"
+    }
+}

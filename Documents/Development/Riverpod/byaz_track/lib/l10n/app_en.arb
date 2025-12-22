@@ -1,0 +1,18 @@
+{
+    "language": "English",
+    "@language": {
+        "description": "Language name in English"
+    },
+    "helloWorld": "Hello World",
+    "@helloWorld": {
+        "description": "A programmer's greeting"
+    },
+    "multiLanguage": "Multi Language",
+    "@multiLanguage": {
+        "description": "App title"
+    },
+    "selectLanguage": "Select Language",
+    "@selectLanguage": {
+        "description": "Title for language selection screen"
+    }
+}
