@@ -6,13 +6,15 @@ class SquareFeatureCard extends StatelessWidget {
   const SquareFeatureCard({
     super.key,
     required this.title,
-    required this.icon,
+    this.icon,
     required this.onTap,
     this.backgroundColor,
+    this.amount,
   });
 
   final String title;
-  final IconData icon;
+  final String? amount;
+  final IconData? icon;
   final VoidCallback onTap;
   final Color? backgroundColor;
 
@@ -21,13 +23,23 @@ class SquareFeatureCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        elevation: 4,
+        elevation: 8,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        color: backgroundColor, // Remove fallback to let theme handle it
+        // color: AppColors.primary25, // Remove fallback to let theme handle it
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 48, color: Get.theme.colorScheme.primary),
+            // Icon(icon, size: 48, color: Get.theme.colorScheme.primary),
+            if (amount != null) Text('Rs', textAlign: TextAlign.left),
+            Text(
+              amount ?? '',
+              textAlign: TextAlign.center,
+              style: context.text.titleMedium?.copyWith(
+                fontSize: 45,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
             const SizedBox(height: 16),
             Text(
               title,

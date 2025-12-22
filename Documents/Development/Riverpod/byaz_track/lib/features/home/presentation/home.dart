@@ -20,8 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(
-          20,
-        ).copyWith(top: context.devicePaddingTop),
+          18,
+        ).copyWith(top: context.devicePaddingTop + 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
               ),
             ),
-            const SizedBox(height: 32),
+            // const SizedBox(height: 32),
 
             // 2x2 Grid of Square Cards
             GridView.count(
@@ -55,44 +55,33 @@ class _HomeScreenState extends State<HomeScreen> {
               childAspectRatio: 1.0, // Ensures perfect squares
               children: [
                 SquareFeatureCard(
-                  title: 'Dashboard\nSummary',
-                  icon: Icons.dashboard_outlined,
+                  title: 'Money Lent',
+                  amount: '31231',
+                  // icon: Icons.receipt_long_outlined,
                   onTap: () {},
                 ),
                 SquareFeatureCard(
-                  title: 'Dashboard\nSummary',
-                  icon: Icons.dashboard_outlined,
+                  title: 'To Receive',
+                  amount: '192631',
+                  // icon: Icons.calculate_outlined,
                   onTap: () {},
                 ),
                 SquareFeatureCard(
-                  title: 'Dashboard\nSummary',
-                  icon: Icons.dashboard_outlined,
+                  title: 'Total Borrowed',
+                  amount: '65778',
+                  // icon: Icons.calculate_outlined,
                   onTap: () {},
                 ),
                 SquareFeatureCard(
-                  title: 'Dashboard\nSummary',
-                  icon: Icons.dashboard_outlined,
-                  onTap: () {},
-                ),
-                SquareFeatureCard(
-                  title: 'Transactions',
-                  icon: Icons.receipt_long_outlined,
-                  onTap: () {},
-                ),
-                SquareFeatureCard(
-                  title: 'Quick\nCalculate',
-                  icon: Icons.calculate_outlined,
-                  onTap: () {},
-                ),
-                SquareFeatureCard(
-                  title: 'My Profile',
-                  icon: Icons.person_outline,
+                  title: 'Total Received',
+                  amount: '9892',
+                  // icon: Icons.calculate_outlined,
                   onTap: () {},
                 ),
               ],
             ),
 
-            const SizedBox(height: 40),
+            // const SizedBox(height: 40),
           ],
         ),
       ),

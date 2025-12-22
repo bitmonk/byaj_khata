@@ -8,7 +8,7 @@ class AppColors {
   static const Color primary600 = Color(0xFF2563EB); // Darker variant if needed
 
   // Backgrounds
-  static const Color scaffoldBackground = Color(0xFFFFFFFF);
+  static const Color scaffoldBackground = Color(0xFFfdfdfe);
   static const Color cardBackground = Color(0xFFFFFFFF);
 
   // Text
@@ -40,7 +40,7 @@ class AppColors {
   // static const Color primary400 = Color(0xFF33A3FF);
   // static const Color primary300 = Color(0xFF66BAFF);
   static const Color primary200 = Color(0xFFC0A8E3);
-  static const Color primary100 = Color(0xFF3629B7);
+  static const Color primary100 = Color(0xFFFFFFFF);
   static const Color primary50 = Color(0xFFFBEBEA);
   static const Color primary25 = Color(0xFFF3FBFB);
   static const Color foundation100 = Color(0xFFD4C4EC);

@@ -8,7 +8,7 @@ class AppTheme {
     useMaterial3: true,
     fontFamily: FontFamily.inter,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: AppColors.scaffoldBackground,
+    scaffoldBackgroundColor: AppColors.scaffoldBackground.withAlpha(200),
     textTheme: AppTextStyle.lightTextTheme.apply(
       bodyColor: AppColors.textPrimary,
       displayColor: AppColors.textPrimary,
