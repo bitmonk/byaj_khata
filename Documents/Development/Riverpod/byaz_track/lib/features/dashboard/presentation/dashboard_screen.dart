@@ -5,7 +5,7 @@ import 'package:byaz_track/features/calculator/presentation/calculator_screen.da
 import 'package:byaz_track/features/create/presentation/create_screen.dart';
 import 'package:byaz_track/features/home/presentation/home.dart';
 import 'package:byaz_track/features/profile/presentation/profile_screen.dart';
-import 'package:byaz_track/features/theme_example/theme_example_screen.dart';
+import 'package:byaz_track/features/theme_example/theme_screen.dart';
 import 'package:byaz_track/features/transactions/presentation/transactions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,8 +52,8 @@ class _DashboardScreenState extends State<DashboardScreen>
       const HomeScreen(),
       const TransactionsScreen(),
       CreateScreen(),
-      // ProfileScreen(),
-      ThemeExampleScreen(),
+      ProfileScreen(),
+      // ThemeExampleScreen(),
       CalculatorScreen(),
     ];
   }
