@@ -130,7 +130,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         } else if (_bottomNavIndex != 0) {
           setState(() {
             _bottomNavIndex = 0;
-            _isShowingDefaultPage = true;
+            _isShowingDefaultPage = true;                                                          
             if (widget.customPages != null) {
               _pages = _defaultPages;
             }
@@ -160,12 +160,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                       }
                     });
                   },
-                  backgroundColor: AppColors.foundation500,
-                  shape: const CircleBorder(),
-                  child:
+                  backgroundColor:
                       _bottomNavIndex == 4
-                          ? Icon(Icons.add, color: AppColors.white)
-                          : Icon(Icons.add),
+                          ? AppColors.primary600
+                          : AppColors.neutral600,
+                  shape: const CircleBorder(),
+                  child: Icon(Icons.add, color: AppColors.white),
                 ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: AnimatedBottomNavigationBar.builder(
@@ -177,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           itemCount: coloredImageList.length,
           tabBuilder: (int index, bool isActive) {
             final color =
-                isActive ? AppColors.foundation500 : AppColors.neutral600;
+                isActive ? AppColors.primary600 : AppColors.neutral600;
 
             return Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -216,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                           decoration: BoxDecoration(
                             color:
                                 isActive
-                                    ? AppColors.foundation500
+                                    ? AppColors.primary600
                                     : Colors.transparent,
                             borderRadius: BorderRadius.circular(100),
                           ),

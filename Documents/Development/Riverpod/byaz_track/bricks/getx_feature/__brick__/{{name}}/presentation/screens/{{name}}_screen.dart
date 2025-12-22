@@ -1,4 +1,4 @@
-import 'package:empowered/core/extension/extensions.dart';
+import 'package:byaz_track/core/extension/extensions.dart';
 
 
 class {{name.pascalCase()}}Screen extends {{#isStateless}} StatelessWidget {{/isStateless}} {{^isStateless}} StatefulWidget {{/isStateless}}{
@@ -16,4 +16,3 @@ class _{{name.pascalCase()}}ScreenState extends State<{{name.pascalCase()}}Scree
     return Container();
   }
 }
-

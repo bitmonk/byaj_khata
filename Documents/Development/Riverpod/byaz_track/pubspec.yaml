@@ -100,6 +100,8 @@ dependencies:
   linkify: ^5.0.0
   font_awesome_flutter:
   get_storage: ^2.1.1
+  flutter_localizations:
+    sdk: flutter
   # fl_chart: ^0.68.0
 
 dev_dependencies:
@@ -124,6 +126,7 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+  generate: true
   uses-material-design: true
   assets:
     - assets/images/

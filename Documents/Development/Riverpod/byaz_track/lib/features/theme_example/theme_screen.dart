@@ -12,7 +12,15 @@ class ThemeScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Get.theme.cardColor,
-      appBar: AppBar(title: const Text('Appearance'), elevation: 0),
+      appBar: AppBar(
+        title: Text(
+          'Appearance',
+          style: Get.theme.textTheme.headlineLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

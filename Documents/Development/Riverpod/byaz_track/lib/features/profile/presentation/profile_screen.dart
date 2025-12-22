@@ -1,5 +1,6 @@
 import 'package:byaz_track/core/constants/app_colors.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/language_screen/presentation/screens/language_screen_screen.dart';
 import 'package:byaz_track/features/theme_example/theme_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -212,7 +213,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         _buildMenuItem(
           icon: Icons.text_fields_sharp,
           title: 'Language',
-          onTap: () {},
+          onTap: () => Get.to(() => const LanguageScreen()),
         ),
 
         _buildMenuItem(

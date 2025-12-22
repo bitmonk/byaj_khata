@@ -1,3 +1,5 @@
+import 'package:byaz_track/l10n/app_localizations.dart';
+import 'package:byaz_track/l10n/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/core/theme/app_theme.dart';
@@ -41,6 +43,8 @@ class _MyAppState extends State<MyApp> {
               themeMode: themeController.themeMode,
               getPages: AppRoutes.appPages,
               initialRoute: widget.initialRoute,
+              // localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: L10n.all,
               home: child,
               defaultTransition: Transition.fadeIn,
             ),
