@@ -19,4 +19,7 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get selectLanguage => 'भाषा छान्नुहोस्';
+
+  @override
+  String get currency => 'रु';
 }

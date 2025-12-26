@@ -42,14 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ).textTheme.bodyLarge?.color?.withValues(alpha: 0.7),
               ),
             ),
-            // const SizedBox(height: 32),
+            const SizedBox(height: 24),
 
             // 2x2 Grid of Square Cards
             GridView.count(
+              padding: EdgeInsets.zero,
               crossAxisCount: 2,
               shrinkWrap:
                   true, // Important: makes GridView scrollable inside SingleChildScrollView
-              physics: const NeverScrollableScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               mainAxisSpacing: 20,
               crossAxisSpacing: 20,
               childAspectRatio: 1.0, // Ensures perfect squares
@@ -73,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {},
                 ),
                 SquareFeatureCard(
-                  title: 'Total Received',
+                  title: 'Total Payable',
                   amount: '9892',
                   // icon: Icons.calculate_outlined,
                   onTap: () {},

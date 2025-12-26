@@ -3,13 +3,12 @@ import 'package:byaz_track/core/dio_provider/api_response.dart';
 import 'package:byaz_track/core/dio_provider/dio_api_client.dart';
 import 'package:dartz/dartz.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
-import 'package:get/get.dart';
 
-class LanguageScreenRemoteSource {
-  const LanguageScreenRemoteSource(this._client);
+class CreateScreenRemoteSource {
+  const CreateScreenRemoteSource(this._client);
   final DioApiClient _client;
 
-  Future<Either<AppError, ApiResponse<dynamic>>> fetchData({
+  Future<Either<AppError, ApiResponse<dynamic>>> createData({
     required int pageKey,
     String? searchQuery,
   }) async {

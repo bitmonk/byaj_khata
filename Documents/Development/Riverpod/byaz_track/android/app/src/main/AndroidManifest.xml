@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<uses-permission android:name="android.permission.READ_CONTACTS"/>
+<!-- Add WRITE if you plan to add/edit contacts later -->
+<uses-permission android:name="android.permission.WRITE_CONTACTS"/>
     <application
         android:label="byaz_track"
         android:name="${applicationName}"

@@ -121,6 +121,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select Language'**
   String get selectLanguage;
+
+  /// Currency symbol
+  ///
+  /// In en, this message translates to:
+  /// **'Rs'**
+  String get currency;
 }
 
 class _AppLocalizationsDelegate

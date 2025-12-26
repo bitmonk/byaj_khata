@@ -14,5 +14,10 @@
     "selectLanguage": "Select Language",
     "@selectLanguage": {
         "description": "Title for language selection screen"
+    },
+
+    "currency" : "Rs",
+    "@currency": {
+        "description": "Currency symbol"
     }
 }

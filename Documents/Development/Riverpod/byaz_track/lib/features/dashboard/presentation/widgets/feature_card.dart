@@ -1,5 +1,5 @@
-// features/dashboard/presentation/widgets/square_feature_card.dart
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class SquareFeatureCard extends StatelessWidget {
@@ -30,9 +30,13 @@ class SquareFeatureCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Icon(icon, size: 48, color: Get.theme.colorScheme.primary),
-            if (amount != null) Text('Rs', textAlign: TextAlign.left),
+            if (amount != null)
+              Text(
+                AppLocalizations.of(context)?.currency ?? 'Rs',
+                textAlign: TextAlign.left,
+              ),
             Text(
-              amount ?? '',
+              amount ?? '0',
               textAlign: TextAlign.center,
               style: context.text.titleMedium?.copyWith(
                 fontSize: 45,

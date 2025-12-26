@@ -2,7 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:byaz_track/core/constants/app_colors.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/calculator/presentation/calculator_screen.dart';
-import 'package:byaz_track/features/create/presentation/create_screen.dart';
+import 'package:byaz_track/features/create/presentation/screens/create_screen.dart';
 import 'package:byaz_track/features/home/presentation/home.dart';
 import 'package:byaz_track/features/profile/presentation/profile_screen.dart';
 import 'package:byaz_track/features/theme_example/theme_screen.dart';
@@ -10,6 +10,9 @@ import 'package:byaz_track/features/transactions/presentation/transactions_scree
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:byaz_track/features/create/presentation/controllers/create_screen_bindings.dart';
+import 'package:byaz_track/features/create/presentation/controllers/create_screen_controller.dart';
+import 'package:get/get.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key, this.initialIndex = 0, this.customPages});
@@ -51,10 +54,10 @@ class _DashboardScreenState extends State<DashboardScreen>
     _defaultPages = [
       const HomeScreen(),
       const TransactionsScreen(),
-      CreateScreen(),
+      CalculatorScreen(),
       ProfileScreen(),
       // ThemeExampleScreen(),
-      CalculatorScreen(),
+      CreateScreen(),
     ];
   }
 
@@ -74,6 +77,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
+    CreateScreenInitializer.initialize();
     _initializePages();
     if (widget.customPages != null) {
       _pages = widget.customPages!;
@@ -130,7 +134,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         } else if (_bottomNavIndex != 0) {
           setState(() {
             _bottomNavIndex = 0;
-            _isShowingDefaultPage = true;                                                          
+            _isShowingDefaultPage = true;
             if (widget.customPages != null) {
               _pages = _defaultPages;
             }
@@ -159,6 +163,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                         _pages = _defaultPages;
                       }
                     });
+                    Get.find<CreateScreenController>().loadContacts();
                   },
                   backgroundColor:
                       _bottomNavIndex == 4

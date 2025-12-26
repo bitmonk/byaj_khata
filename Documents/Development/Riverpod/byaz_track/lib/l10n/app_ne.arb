@@ -15,5 +15,9 @@
     "selectLanguage": "भाषा छान्नुहोस्",
     "@selectLanguage": {
         "description": "भाषा चयन स्क्रिनको लागि शीर्षक"
+    },
+    "currency" : "रु",
+    "@currency": {
+        "description": "रुपयाको नाम"
     }
 }
