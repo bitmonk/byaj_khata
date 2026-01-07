@@ -1,3 +1,4 @@
+import 'package:byaz_track/features/dashboard/presentation/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:byaz_track/features/create/presentation/controllers/create_screen_controller.dart';
@@ -81,17 +82,21 @@ class CreateScreen extends StatelessWidget {
                             ? Text(contact.phones.first.number)
                             : const Text('No phone number'),
                     onTap: () {
-                      // Return selected contact data to previous screen
-                      Get.back(
-                        result: {
-                          'name': contact.displayName,
-                          'phone':
-                              contact.phones.isNotEmpty
-                                  ? contact.phones.first.number
-                                  : '',
-                          'contactId': contact.id,
-                        },
-                      );
+                      print("contact");
+                      // Get.back(
+                      //   result: {
+                      //     'name': contact.displayName,
+                      //     'phone':
+                      //         contact.phones.isNotEmpty
+                      //             ? contact.phones.first.number
+                      //             : '',
+                      //     'contactId': contact.id,
+                      //   },
+                      // );
+                      print(contact.displayName);
+                      controller.selectedContact.value = contact;
+                      print(controller.selectedContact.value.displayName);
+                      Get.to(DashboardScreen(initialIndex: 2));
                     },
                   );
                 },

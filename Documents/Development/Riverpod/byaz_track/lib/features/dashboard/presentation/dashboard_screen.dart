@@ -25,7 +25,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen>
     with TickerProviderStateMixin {
-  var _bottomNavIndex = 0;
+  int _bottomNavIndex = 0;
   bool isScrollingDown = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<int> _navigationStack = [];
@@ -77,6 +77,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
+    _bottomNavIndex = widget.initialIndex;
     CreateScreenInitializer.initialize();
     _initializePages();
     if (widget.customPages != null) {

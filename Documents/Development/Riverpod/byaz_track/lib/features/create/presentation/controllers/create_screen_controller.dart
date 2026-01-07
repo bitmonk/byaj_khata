@@ -11,13 +11,16 @@ class CreateScreenController extends GetxController {
   var hasPermission = false.obs;
   var errorMessage = ''.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    loadContacts();
-  }
+  final selectedContact = Contact().obs;
+
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   // loadContacts();
+  // }
 
   Future<void> loadContacts() async {
+    print('fetched ok');
     try {
       isLoading(true);
 
@@ -38,6 +41,11 @@ class CreateScreenController extends GetxController {
         withPhoto: true,
         withThumbnail: true, // Smaller photo for list performance
       );
+
+      if (fetchedContacts.isEmpty) {
+        errorMessage('No contacts found');
+        return;
+      }
 
       // Sort by display name
       fetchedContacts.sort((a, b) => a.displayName.compareTo(b.displayName));
