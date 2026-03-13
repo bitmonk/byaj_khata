@@ -1,12 +1,13 @@
-import 'package:byaz_track/features/create/presentation/screens/create_screen.dart';
-import 'package:byaz_track/features/dashboard/presentation/dashboard_screen.dart';
+import 'package:byaz_track/features/dashboard/presentation/screens/dashboard_screen.dart';
+
+import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
-  static const String splash = '/';
-  static const String create = '/create';
+  static const String home = '/home';
+  static const String dashboard = '/dashboard';
   static List<GetPage<dynamic>>? appPages = [
-    GetPage(name: splash, page: () => const DashboardScreen()),
-    GetPage(name: create, page: () => CreateScreen()),
+    GetPage(name: home, page: () => const HomeScreen()),
+    GetPage(name: dashboard, page: () => const DashboardScreen()),
   ];
 }
