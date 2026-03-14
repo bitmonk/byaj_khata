@@ -1,6 +1,16 @@
 import 'package:byaz_track/core/extension/extensions.dart';
 
 class AppColors {
+  // New ByajTracker Colors
+  static const Color primary = Color(0xFF228B22);
+  static const Color background = Color(0xFFFEFEF8);
+  static const Color surface = Color(0xFFFEFEF8);
+  static const Color primaryText = Color(0xFF1A1C18);
+  static const Color secondaryText = Color(0xFF424940);
+  static const Color divider = Color(0xFFC4CCC0);
+  static const Color success = Color(0xFF228B22);
+  static const Color error = Color(0xFFBA1A1A);
+
   // Primary Accent (Trust Blue - matches screenshot active tab)
   static const Color primary500 = Color(0xFF3B82F6); // Main blue
   static const Color primary400 = Color(0xFF60A5FA); // Lighter hover/active
