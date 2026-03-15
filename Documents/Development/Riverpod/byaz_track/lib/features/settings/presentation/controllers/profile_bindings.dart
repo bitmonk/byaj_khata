@@ -1,6 +1,6 @@
-import 'package:get/get.dart';
 import 'package:byaz_track/features/profile/data/source/profile_remote_source.dart';
-import 'package:byaz_track/features/profile/presentation/controllers/profile_controller.dart';
+import 'package:get/get.dart';
+import 'package:byaz_track/features/settings/presentation/controllers/profile_controller.dart';
 
 class ProfileBindings extends Bindings {
   @override
