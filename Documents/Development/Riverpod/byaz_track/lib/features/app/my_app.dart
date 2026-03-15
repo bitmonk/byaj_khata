@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
             () => GetMaterialApp(
               // initialBinding: ProfileBindings(),
               debugShowCheckedModeBanner: false,
-              theme: AppTheme.appTheme(context),
+              theme: AppTheme.lightTheme(context),
               darkTheme: AppTheme.darkTheme(context),
               themeMode: themeController.themeMode,
               getPages: AppRoutes.appPages,

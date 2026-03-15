@@ -13,9 +13,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Home')),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
+      body: Padding(
+        padding: EdgeInsets.all(16.0).copyWith(top: context.devicePaddingTop),
         child: Column(
           children: [
             NetBalanceCard(),

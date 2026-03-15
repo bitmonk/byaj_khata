@@ -19,14 +19,19 @@ class SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isPositive ? AppColors.success : AppColors.error;
+    final colorScheme = Theme.of(context).colorScheme;
+    final color = isPositive ? AppColors.success : colorScheme.error;
 
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.onSurface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.divider.withOpacity(0.5)),
+        border: Border.all(
+          color:
+              Theme.of(context).dividerTheme.color?.withOpacity(0.5) ??
+              colorScheme.outlineVariant,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.02),
@@ -44,19 +49,16 @@ class SummaryCard extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: const TextStyle(
-                  color: AppColors.secondaryText,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
               ),
             ],
           ),
           const SizedBox(height: 16),
           Text(
             amount,
-            style: const TextStyle(
-              color: AppColors.primaryText,
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),

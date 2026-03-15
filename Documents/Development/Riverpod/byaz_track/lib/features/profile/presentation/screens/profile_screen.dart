@@ -13,8 +13,11 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final divider =
+        Theme.of(context).dividerTheme.color ?? colorScheme.outlineVariant;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colorScheme.surface,
 
       body: Padding(
         padding: EdgeInsets.only(top: context.devicePaddingTop),
@@ -46,8 +49,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           right: 0,
                           child: Container(
                             padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: AppColors.primary,
+                            decoration: BoxDecoration(
+                              color: colorScheme.primary,
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
@@ -65,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Rajesh Kumar',
+                            'Ryan Lama',
                             style: context.textTheme.headlineMedium?.copyWith(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -77,8 +80,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Container(
                                 width: 8,
                                 height: 8,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.primary,
+                                decoration: BoxDecoration(
+                                  color: colorScheme.primary,
                                   shape: BoxShape.circle,
                                 ),
                               ),
@@ -86,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Text(
                                 '9815921293',
                                 style: context.textTheme.bodyMedium?.copyWith(
-                                  color: AppColors.primary,
+                                  color: colorScheme.primary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -94,7 +97,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'rajesh.kumar@example.com',
+                            'ryanlama@gmail.com',
                             style: context.textTheme.bodyMedium,
                           ),
                         ],
@@ -111,51 +114,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     children: [
                       ProfileTileWidget(
-                        leadingIcon: Icons.money,
-                        title: 'Currency',
+                        leadingIcon: Icons.dark_mode,
+                        title: 'Theme',
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'NPR (रू)',
+                              Theme.of(context).brightness == Brightness.light
+                                  ? 'Light'
+                                  : 'Dark',
                               style: context.textTheme.bodyMedium,
                             ),
                             const SizedBox(width: 4),
-                            const Icon(
+                            Icon(
                               Icons.chevron_right,
-                              color: AppColors.secondaryText,
+                              color: context.textTheme.bodyMedium?.color,
                               size: 20,
                             ),
                           ],
                         ),
+                        onTap: () => Get.toNamed(AppRoutes.theme),
                       ),
-                      const Divider(
+                      Divider(
                         height: 1,
                         indent: 56,
                         endIndent: 16,
-                        color: AppColors.divider,
-                      ),
-                      ProfileTileWidget(
-                        leadingIcon: Icons.percent,
-                        title: 'Default Interest Type',
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Simple', style: context.textTheme.bodyMedium),
-                            const SizedBox(width: 4),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: AppColors.secondaryText,
-                              size: 20,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(
-                        height: 1,
-                        indent: 56,
-                        endIndent: 16,
-                        color: AppColors.divider,
+                        color: divider,
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.translate,
@@ -168,9 +152,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               style: context.textTheme.bodyMedium,
                             ),
                             const SizedBox(width: 4),
-                            const Icon(
+                            Icon(
                               Icons.chevron_right,
-                              color: AppColors.secondaryText,
+                              color: context.textTheme.bodyMedium?.color,
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                        onTap: () => Get.toNamed(AppRoutes.language),
+                      ),
+                      Divider(
+                        height: 1,
+                        indent: 56,
+                        endIndent: 16,
+                        color: divider,
+                      ),
+                      ProfileTileWidget(
+                        leadingIcon: Icons.percent,
+                        title: 'Default Interest Type',
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text('Simple', style: context.textTheme.bodyMedium),
+                            const SizedBox(width: 4),
+                            Icon(
+                              Icons.chevron_right,
+                              color: context.textTheme.bodyMedium?.color,
                               size: 20,
                             ),
                           ],
@@ -193,16 +200,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         trailing: Text(
                           '12% p.a.',
                           style: context.textTheme.bodyLarge?.copyWith(
-                            color: AppColors.primary,
+                            color: colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      const Divider(
+                      Divider(
                         height: 1,
                         indent: 56,
                         endIndent: 16,
-                        color: AppColors.divider,
+                        color: divider,
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.history,
@@ -212,11 +219,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           style: context.textTheme.bodyMedium,
                         ),
                       ),
-                      const Divider(
+                      Divider(
                         height: 1,
                         indent: 56,
                         endIndent: 16,
-                        color: AppColors.divider,
+                        color: divider,
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.calendar_month,
@@ -227,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             value: true,
                             onChanged: (val) {},
                             activeColor: Colors.white,
-                            activeTrackColor: AppColors.primary,
+                            activeTrackColor: colorScheme.primary,
                           ),
                         ),
                       ),
@@ -251,15 +258,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             value: true,
                             onChanged: (val) {},
                             activeColor: Colors.white,
-                            activeTrackColor: AppColors.primary,
+                            activeTrackColor: colorScheme.primary,
                           ),
                         ),
                       ),
-                      const Divider(
+                      Divider(
                         height: 1,
                         indent: 56,
                         endIndent: 16,
-                        color: AppColors.divider,
+                        color: divider,
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.fingerprint,
@@ -270,15 +277,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             value: false,
                             onChanged: (val) {},
                             inactiveThumbColor: Colors.white,
-                            inactiveTrackColor: AppColors.divider,
+                            inactiveTrackColor: divider,
                           ),
                         ),
                       ),
-                      const Divider(
+                      Divider(
                         height: 1,
                         indent: 56,
                         endIndent: 16,
-                        color: AppColors.divider,
+                        color: divider,
                       ),
                       const ProfileTileWidget(
                         leadingIcon: Icons.download_outlined,
@@ -299,24 +306,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     decoration: BoxDecoration(
-                      color: AppColors.error.withOpacity(0.05),
+                      color: colorScheme.error.withOpacity(0.05),
                       border: Border.all(
-                        color: AppColors.error.withOpacity(0.3),
+                        color: colorScheme.error.withOpacity(0.3),
                       ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.delete_outline,
-                          color: AppColors.error,
-                        ),
+                        Icon(Icons.delete_outline, color: colorScheme.error),
                         const SizedBox(width: 8),
                         Text(
                           'Reset All Data',
                           style: context.textTheme.bodyLarge?.copyWith(
-                            color: AppColors.error,
+                            color: colorScheme.error,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -334,7 +338,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.2),
+                          color: colorScheme.primary.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Padding(
@@ -346,7 +350,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Text(
                         'ByajTracker v2.4.1',
                         style: context.textTheme.labelLarge?.copyWith(
-                          color: AppColors.secondaryText,
+                          color: context.textTheme.bodyMedium?.color,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -372,8 +376,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       style: context.textTheme.labelLarge?.copyWith(
         color:
             isDanger
-                ? AppColors.error
-                : AppColors.secondaryText.withOpacity(0.7),
+                ? Theme.of(context).colorScheme.error
+                : Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.color?.withOpacity(0.7),
         fontWeight: FontWeight.bold,
         letterSpacing: 1.2,
       ),
@@ -383,9 +389,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildSectionContainer({required Widget child}) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.04),
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.04),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.primary.withOpacity(0.05)),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.08),
+        ),
       ),
       child: child,
     );

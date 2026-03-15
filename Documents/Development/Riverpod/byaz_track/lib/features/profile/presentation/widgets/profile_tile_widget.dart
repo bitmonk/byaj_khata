@@ -19,20 +19,24 @@ class ProfileTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
         child: Row(
           children: [
-            Icon(leadingIcon, color: iconColor ?? AppColors.primary, size: 24),
+            Icon(
+              leadingIcon,
+              color: iconColor ?? colorScheme.primary,
+              size: 24,
+            ),
             const HorizontalSpacing(16),
             Expanded(
               child: Text(
                 title,
                 style: context.textTheme.bodyLarge?.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: AppColors.primaryText,
                 ),
               ),
             ),

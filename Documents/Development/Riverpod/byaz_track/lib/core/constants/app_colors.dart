@@ -3,7 +3,7 @@ import 'package:byaz_track/core/extension/extensions.dart';
 class AppColors {
   // New ByajTracker Colors
   static const Color primary = Color(0xFF228B22);
-  static const Color background = Color(0xFFFEFEF8);
+  static const Color background = Color(0xFFF6F8F6);
   static const Color surface = Color(0xFFFEFEF8);
   static const Color primaryText = Color(0xFF1A1C18);
   static const Color secondaryText = Color(0xFF424940);
@@ -208,35 +208,31 @@ class AppColors {
 
 // Dark Theme Colors
 class AppColorsDark {
-  // Primary Accent (Same blue for brand consistency)
-  static const Color primary500 = Color(0xFF3B82F6);
-  static const Color primary400 = Color(0xFF60A5FA);
-  static const Color primary300 = Color(0xFF93BBFB);
+  // Primary Accent (Green to match light theme branding)
+  static const Color primary500 = Color(0xFF4CAF50);
+  static const Color primary400 = Color(0xFF66BB6A);
+  static const Color primary300 = Color(0xFF81C784);
 
   // Backgrounds
-  static const Color scaffoldBackground = Color(
-    0xFF0F172A,
-  ); // Deep slate blue-black
-  static const Color cardBackground = Color(0xFF1E293B); // Elevated surface
-  static const Color surfaceBackground = Color(0xFF1E293B);
+  static const Color scaffoldBackground = Color(0xFF121212);
+  static const Color cardBackground = Color(0xFF1E1E1E);
+  static const Color surfaceBackground = Color(0xFF1E1E1E);
 
   // Text
-  static const Color textPrimary = Color(
-    0xFFF1F5F9,
-  ); // Light gray (almost white)
-  static const Color textSecondary = Color(0xFF94A3B8); // Muted gray
+  static const Color textPrimary = Color(0xFFE0E0E0);
+  static const Color textSecondary = Color(0xFF9E9E9E);
 
   // Neutral / Inactive
-  static const Color neutral600 = Color(0xFF64748B); // Inactive icons
-  static const Color neutral500 = Color(0xFF475569);
-  static const Color neutral700 = Color(0xFF334155);
+  static const Color neutral600 = Color(0xFF757575);
+  static const Color neutral500 = Color(0xFF616161);
+  static const Color neutral700 = Color(0xFF424242);
 
   // Dividers & Borders
-  static const Color dividerColor = Color(0xFF334155);
-  static const Color borderColor = Color(0xFF334155);
+  static const Color dividerColor = Color(0xFF2C2C2C);
+  static const Color borderColor = Color(0xFF2C2C2C);
 
   // App Bar
-  static const Color appBarBackground = Color(0xFF0F172A);
+  static const Color appBarBackground = Color(0xFF121212);
 
   // Constants
   static const Color white = Colors.white;

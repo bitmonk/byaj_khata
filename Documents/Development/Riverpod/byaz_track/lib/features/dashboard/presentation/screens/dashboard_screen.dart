@@ -110,7 +110,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         key: _scaffoldKey,
         extendBody: true,
         body: IndexedStack(
@@ -130,7 +130,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       }
                     });
                   },
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   shape: const CircleBorder(),
                   child: const Icon(Icons.add, color: Colors.white),
                 ),
@@ -144,7 +144,12 @@ class _DashboardScreenState extends State<DashboardScreen>
           itemCount: coloredImageList.length,
           tabBuilder: (int index, bool isActive) {
             final color =
-                isActive ? Theme.of(context).primaryColor : Colors.grey;
+                isActive
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.color?.withOpacity(0.5) ??
+                        Colors.grey;
 
             return Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -183,7 +188,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                           decoration: BoxDecoration(
                             color:
                                 isActive
-                                    ? Theme.of(context).primaryColor
+                                    ? Theme.of(context).colorScheme.primary
                                     : Colors.transparent,
                             borderRadius: BorderRadius.circular(100),
                           ),
@@ -195,12 +200,14 @@ class _DashboardScreenState extends State<DashboardScreen>
               ),
             );
           },
-          backgroundColor: Colors.white,
+          backgroundColor:
+              Theme.of(context).bottomNavigationBarTheme.backgroundColor ??
+              Theme.of(context).scaffoldBackgroundColor,
           activeIndex:
               _isShowingDefaultPage
                   ? (_bottomNavIndex == 4 ? -1 : _bottomNavIndex)
                   : -1,
-          splashColor: Colors.white,
+          splashColor: Theme.of(context).scaffoldBackgroundColor,
           splashSpeedInMilliseconds: 300,
           notchSmoothness: NotchSmoothness.smoothEdge,
           gapLocation: GapLocation.center,
