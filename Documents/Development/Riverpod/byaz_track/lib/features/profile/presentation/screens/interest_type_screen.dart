@@ -1,4 +1,5 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class InterestTypeScreen extends StatefulWidget {
@@ -11,30 +12,42 @@ class InterestTypeScreen extends StatefulWidget {
 class _InterestTypeScreenState extends State<InterestTypeScreen> {
   int _selectedIndex = 0;
 
-  final List<_InterestOption> _options = [
-    _InterestOption(
-      title: 'Rupee (per 100 / monthly)',
-      description:
-          'Common in informal lending. Calculate interest based on a fixed amount (e.g., ₹2) per ₹100 every month.',
-    ),
-    _InterestOption(
-      title: 'Percentage (%)',
-      description:
-          'Standard banking method. Calculate interest as an annual (APR) or monthly percentage rate on the principal.',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final List<_InterestOption> options = [
+      _InterestOption(
+        title: l10n?.rupeeMethodTitle ?? 'Rupee (per 100 / monthly)',
+        description:
+            l10n?.rupeeMethodDescription ??
+            'Common in informal lending. Calculate interest based on a fixed amount (e.g., Rs2) per Rs100 every month.',
+      ),
+      _InterestOption(
+        title: l10n?.percentageMethodTitle ?? 'Percentage (%)',
+        description:
+            l10n?.percentageMethodDescription ??
+            'Standard banking method. Calculate interest as an annual (APR) or monthly percentage rate on the principal.',
+      ),
+    ];
+
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
-        title: const Text(
-          'Interest Calculation',
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+        title: Text(
+          AppLocalizations.of(context)?.defaultInterestType ??
+              'Default Interest Type',
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            color: context.textTheme.headlineMedium?.color,
+          ),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.primaryText),
+          icon: Icon(
+            Icons.arrow_back,
+            color: context.textTheme.headlineMedium?.color,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         backgroundColor: Colors.transparent,
@@ -42,7 +55,7 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
         centerTitle: true,
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(color: AppColors.divider, height: 1),
+          child: Container(color: Theme.of(context).dividerColor, height: 1),
         ),
       ),
       body: Padding(
@@ -59,7 +72,8 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Default Method',
+                      AppLocalizations.of(context)?.defaultMethodHeader ??
+                          'Default Method',
                       style: context.textTheme.headlineMedium?.copyWith(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
@@ -67,15 +81,16 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Choose how you want to calculate interest across your ledgers by default.',
+                      AppLocalizations.of(context)?.defaultMethodDescription ??
+                          'Choose how you want to calculate interest across your ledgers by default.',
                       style: context.textTheme.bodyMedium?.copyWith(
-                        color: AppColors.secondaryText,
+                        color: context.textTheme.bodyMedium?.color,
                         height: 1.4,
                       ),
                     ),
                     const SizedBox(height: 24),
-                    ...List.generate(_options.length, (index) {
-                      final option = _options[index];
+                    ...List.generate(options.length, (index) {
+                      final option = options[index];
                       final isSelected = _selectedIndex == index;
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 16),
@@ -90,7 +105,7 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.05),
+                        color: colorScheme.primary.withOpacity(0.05),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -98,15 +113,16 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
                         children: [
                           Icon(
                             Icons.info_outline,
-                            color: AppColors.primary,
+                            color: colorScheme.primary,
                             size: 22,
                           ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              'This setting will be applied to all new loans. You can still override this calculation type for individual loans during creation.',
+                              l10n?.settingDisclaimer ??
+                                  'This setting will be applied to all new loans. You can still override this calculation type for individual loans during creation.',
                               style: context.textTheme.bodyMedium?.copyWith(
-                                color: AppColors.secondaryText,
+                                color: context.textTheme.bodyMedium?.color,
                                 height: 1.5,
                               ),
                             ),
@@ -129,10 +145,12 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
+                    backgroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
                     ),
@@ -142,7 +160,7 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  child: const Text('Save Preference'),
+                  child: Text(l10n?.savePreferenceButton ?? 'Save'),
                 ),
               ),
             ),
@@ -165,14 +183,15 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
         decoration: BoxDecoration(
           color:
               isSelected
-                  ? AppColors.primary.withOpacity(0.04)
-                  : AppColors.background,
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.04)
+                  : Theme.of(context).cardTheme.color ??
+                      Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color:
                 isSelected
-                    ? AppColors.primary
-                    : AppColors.divider.withOpacity(0.6),
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).dividerColor.withOpacity(0.6),
             width: isSelected ? 2 : 1.5,
           ),
         ),
@@ -188,14 +207,17 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
                     style: context.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w700,
                       fontSize: 16,
-                      color: AppColors.primaryText,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     option.description,
                     style: context.textTheme.bodyMedium?.copyWith(
-                      color: AppColors.secondaryText,
+                      color:
+                          isSelected
+                              ? Theme.of(context).colorScheme.primary
+                              : context.textTheme.bodyMedium?.color,
                       height: 1.5,
                     ),
                   ),
@@ -209,7 +231,10 @@ class _InterestTypeScreenState extends State<InterestTypeScreen> {
                 isSelected
                     ? Icons.radio_button_checked
                     : Icons.radio_button_off,
-                color: isSelected ? AppColors.primary : AppColors.divider,
+                color:
+                    isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).dividerColor,
                 size: 24,
               ),
             ),

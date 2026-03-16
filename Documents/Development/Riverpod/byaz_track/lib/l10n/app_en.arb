@@ -23,5 +23,17 @@
     "choosePreferredLanguage": "Choose your preferred language",
     "pickLanguageDescription": "Pick the language you want to use in ByajTracker",
     "continueButton": "Continue",
-    "theme": "Theme"
+    "theme": "Theme",
+
+
+    "defaultInterestType": "Default Interest Type",
+    "defaultMethodHeader": "Default Method",
+    "defaultMethodDescription": "Choose how you want to calculate interest across your ledgers by default.",
+    "rupeeMethodTitle": "Rupee (per 100 / monthly)",
+    "rupeeMethodDescription": "Common in informal lending. Calculate interest based on a fixed amount (e.g., Rs2) per Rs100 every month.",
+    "percentageMethodTitle": "Percentage (%)",
+    "percentageMethodDescription": "Standard banking method. Calculate interest as an annual (APR) or monthly percentage rate on the principal.",
+    "settingDisclaimer": "This setting will be applied to all new loans. You can still override this calculation type for individual loans during creation.",
+    "savePreferenceButton": "Save"
+
 }

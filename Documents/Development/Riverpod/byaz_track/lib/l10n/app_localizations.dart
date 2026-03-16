@@ -151,6 +151,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Theme'**
   String get theme;
+
+  /// No description provided for @defaultInterestType.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Interest Type'**
+  String get defaultInterestType;
+
+  /// No description provided for @defaultMethodHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Method'**
+  String get defaultMethodHeader;
+
+  /// No description provided for @defaultMethodDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how you want to calculate interest across your ledgers by default.'**
+  String get defaultMethodDescription;
+
+  /// No description provided for @rupeeMethodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rupee (per 100 / monthly)'**
+  String get rupeeMethodTitle;
+
+  /// No description provided for @rupeeMethodDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Common in informal lending. Calculate interest based on a fixed amount (e.g., Rs2) per Rs100 every month.'**
+  String get rupeeMethodDescription;
+
+  /// No description provided for @percentageMethodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage (%)'**
+  String get percentageMethodTitle;
+
+  /// No description provided for @percentageMethodDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard banking method. Calculate interest as an annual (APR) or monthly percentage rate on the principal.'**
+  String get percentageMethodDescription;
+
+  /// No description provided for @settingDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This setting will be applied to all new loans. You can still override this calculation type for individual loans during creation.'**
+  String get settingDisclaimer;
+
+  /// No description provided for @savePreferenceButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get savePreferenceButton;
 }
 
 class _AppLocalizationsDelegate

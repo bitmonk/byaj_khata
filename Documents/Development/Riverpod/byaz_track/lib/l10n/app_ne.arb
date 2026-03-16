@@ -23,5 +23,16 @@
     "choosePreferredLanguage": "आफ्नो मनपर्ने भाषा चयन गर्नुहोस्",
     "pickLanguageDescription": "ByajTracker मा प्रयोग गर्न चाहनुभएको भाषा छान्नुहोस्",
     "continueButton": "जारी राख्नुहोस्",
-    "theme": "दिखावट"
+    "theme": "दिखावट",
+
+    "defaultInterestType": "पूर्वनिर्धारित ब्याज प्रकार",
+    "defaultMethodHeader": "पूर्वनिर्धारित विधि",
+    "defaultMethodDescription": "तपाईंको खातामा ब्याज गणना गर्ने तरिका छनोट गर्नुहोस्।",
+    "rupeeMethodTitle": "रुपैयाँ (प्रति १०० / मासिक)",
+    "rupeeMethodDescription": "अनौपचारिक ऋणमा प्रचलित। हरेक महिना प्रति १०० रुपैयाँको निश्चित रकम (जस्तै रु. २) का आधारमा ब्याज गणना गर्नुहोस्।",
+    "percentageMethodTitle": "प्रतिशत (%)",
+    "percentageMethodDescription": "बैंकिङ मानक विधि। साँवामा वार्षिक (APR) वा मासिक प्रतिशत दरको रूपमा ब्याज गणना गर्नुहोस्।",
+    "settingDisclaimer": "यो सेटिङ सबै नयाँ ऋणहरूमा लागू हुनेछ। तपाईंले ऋण सिर्जना गर्दा व्यक्तिगत ऋणका लागि यो गणना प्रकारलाई बदल्न सक्नुहुन्छ।",
+    "savePreferenceButton": "प्राथमिकता सेट गर्नुहोस्"
+
 }

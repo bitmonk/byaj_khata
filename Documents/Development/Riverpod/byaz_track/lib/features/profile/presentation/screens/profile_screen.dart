@@ -176,7 +176,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.percent,
-                        title: 'Default Interest Type',
+                        title:
+                            AppLocalizations.of(context)?.defaultInterestType ??
+                            'Default Interest Type',
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
