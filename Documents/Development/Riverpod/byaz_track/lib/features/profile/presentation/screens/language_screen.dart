@@ -1,5 +1,8 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/core/language/language_controller.dart';
+import 'package:byaz_track/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -12,9 +15,28 @@ class _LanguageScreenState extends State<LanguageScreen> {
   int _selectedIndex = 0;
 
   final List<_LanguageOption> _options = [
-    _LanguageOption(title: 'English', subtitle: 'Default language'),
-    _LanguageOption(title: 'Nepali (नेपाली)', subtitle: 'नेपाली भाषा'),
+    _LanguageOption(
+      title: 'English',
+      subtitle: 'Default language',
+      languageCode: 'en',
+    ),
+    _LanguageOption(
+      title: 'Nepali (नेपाली)',
+      subtitle: 'नेपाली भाषा',
+      languageCode: 'ne',
+    ),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize selected index based on current locale
+    final currentLocale = LanguageController.instance.locale.languageCode;
+    _selectedIndex = _options.indexWhere(
+      (option) => option.languageCode == currentLocale,
+    );
+    if (_selectedIndex == -1) _selectedIndex = 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +45,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
       backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(
-          'Select Language',
+          AppLocalizations.of(context)?.selectLanguage ?? 'Select Language',
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 18,
@@ -54,7 +76,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Choose your preferred\nlanguage',
+                    AppLocalizations.of(context)?.choosePreferredLanguage ??
+                        'Choose your preferred language',
                     style: context.textTheme.headlineMedium?.copyWith(
                       fontSize: 24,
                       fontWeight: FontWeight.w800,
@@ -62,7 +85,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Pick the language you want to use in ByajTracker',
+                    AppLocalizations.of(context)?.pickLanguageDescription ??
+                        'Pick the language you want to use in ByajTracker',
                     style: context.textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).textTheme.bodyMedium?.color,
                       height: 1.4,
@@ -77,39 +101,16 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       child: _buildLanguageCard(
                         option: option,
                         isSelected: isSelected,
-                        onTap: () => setState(() => _selectedIndex = index),
+                        onTap: () {
+                          setState(() => _selectedIndex = index);
+                          LanguageController.instance.setLanguage(
+                            option.languageCode,
+                          );
+                        },
                       ),
                     );
                   }),
                 ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-              24,
-              16,
-              24,
-              context.devicePaddingBottom + 24,
-            ),
-            child: SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: colorScheme.primary,
-                  foregroundColor: colorScheme.onPrimary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  elevation: 0,
-                  textStyle: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                child: const Text('Continue'),
               ),
             ),
           ),
@@ -192,6 +193,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
 class _LanguageOption {
   final String title;
   final String subtitle;
+  final String languageCode;
 
-  _LanguageOption({required this.title, required this.subtitle});
+  _LanguageOption({
+    required this.title,
+    required this.subtitle,
+    required this.languageCode,
+  });
 }

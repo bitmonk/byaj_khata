@@ -1,5 +1,5 @@
 {
-    "language": "English",
+    "language": "Language",
     "@language": {
         "description": "Language name in English"
     },
@@ -19,5 +19,9 @@
     "currency" : "Rs",
     "@currency": {
         "description": "Currency symbol"
-    }
+    },
+    "choosePreferredLanguage": "Choose your preferred language",
+    "pickLanguageDescription": "Pick the language you want to use in ByajTracker",
+    "continueButton": "Continue",
+    "theme": "Theme"
 }

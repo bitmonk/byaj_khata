@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// Language name in English
   ///
   /// In en, this message translates to:
-  /// **'English'**
+  /// **'Language'**
   String get language;
 
   /// A programmer's greeting
@@ -127,6 +127,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rs'**
   String get currency;
+
+  /// No description provided for @choosePreferredLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your preferred language'**
+  String get choosePreferredLanguage;
+
+  /// No description provided for @pickLanguageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the language you want to use in ByajTracker'**
+  String get pickLanguageDescription;
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
+  /// No description provided for @theme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get theme;
 }
 
 class _AppLocalizationsDelegate

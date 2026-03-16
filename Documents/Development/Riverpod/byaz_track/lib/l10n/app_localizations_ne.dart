@@ -9,7 +9,7 @@ class AppLocalizationsNe extends AppLocalizations {
   AppLocalizationsNe([String locale = 'ne']) : super(locale);
 
   @override
-  String get language => 'नेपाली';
+  String get language => 'भाषा';
 
   @override
   String get helloWorld => 'नमस्ते';
@@ -22,4 +22,17 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get currency => 'रु';
+
+  @override
+  String get choosePreferredLanguage => 'आफ्नो मनपर्ने भाषा चयन गर्नुहोस्';
+
+  @override
+  String get pickLanguageDescription =>
+      'ByajTracker मा प्रयोग गर्न चाहनुभएको भाषा छान्नुहोस्';
+
+  @override
+  String get continueButton => 'जारी राख्नुहोस्';
+
+  @override
+  String get theme => 'दिखावट';
 }

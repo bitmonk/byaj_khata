@@ -1,6 +1,6 @@
 {
     "@@locale": "ne",
-    "language": "नेपाली",
+    "language": "भाषा",
     "@language": {
         "description": "नेपालीमा भाषाको नाम"
     },
@@ -19,5 +19,9 @@
     "currency" : "रु",
     "@currency": {
         "description": "रुपयाको नाम"
-    }
+    },
+    "choosePreferredLanguage": "आफ्नो मनपर्ने भाषा चयन गर्नुहोस्",
+    "pickLanguageDescription": "ByajTracker मा प्रयोग गर्न चाहनुभएको भाषा छान्नुहोस्",
+    "continueButton": "जारी राख्नुहोस्",
+    "theme": "दिखावट"
 }

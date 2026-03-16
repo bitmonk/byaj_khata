@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get language => 'English';
+  String get language => 'Language';
 
   @override
   String get helloWorld => 'Hello World';
@@ -22,4 +22,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get currency => 'Rs';
+
+  @override
+  String get choosePreferredLanguage => 'Choose your preferred language';
+
+  @override
+  String get pickLanguageDescription =>
+      'Pick the language you want to use in ByajTracker';
+
+  @override
+  String get continueButton => 'Continue';
+
+  @override
+  String get theme => 'Theme';
 }

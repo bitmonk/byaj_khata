@@ -1,6 +1,8 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/core/language/language_controller.dart';
 import 'package:byaz_track/features/profile/presentation/widgets/profile_tile_widget.dart';
 import 'package:byaz_track/gen/assets.gen.dart';
+import 'package:byaz_track/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -115,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ProfileTileWidget(
                         leadingIcon: Icons.dark_mode,
-                        title: 'Theme',
+                        title: AppLocalizations.of(context)?.theme ?? 'Theme',
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -143,12 +145,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.translate,
-                        title: 'Language',
+                        title:
+                            AppLocalizations.of(context)?.language ??
+                            'Language',
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              'English',
+                              LanguageController.instance.locale.languageCode ==
+                                      'en'
+                                  ? 'English'
+                                  : 'नेपाली',
                               style: context.textTheme.bodyMedium,
                             ),
                             const SizedBox(width: 4),
@@ -182,6 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ],
                         ),
+                        onTap: () => Get.toNamed(AppRoutes.interestType),
                       ),
                     ],
                   ),
