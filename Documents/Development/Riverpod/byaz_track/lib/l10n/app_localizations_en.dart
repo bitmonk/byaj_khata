@@ -37,6 +37,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get theme => 'Theme';
 
   @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get system => 'System';
+
+  @override
+  String get colorMode => 'Color Mode';
+
+  @override
   String get defaultInterestType => 'Default Interest Type';
 
   @override
@@ -117,4 +129,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get resetAllData => 'Reset All Data';
+
+  @override
+  String get frequencyDescription =>
+      'Choose how often interest is calculated and added to the principal to be calculated again.';
+
+  @override
+  String get monthlyDescription =>
+      'Interest is added to the principal every month.';
+
+  @override
+  String get yearlyDescription =>
+      'Interest is added to the principal once a year.';
+
+  @override
+  String get frequencyDisclaimer =>
+      'This frequency will be used for compound interest calculations in all new ledgers.';
+
+  @override
+  String get defaultRateDescription =>
+      'Set the default interest rate that will be pre-filled when you create a new loan ledger.';
+
+  @override
+  String get defaultRateDisclaimer =>
+      'Changing this setting won\'t affect interest rates on your existing ledgers.';
 }

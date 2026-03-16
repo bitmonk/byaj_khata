@@ -165,9 +165,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       color:
                           isSelected
                               ? Theme.of(context).colorScheme.primary
-                              : Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withOpacity(0.7),
+                              : Theme.of(context).textTheme.bodyMedium?.color,
                       fontWeight:
                           isSelected ? FontWeight.w600 : FontWeight.normal,
                     ),

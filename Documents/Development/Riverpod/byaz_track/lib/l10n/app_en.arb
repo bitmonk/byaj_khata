@@ -23,6 +23,10 @@
     "pickLanguageDescription": "Pick the language you want to use in ByajTracker",
     "continueButton": "Continue",
     "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "colorMode": "Color Mode",
     "defaultInterestType": "Default Interest Type",
     "defaultMethodHeader": "Default Method",
     "defaultMethodDescription": "Choose how you want to calculate interest across your ledgers by default.",
@@ -48,5 +52,11 @@
     "biometricLock": "Biometric Lock",
     "exportData": "Export Data",
     "dangerZone": "Danger Zone",
-    "resetAllData": "Reset All Data"
+    "resetAllData": "Reset All Data",
+    "frequencyDescription": "Choose how often interest is calculated and added to the principal to be calculated again.",
+    "monthlyDescription": "Interest is added to the principal every month.",
+    "yearlyDescription": "Interest is added to the principal once a year.",
+    "frequencyDisclaimer": "This frequency will be used for compound interest calculations in all new ledgers.",
+    "defaultRateDescription": "Set the default interest rate that will be pre-filled when you create a new loan ledger.",
+    "defaultRateDisclaimer": "Changing this setting won't affect interest rates on your existing ledgers."
 }

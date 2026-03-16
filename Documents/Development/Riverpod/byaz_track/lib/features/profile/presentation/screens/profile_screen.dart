@@ -128,8 +128,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             Text(
                               Theme.of(context).brightness == Brightness.light
-                                  ? 'Light'
-                                  : 'Dark',
+                                  ? AppLocalizations.of(context)?.light ??
+                                      'Light'
+                                  : AppLocalizations.of(context)?.dark ??
+                                      'Dark',
                               style: context.textTheme.bodyMedium,
                             ),
                             const SizedBox(width: 4),
@@ -225,6 +227,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        onTap: () => Get.toNamed(AppRoutes.defaultRate),
                       ),
 
                       Divider(
@@ -242,6 +245,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           AppLocalizations.of(context)?.monthly ?? 'Monthly',
                           style: context.textTheme.bodyMedium,
                         ),
+                        onTap: () => Get.toNamed(AppRoutes.compoundFrequency),
                       ),
                       Divider(
                         height: 1,

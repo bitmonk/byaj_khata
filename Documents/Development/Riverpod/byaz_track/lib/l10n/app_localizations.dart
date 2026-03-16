@@ -152,6 +152,30 @@ abstract class AppLocalizations {
   /// **'Theme'**
   String get theme;
 
+  /// No description provided for @light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get light;
+
+  /// No description provided for @dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
+
+  /// No description provided for @system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get system;
+
+  /// No description provided for @colorMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Mode'**
+  String get colorMode;
+
   /// No description provided for @defaultInterestType.
   ///
   /// In en, this message translates to:
@@ -307,6 +331,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reset All Data'**
   String get resetAllData;
+
+  /// No description provided for @frequencyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose how often interest is calculated and added to the principal to be calculated again.'**
+  String get frequencyDescription;
+
+  /// No description provided for @monthlyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest is added to the principal every month.'**
+  String get monthlyDescription;
+
+  /// No description provided for @yearlyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Interest is added to the principal once a year.'**
+  String get yearlyDescription;
+
+  /// No description provided for @frequencyDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'This frequency will be used for compound interest calculations in all new ledgers.'**
+  String get frequencyDisclaimer;
+
+  /// No description provided for @defaultRateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Set the default interest rate that will be pre-filled when you create a new loan ledger.'**
+  String get defaultRateDescription;
+
+  /// No description provided for @defaultRateDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing this setting won\'t affect interest rates on your existing ledgers.'**
+  String get defaultRateDisclaimer;
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,7 @@
 import 'package:byaz_track/core/constants/app_colors.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/core/theme/theme_controller.dart';
+import 'package:byaz_track/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class ThemeScreen extends StatefulWidget {
@@ -14,19 +15,19 @@ class _ThemeScreenState extends State<ThemeScreen> {
   final ThemeController _themeController = ThemeController.instance;
   int _selectedAccent = 0;
 
-  final List<_ThemeModeOption> _modes = [
+  List<_ThemeModeOption> get _modes => [
     _ThemeModeOption(
-      title: 'Light',
+      title: AppLocalizations.of(context)?.light ?? 'Light',
       icon: Icons.wb_sunny_outlined,
       mode: ThemeMode.light,
     ),
     _ThemeModeOption(
-      title: 'Dark',
+      title: AppLocalizations.of(context)?.dark ?? 'Dark',
       icon: Icons.nightlight_round,
       mode: ThemeMode.dark,
     ),
     _ThemeModeOption(
-      title: 'System Default',
+      title: AppLocalizations.of(context)?.system ?? 'System Default',
       icon: Icons.brightness_auto,
       mode: ThemeMode.system,
     ),
@@ -50,7 +51,7 @@ class _ThemeScreenState extends State<ThemeScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          'Appearance',
+          AppLocalizations.of(context)?.theme ?? 'Theme',
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 18,
@@ -84,11 +85,11 @@ class _ThemeScreenState extends State<ThemeScreen> {
           children: [
             // COLOR MODE
             Text(
-              'COLOR MODE',
+              AppLocalizations.of(context)?.colorMode ?? 'Color Mode',
               style: context.textTheme.labelLarge?.copyWith(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
+                // letterSpacing: 1.2,
               ),
             ),
             const SizedBox(height: 16),

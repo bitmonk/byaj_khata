@@ -37,6 +37,18 @@ class AppLocalizationsNe extends AppLocalizations {
   String get theme => 'दिखावट';
 
   @override
+  String get light => 'उज्यालो';
+
+  @override
+  String get dark => 'अँध्यारो';
+
+  @override
+  String get system => 'प्रणाली';
+
+  @override
+  String get colorMode => 'कलर मोड';
+
+  @override
   String get defaultInterestType => 'पूर्वनिर्धारित ब्याज प्रकार';
 
   @override
@@ -117,4 +129,25 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get resetAllData => 'सबै डाटा रिसेट';
+
+  @override
+  String get frequencyDescription =>
+      'ब्याज गणना र साँवामा थपिने प्रक्रिया कति पटक हुनेछ छान्नुहोस्।';
+
+  @override
+  String get monthlyDescription => 'ब्याज हरेक महिना साँवामा थपिन्छ।';
+
+  @override
+  String get yearlyDescription => 'ब्याज हरेक वर्ष साँवामा थपिन्छ।';
+
+  @override
+  String get frequencyDisclaimer => 'यो अन्तराल सबै नयाँ ऋणहरूमा लागू हुनेछ।';
+
+  @override
+  String get defaultRateDescription =>
+      'नयाँ ऋण खाता सिर्जना गर्दा प्रयोग गरिने पूर्वनिर्धारित ब्याज दर सेट गर्नुहोस्।';
+
+  @override
+  String get defaultRateDisclaimer =>
+      'यो सेटिङ परिवर्तन गर्दा तपाईंका पुराना खाताहरूको ब्याज दरमा कुनै असर पर्ने छैन।';
 }

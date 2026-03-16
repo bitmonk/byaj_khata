@@ -24,6 +24,10 @@
     "pickLanguageDescription": "ByajTracker मा प्रयोग गर्न चाहनुभएको भाषा छान्नुहोस्",
     "continueButton": "जारी राख्नुहोस्",
     "theme": "दिखावट",
+    "light": "उज्यालो",
+    "dark": "अँध्यारो",
+    "system": "प्रणाली",
+    "colorMode": "कलर मोड",
     "defaultInterestType": "पूर्वनिर्धारित ब्याज प्रकार",
     "defaultMethodHeader": "पूर्वनिर्धारित विधि",
     "defaultMethodDescription": "तपाईंको खातामा ब्याज गणना गर्ने तरिका छनोट गर्नुहोस्।",
@@ -49,5 +53,11 @@
     "biometricLock": "बायोमेट्रिक लक",
     "exportData": "डाटा निर्यात",
     "dangerZone": "खतरनाक क्षेत्र",
-    "resetAllData": "सबै डाटा रिसेट"
+    "resetAllData": "सबै डाटा रिसेट",
+    "frequencyDescription": "ब्याज गणना र साँवामा थपिने प्रक्रिया कति पटक हुनेछ छान्नुहोस्।",
+    "monthlyDescription": "ब्याज हरेक महिना साँवामा थपिन्छ।",
+    "yearlyDescription": "ब्याज हरेक वर्ष साँवामा थपिन्छ।",
+    "frequencyDisclaimer": "यो अन्तराल सबै नयाँ ऋणहरूमा लागू हुनेछ।",
+    "defaultRateDescription": "नयाँ ऋण खाता सिर्जना गर्दा प्रयोग गरिने पूर्वनिर्धारित ब्याज दर सेट गर्नुहोस्।",
+    "defaultRateDisclaimer": "यो सेटिङ परिवर्तन गर्दा तपाईंका पुराना खाताहरूको ब्याज दरमा कुनै असर पर्ने छैन।"
 }

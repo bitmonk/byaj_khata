@@ -4,6 +4,8 @@ import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/interest_type_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/language_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/theme_screen.dart';
+import 'package:byaz_track/features/profile/presentation/screens/compound_frequency_screen.dart';
+import 'package:byaz_track/features/profile/presentation/screens/default_rate_screen.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
@@ -12,6 +14,8 @@ class AppRoutes {
   static const String theme = '/theme';
   static const String language = '/language';
   static const String interestType = '/interestType';
+  static const String compoundFrequency = '/compoundFrequency';
+  static const String defaultRate = '/defaultRate';
 
   static List<GetPage<dynamic>>? appPages = [
     GetPage(name: home, page: () => const HomeScreen()),
@@ -19,5 +23,10 @@ class AppRoutes {
     GetPage(name: theme, page: () => const ThemeScreen()),
     GetPage(name: language, page: () => const LanguageScreen()),
     GetPage(name: interestType, page: () => const InterestTypeScreen()),
+    GetPage(
+      name: compoundFrequency,
+      page: () => const CompoundFrequencyScreen(),
+    ),
+    GetPage(name: defaultRate, page: () => const DefaultRateScreen()),
   ];
 }
