@@ -15,8 +15,7 @@
     "@selectLanguage": {
         "description": "Title for language selection screen"
     },
-
-    "currency" : "Rs",
+    "currency": "Rs",
     "@currency": {
         "description": "Currency symbol"
     },
@@ -24,8 +23,6 @@
     "pickLanguageDescription": "Pick the language you want to use in ByajTracker",
     "continueButton": "Continue",
     "theme": "Theme",
-
-
     "defaultInterestType": "Default Interest Type",
     "defaultMethodHeader": "Default Method",
     "defaultMethodDescription": "Choose how you want to calculate interest across your ledgers by default.",
@@ -34,6 +31,22 @@
     "percentageMethodTitle": "Percentage (%)",
     "percentageMethodDescription": "Standard banking method. Calculate interest as an annual (APR) or monthly percentage rate on the principal.",
     "settingDisclaimer": "This setting will be applied to all new loans. You can still override this calculation type for individual loans during creation.",
-    "savePreferenceButton": "Save"
-
+    "savePreferenceButton": "Save",
+    "preferences": "PREFERENCES",
+    "calculationDefaults": "Calculation Defaults",
+    "defaultRate": "Default Rate",
+    "perAnnum": "p.a",
+    "compoundFrequency": "Compound Frequency",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "custom": "Custom",
+    "nepaliCalendar": "Nepali Calendar",
+    "bS": "B.S",
+    "aD": "A.D",
+    "dataAndSecurity": "Data & Security",
+    "autoBackup": "Auto Backup",
+    "biometricLock": "Biometric Lock",
+    "exportData": "Export Data",
+    "dangerZone": "Danger Zone",
+    "resetAllData": "Reset All Data"
 }

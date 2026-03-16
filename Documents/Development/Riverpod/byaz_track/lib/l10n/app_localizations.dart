@@ -205,6 +205,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get savePreferenceButton;
+
+  /// No description provided for @preferences.
+  ///
+  /// In en, this message translates to:
+  /// **'PREFERENCES'**
+  String get preferences;
+
+  /// No description provided for @calculationDefaults.
+  ///
+  /// In en, this message translates to:
+  /// **'Calculation Defaults'**
+  String get calculationDefaults;
+
+  /// No description provided for @defaultRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Default Rate'**
+  String get defaultRate;
+
+  /// No description provided for @perAnnum.
+  ///
+  /// In en, this message translates to:
+  /// **'p.a'**
+  String get perAnnum;
+
+  /// No description provided for @compoundFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Compound Frequency'**
+  String get compoundFrequency;
+
+  /// No description provided for @monthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get monthly;
+
+  /// No description provided for @yearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get yearly;
+
+  /// No description provided for @custom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get custom;
+
+  /// No description provided for @nepaliCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Nepali Calendar'**
+  String get nepaliCalendar;
+
+  /// No description provided for @bS.
+  ///
+  /// In en, this message translates to:
+  /// **'B.S'**
+  String get bS;
+
+  /// No description provided for @aD.
+  ///
+  /// In en, this message translates to:
+  /// **'A.D'**
+  String get aD;
+
+  /// No description provided for @dataAndSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Data & Security'**
+  String get dataAndSecurity;
+
+  /// No description provided for @autoBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Backup'**
+  String get autoBackup;
+
+  /// No description provided for @biometricLock.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric Lock'**
+  String get biometricLock;
+
+  /// No description provided for @exportData.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Data'**
+  String get exportData;
+
+  /// No description provided for @dangerZone.
+  ///
+  /// In en, this message translates to:
+  /// **'Danger Zone'**
+  String get dangerZone;
+
+  /// No description provided for @resetAllData.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset All Data'**
+  String get resetAllData;
 }
 
 class _AppLocalizationsDelegate

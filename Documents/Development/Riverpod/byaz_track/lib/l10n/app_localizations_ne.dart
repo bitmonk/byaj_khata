@@ -66,4 +66,55 @@ class AppLocalizationsNe extends AppLocalizations {
 
   @override
   String get savePreferenceButton => 'प्राथमिकता सेट गर्नुहोस्';
+
+  @override
+  String get preferences => 'प्राथमिकता';
+
+  @override
+  String get calculationDefaults => 'हिसाब सम्बन्धी';
+
+  @override
+  String get defaultRate => 'निर्धारित ब्याज दर';
+
+  @override
+  String get perAnnum => 'वार्षिक';
+
+  @override
+  String get compoundFrequency => 'चक्रवृद्धि अन्तराल';
+
+  @override
+  String get monthly => 'मासिक';
+
+  @override
+  String get yearly => 'वार्षिक';
+
+  @override
+  String get custom => 'कस्टम';
+
+  @override
+  String get nepaliCalendar => 'विक्रम संवत';
+
+  @override
+  String get bS => 'वि.स';
+
+  @override
+  String get aD => 'इ.स';
+
+  @override
+  String get dataAndSecurity => 'डाटा र सुरक्षा';
+
+  @override
+  String get autoBackup => 'अटो ब्याकअप';
+
+  @override
+  String get biometricLock => 'बायोमेट्रिक लक';
+
+  @override
+  String get exportData => 'डाटा निर्यात';
+
+  @override
+  String get dangerZone => 'खतरनाक क्षेत्र';
+
+  @override
+  String get resetAllData => 'सबै डाटा रिसेट';
 }

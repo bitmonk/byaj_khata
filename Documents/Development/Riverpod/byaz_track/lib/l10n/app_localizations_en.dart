@@ -66,4 +66,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savePreferenceButton => 'Save';
+
+  @override
+  String get preferences => 'PREFERENCES';
+
+  @override
+  String get calculationDefaults => 'Calculation Defaults';
+
+  @override
+  String get defaultRate => 'Default Rate';
+
+  @override
+  String get perAnnum => 'p.a';
+
+  @override
+  String get compoundFrequency => 'Compound Frequency';
+
+  @override
+  String get monthly => 'Monthly';
+
+  @override
+  String get yearly => 'Yearly';
+
+  @override
+  String get custom => 'Custom';
+
+  @override
+  String get nepaliCalendar => 'Nepali Calendar';
+
+  @override
+  String get bS => 'B.S';
+
+  @override
+  String get aD => 'A.D';
+
+  @override
+  String get dataAndSecurity => 'Data & Security';
+
+  @override
+  String get autoBackup => 'Auto Backup';
+
+  @override
+  String get biometricLock => 'Biometric Lock';
+
+  @override
+  String get exportData => 'Export Data';
+
+  @override
+  String get dangerZone => 'Danger Zone';
+
+  @override
+  String get resetAllData => 'Reset All Data';
 }

@@ -24,6 +24,7 @@ export '../constants/app_font_size.dart';
 export '../constants/app_images.dart';
 export '../theme/text_theme.dart';
 export './date_extension.dart';
+export './number_extension.dart';
 
 extension ThemeContext on BuildContext {
   ThemeData get theme => Theme.of(this);
@@ -75,4 +76,23 @@ String formatString(String input) {
       .split('_')
       .map((word) => word[0].toUpperCase() + word.substring(1))
       .join(' ');
+}
+
+extension NepaliNumber on num {
+  String toNepali() {
+    return NumberFormat.decimalPattern('ne').format(this);
+  }
+}
+
+extension NepaliString on String {
+  String toNepali() {
+    const englishDigits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const nepaliDigits = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+
+    String result = this;
+    for (int i = 0; i < englishDigits.length; i++) {
+      result = result.replaceAll(englishDigits[i], nepaliDigits[i]);
+    }
+    return result;
+  }
 }

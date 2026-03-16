@@ -89,7 +89,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               const SizedBox(width: 6),
                               Text(
-                                '9815921293',
+                                LanguageController.instance.isNepali
+                                    ? '9815921293'.toNepali()
+                                    : '9815921293',
                                 style: context.textTheme.bodyMedium?.copyWith(
                                   color: colorScheme.primary,
                                   fontWeight: FontWeight.w600,
@@ -110,7 +112,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 48),
 
                 // PREFERENCES
-                _buildSectionHeader(context, 'PREFERENCES'),
+                _buildSectionHeader(
+                  context,
+                  AppLocalizations.of(context)?.preferences ?? 'PREFERENCES',
+                ),
                 const SizedBox(height: 16),
                 _buildSectionContainer(
                   child: Column(
@@ -199,22 +204,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 32),
 
                 // CALCULATION DEFAULTS
-                _buildSectionHeader(context, 'CALCULATION DEFAULTS'),
+                _buildSectionHeader(
+                  context,
+                  AppLocalizations.of(context)?.calculationDefaults ??
+                      'Calculation Defaults',
+                ),
                 const SizedBox(height: 16),
                 _buildSectionContainer(
                   child: Column(
                     children: [
                       ProfileTileWidget(
                         leadingIcon: Icons.trending_up,
-                        title: 'Default Rate',
+                        title:
+                            AppLocalizations.of(context)?.defaultRate ??
+                            'Default Rate',
                         trailing: Text(
-                          '12% p.a.',
+                          '${LanguageController.instance.isNepali ? (12).toNepali() : '12'}% ${AppLocalizations.of(context)?.perAnnum ?? 'p.a.'}',
                           style: context.textTheme.bodyLarge?.copyWith(
                             color: colorScheme.primary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
+
                       Divider(
                         height: 1,
                         indent: 56,
@@ -223,9 +235,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.history,
-                        title: 'Compound Frequency',
+                        title:
+                            AppLocalizations.of(context)?.compoundFrequency ??
+                            'Compound Frequency',
                         trailing: Text(
-                          'Monthly',
+                          AppLocalizations.of(context)?.monthly ?? 'Monthly',
                           style: context.textTheme.bodyMedium,
                         ),
                       ),
@@ -237,7 +251,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.calendar_month,
-                        title: 'Nepali Calendar (B.S.)',
+                        title:
+                            '${AppLocalizations.of(context)?.nepaliCalendar ?? 'Nepali Calendar'} (${AppLocalizations.of(context)?.bS ?? 'B.S.'})',
                         trailing: SizedBox(
                           height: 24,
                           child: Switch(
@@ -254,14 +269,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 32),
 
                 // DATA & SECURITY
-                _buildSectionHeader(context, 'DATA & SECURITY'),
+                _buildSectionHeader(
+                  context,
+                  AppLocalizations.of(context)?.dataAndSecurity ??
+                      'Data & Security',
+                ),
                 const SizedBox(height: 16),
                 _buildSectionContainer(
                   child: Column(
                     children: [
                       ProfileTileWidget(
                         leadingIcon: Icons.cloud_upload_outlined,
-                        title: 'Auto Backup',
+                        title:
+                            AppLocalizations.of(context)?.autoBackup ??
+                            'Auto Backup',
                         trailing: SizedBox(
                           height: 24,
                           child: Switch(
@@ -280,7 +301,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       ProfileTileWidget(
                         leadingIcon: Icons.fingerprint,
-                        title: 'Biometric Lock',
+                        title:
+                            AppLocalizations.of(context)?.biometricLock ??
+                            'Biometric Lock',
                         trailing: SizedBox(
                           height: 24,
                           child: Switch(
@@ -297,9 +320,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         endIndent: 16,
                         color: divider,
                       ),
-                      const ProfileTileWidget(
+                      ProfileTileWidget(
                         leadingIcon: Icons.download_outlined,
-                        title: 'Export Data (Excel/PDF)',
+                        title:
+                            '${AppLocalizations.of(context)?.exportData ?? 'Export Data'} (Excel/PDF)',
                       ),
                     ],
                   ),
@@ -307,7 +331,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 32),
 
                 // DANGER ZONE
-                _buildSectionHeader(context, 'DANGER ZONE', isDanger: true),
+                _buildSectionHeader(
+                  context,
+                  AppLocalizations.of(context)?.dangerZone ?? 'Danger Zone',
+                  isDanger: true,
+                ),
                 const SizedBox(height: 16),
                 InkWell(
                   onTap: () {},
@@ -328,7 +356,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Icon(Icons.delete_outline, color: colorScheme.error),
                         const SizedBox(width: 8),
                         Text(
-                          'Reset All Data',
+                          AppLocalizations.of(context)?.resetAllData ??
+                              'Reset All Data',
                           style: context.textTheme.bodyLarge?.copyWith(
                             color: colorScheme.error,
                             fontWeight: FontWeight.bold,
@@ -391,7 +420,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   context,
                 ).textTheme.bodyMedium?.color?.withOpacity(0.7),
         fontWeight: FontWeight.bold,
-        letterSpacing: 1.2,
+        letterSpacing: 0,
       ),
     );
   }

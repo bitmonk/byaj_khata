@@ -16,7 +16,7 @@
     "@selectLanguage": {
         "description": "भाषा चयन स्क्रिनको लागि शीर्षक"
     },
-    "currency" : "रु",
+    "currency": "रु",
     "@currency": {
         "description": "रुपयाको नाम"
     },
@@ -24,7 +24,6 @@
     "pickLanguageDescription": "ByajTracker मा प्रयोग गर्न चाहनुभएको भाषा छान्नुहोस्",
     "continueButton": "जारी राख्नुहोस्",
     "theme": "दिखावट",
-
     "defaultInterestType": "पूर्वनिर्धारित ब्याज प्रकार",
     "defaultMethodHeader": "पूर्वनिर्धारित विधि",
     "defaultMethodDescription": "तपाईंको खातामा ब्याज गणना गर्ने तरिका छनोट गर्नुहोस्।",
@@ -33,6 +32,22 @@
     "percentageMethodTitle": "प्रतिशत (%)",
     "percentageMethodDescription": "बैंकिङ मानक विधि। साँवामा वार्षिक (APR) वा मासिक प्रतिशत दरको रूपमा ब्याज गणना गर्नुहोस्।",
     "settingDisclaimer": "यो सेटिङ सबै नयाँ ऋणहरूमा लागू हुनेछ। तपाईंले ऋण सिर्जना गर्दा व्यक्तिगत ऋणका लागि यो गणना प्रकारलाई बदल्न सक्नुहुन्छ।",
-    "savePreferenceButton": "प्राथमिकता सेट गर्नुहोस्"
-
+    "savePreferenceButton": "प्राथमिकता सेट गर्नुहोस्",
+    "preferences": "प्राथमिकता",
+    "calculationDefaults": "हिसाब सम्बन्धी",
+    "defaultRate": "निर्धारित ब्याज दर",
+    "perAnnum": "वार्षिक",
+    "compoundFrequency": "चक्रवृद्धि अन्तराल",
+    "monthly": "मासिक",
+    "yearly": "वार्षिक",
+    "custom": "कस्टम",
+    "nepaliCalendar": "विक्रम संवत",
+    "bS": "वि.स",
+    "aD": "इ.स",
+    "dataAndSecurity": "डाटा र सुरक्षा",
+    "autoBackup": "अटो ब्याकअप",
+    "biometricLock": "बायोमेट्रिक लक",
+    "exportData": "डाटा निर्यात",
+    "dangerZone": "खतरनाक क्षेत्र",
+    "resetAllData": "सबै डाटा रिसेट"
 }
