@@ -103,6 +103,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_contacts: ^1.1.9+2
+  fl_chart: ^0.68.0
   # fl_chart: ^0.68.0
 
 dev_dependencies:
