@@ -5,33 +5,19 @@ class NetBalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final isDark = colorScheme.brightness == Brightness.dark;
-
-    final backgroundGradient = LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors:
-          isDark
-              ? [
-                colorScheme.primary.withOpacity(0.95),
-                colorScheme.surfaceVariant.withOpacity(0.25),
-              ]
-              : [
-                const Color(0xFF228B22), // AppColors.primary
-                const Color(0xFF1E293B), // Dark slate
-              ],
-    );
-
-    final textColor = isDark ? Colors.white : Colors.white;
-
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: backgroundGradient,
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF228B22), // AppColors.primary
+            Color(0xFF1E293B), // Dark slate
+          ],
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,17 +31,17 @@ class NetBalanceCard extends StatelessWidget {
                 children: [
                   Text(
                     'Total Net Balance',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: textColor.withOpacity(0.9),
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
+                  const Text(
                     'रू 1,24,500',
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      color: textColor,
+                    style: TextStyle(
+                      color: Colors.white,
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                     ),
@@ -75,16 +61,16 @@ class NetBalanceCard extends StatelessWidget {
                   children: [
                     Text(
                       'Avg. Rate',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: textColor.withOpacity(0.9),
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
                         fontSize: 12,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    const Text(
                       '2.5% /mo',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: textColor,
+                      style: TextStyle(
+                        color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -110,16 +96,16 @@ class NetBalanceCard extends StatelessWidget {
                   children: [
                     Text(
                       'Monthly Income',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: textColor.withOpacity(0.9),
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
                         fontSize: 12,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    const Text(
                       'रू 3,720',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: textColor,
+                      style: TextStyle(
+                        color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -133,16 +119,16 @@ class NetBalanceCard extends StatelessWidget {
                   children: [
                     Text(
                       'Next Collection',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: textColor.withOpacity(0.9),
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
                         fontSize: 12,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Text(
+                    const Text(
                       'In 2 Days',
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: textColor,
+                      style: TextStyle(
+                        color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),

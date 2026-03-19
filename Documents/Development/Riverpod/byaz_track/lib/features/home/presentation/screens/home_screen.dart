@@ -3,6 +3,7 @@ import 'package:byaz_track/features/home/presentation/widgets/home_header.dart';
 import 'package:byaz_track/features/home/presentation/widgets/interest_growth_chart.dart';
 import 'package:byaz_track/features/home/presentation/widgets/net_balance_card.dart';
 import 'package:byaz_track/features/home/presentation/widgets/summary_card.dart';
+import 'package:byaz_track/features/home/presentation/widgets/upcoming_collections_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -51,6 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 16),
               const InterestGrowthChart(),
+              const SizedBox(height: 20),
+              const UpcomingCollectionsWidget(),
             ],
           ),
         ),

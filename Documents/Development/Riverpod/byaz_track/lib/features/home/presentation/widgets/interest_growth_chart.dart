@@ -86,9 +86,12 @@ class _InterestGrowthChartState extends State<InterestGrowthChart> {
     final titleColor = colorScheme.onSurface.withOpacity(0.7);
 
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: Colors.green, width: 1),
+      ),
       color: colorScheme.surface,
-      elevation: 2,
+      elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -218,12 +221,12 @@ class _InterestGrowthChartState extends State<InterestGrowthChart> {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 28,
-            interval: 2,
+            interval: 3,
             getTitlesWidget: (value, meta) {
               return SideTitleWidget(
                 axisSide: meta.axisSide,
                 child: Text(
-                  const {2: 'MAR', 5: 'JUN', 8: 'SEP'}[value.toInt()] ?? '',
+                  const {3: 'MAR', 6: 'JUN', 9: 'SEP'}[value.toInt()] ?? '',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.w500,
                     fontSize: 8,
