@@ -27,8 +27,7 @@ export './date_extension.dart';
 export './number_extension.dart';
 
 extension ThemeContext on BuildContext {
-  ThemeData get theme => Theme.of(this);
-  TextTheme get text => theme.textTheme;
+  TextTheme get text => Theme.of(this).textTheme;
   double get devicePaddingTop => MediaQuery.of(this).padding.top;
   double get devicePaddingBottom => MediaQuery.of(this).padding.bottom;
   double get viewInsets => MediaQuery.of(this).viewInsets.bottom;

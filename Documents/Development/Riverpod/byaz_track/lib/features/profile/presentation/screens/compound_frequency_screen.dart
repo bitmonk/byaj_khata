@@ -123,7 +123,7 @@ class _CompoundFrequencyScreenState extends State<CompoundFrequencyScreen> {
                           Expanded(
                             child: Text(
                               l10n?.frequencyDisclaimer ??
-                                  'This frequency will be used for compounding interest calculations in all new ledgers.',
+                                  'This will be used for compounding interest calculations in all new ledgers.',
                               style: context.textTheme.bodyMedium?.copyWith(
                                 color: context.textTheme.bodyMedium?.color,
                                 height: 1.5,

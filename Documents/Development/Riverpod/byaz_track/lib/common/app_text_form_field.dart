@@ -24,11 +24,11 @@ class AppTextFormField extends StatefulWidget {
     this.maxLines = 1,
     this.labelText,
     this.labelStyle,
-    this.fillColor = AppColors.colorWhite,
+    this.fillColor,
     this.borderWidth = 1.0,
     this.hintStyle,
     this.autofillHints,
-    this.focusedBorderColor = AppColors.neutral600,
+    this.focusedBorderColor,
     this.style,
     this.cursorHeight,
     this.maxLength,
@@ -64,8 +64,8 @@ class AppTextFormField extends StatefulWidget {
   final int? maxLines;
   final String? labelText;
   final TextStyle? labelStyle;
-  final Color fillColor;
-  final Color focusedBorderColor;
+  final Color? fillColor;
+  final Color? focusedBorderColor;
   final double borderWidth;
   final TextStyle? hintStyle;
   final TextStyle? style;
@@ -139,8 +139,11 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
         // Run the actual validation only after user interaction and when field has content
         return widget.validator?.call(value);
       },
-      // obscureText: widget.obscureText,
-      // validator: widget.validator,
+      onFieldSubmitted: (value) {
+        setState(() {
+          isFocused = false;
+        });
+      },
       keyboardType: widget.textInputType,
       controller: widget.controller,
       textInputAction: widget.textInputAction,
@@ -149,6 +152,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
       style: context.text.titleMedium!.copyWith(
         fontWeight: FontWeight.w400,
         decoration: TextDecoration.none,
+        color: context.text.bodyLarge?.color,
       ),
       maxLength: widget.maxLength,
       buildCounter:
@@ -163,7 +167,8 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
                 return Text(
                   '$currentLength/$maxLength words',
                   style: TextStyle(
-                    color: AppColors.neutral600,
+                    color:
+                        context.text.bodySmall?.color ?? AppColors.neutral600,
                     fontSize: 12.sp,
                   ),
                 );
@@ -177,13 +182,16 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
         counterText: '',
         filled: true,
         isDense: true,
-        fillColor: widget.fillColor,
+        fillColor:
+            widget.fillColor ?? context.theme.inputDecorationTheme.fillColor,
         hintText: widget.hintText,
         alignLabelWithHint: widget.alignLabelWithHint,
         hintStyle:
             widget.hintStyle ??
             AppTextStyles.typography3Regular.copyWith(
-              color: AppColors.neutral600,
+              color:
+                  context.theme.inputDecorationTheme.hintStyle?.color ??
+                  AppColors.neutral600,
             ),
         contentPadding:
             widget.contentPadding ??
@@ -191,27 +199,47 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
         enabledBorder: CustomOutlineInputBorder(
           borderRadius: widget.borderRadius,
           borderSide: BorderSide(
-            color: AppColors.neutral50,
+            color:
+                context
+                    .theme
+                    .inputDecorationTheme
+                    .enabledBorder
+                    ?.borderSide
+                    .color ??
+                AppColors.neutral50,
             width: widget.borderWidth,
           ),
         ),
         focusedBorder: CustomOutlineInputBorder(
           borderRadius: widget.borderRadius,
-          borderSide: BorderSide(color: widget.focusedBorderColor),
+          borderSide: BorderSide(
+            color:
+                widget.focusedBorderColor ??
+                context
+                    .theme
+                    .inputDecorationTheme
+                    .focusedBorder
+                    ?.borderSide
+                    .color ??
+                AppColors.primary,
+          ),
         ),
         errorBorder: CustomOutlineInputBorder(
           borderRadius: widget.borderRadius,
-          borderSide: BorderSide(color: AppColors.error500),
+          borderSide: BorderSide(color: context.theme.colorScheme.error),
         ),
         errorMaxLines: 2,
-        errorStyle: const TextStyle(
-          color: AppColors.error500,
+        errorStyle: TextStyle(
+          color: context.theme.colorScheme.error,
           fontSize: 11,
           fontWeight: FontWeight.w400,
         ),
         focusedErrorBorder: CustomOutlineInputBorder(
           borderRadius: widget.borderRadius,
-          borderSide: BorderSide(width: 2, color: AppColors.error500),
+          borderSide: BorderSide(
+            width: 2,
+            color: context.theme.colorScheme.error,
+          ),
         ),
         suffixIconConstraints: const BoxConstraints(
           maxHeight: 36,
@@ -245,7 +273,7 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
     if (hasInteracted && hasValidationError && currentValue.isNotEmpty) {
       return widget.labelStyle ??
           context.text.titleMedium!.copyWith(
-            color: AppColors.error500,
+            color: context.theme.colorScheme.error,
             fontSize: 16,
           );
     }
@@ -253,14 +281,14 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
     if (isFocused) {
       return widget.labelStyle ??
           context.text.titleMedium!.copyWith(
-            color: widget.focusedBorderColor,
+            color: widget.focusedBorderColor ?? context.theme.primaryColor,
             fontSize: 16,
           );
     }
 
     return widget.labelStyle ??
         context.text.titleMedium!.copyWith(
-          color: AppColors.neutral600,
+          color: context.text.bodyMedium?.color ?? AppColors.neutral600,
           fontSize: 16,
         );
   }

@@ -7,7 +7,11 @@ class InterestHelper {
     return calculateInterest(principal, time, rate) + principal;
   }
 
-  static double calculateMonthlyPayment(double principal,int time,double rate,) {
+  static double calculateMonthlyPayment(
+    double principal,
+    int time,
+    double rate,
+  ) {
     return calculateTotalAmount(principal, time, rate) / time;
   }
 }
