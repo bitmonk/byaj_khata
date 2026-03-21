@@ -2,6 +2,7 @@ import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/widgets/calculaor_header.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/widgets/interest_rate_section.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/widgets/interest_type_section.dart';
+import 'package:byaz_track/features/calculator/presentation/screens/widgets/time_period_section.dart';
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
@@ -49,6 +50,8 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             InterestTypeSection(),
             VerticalSpacing(20),
             InterestRateSection(),
+            VerticalSpacing(20),
+            TimePeriodSection(),
             VerticalSpacing(20),
 
             // const Divider(height: 1),

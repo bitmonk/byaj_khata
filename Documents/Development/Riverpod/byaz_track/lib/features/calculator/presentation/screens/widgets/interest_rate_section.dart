@@ -129,13 +129,9 @@ class _RateButton extends StatelessWidget {
         child: Text(
           label,
           style: context.text.bodyMedium?.copyWith(
-            color:
-                isSelected
-                    ? Colors.white
-                    : (isDark
-                        ? colorScheme.onSurface
-                        : const Color(0xFF374151)),
+            color: isSelected ? Colors.white : Color(0xFF9CA3AF),
             fontWeight: FontWeight.w600,
+            fontSize: 14,
           ),
         ),
       ),

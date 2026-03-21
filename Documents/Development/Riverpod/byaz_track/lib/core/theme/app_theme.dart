@@ -20,7 +20,7 @@ class AppTheme {
         primary: AppColors.primary,
         onPrimary: Colors.white,
         surface: AppColors.background,
-        onSurface: AppColors.surface,
+        onSurface: AppColors.primaryText,
         error: AppColors.error,
         onError: Colors.white,
         secondaryContainer: AppColors.white,
@@ -153,7 +153,7 @@ class AppTheme {
         primary: AppColors.primary,
         onPrimary: Colors.white,
         surface: Color(0xFF0D1117), // main background
-        onSurface: Color(0xFF161B22), // cards
+        onSurface: Color(0xFFE6EDF3), // text color
         error: Color(0xFFEF4444),
         onError: Colors.white,
         secondaryContainer: Color(0xFF161B22),

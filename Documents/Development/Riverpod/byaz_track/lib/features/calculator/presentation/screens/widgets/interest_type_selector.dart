@@ -64,7 +64,7 @@ class _SelectorCard extends StatelessWidget {
               isSelected
                   ? colorScheme.primary
                   : (isDark ? colorScheme.surface : Colors.white),
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(30),
           border: Border.all(
             color:
                 isSelected
@@ -76,13 +76,14 @@ class _SelectorCard extends StatelessWidget {
         child: Text(
           title,
           textAlign: TextAlign.center,
-          style: context.text.titleMedium?.copyWith(
-            color:
-                isSelected
-                    ? Colors.white
-                    : (isDark
-                        ? colorScheme.onSurface
-                        : const Color(0xFF374151)),
+          style: context.text.bodyMedium?.copyWith(
+            // color:
+            //     isSelected
+            //         ? Colors.white
+            //         : (isDark
+            //             ? colorScheme.onSurface
+            //             : const Color(0xFF374151)),
+            color: isSelected ? Colors.white : Color(0xFF9CA3AF),
             fontWeight: FontWeight.w600,
             fontSize: 14,
           ),

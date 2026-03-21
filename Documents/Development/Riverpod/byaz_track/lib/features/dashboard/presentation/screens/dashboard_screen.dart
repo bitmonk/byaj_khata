@@ -1,6 +1,8 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/add/presentation/screens/add_screen.dart';
+import 'package:byaz_track/features/calculator/data/source/calculator_remote_source.dart';
+import 'package:byaz_track/features/calculator/presentation/controllers/calculator_controller.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/calculator_screen.dart';
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/screens/ledger_screen.dart';
@@ -73,6 +75,9 @@ class _DashboardScreenState extends State<DashboardScreen>
     super.initState();
     _bottomNavIndex = widget.initialIndex;
     _isShowingDefaultPage = widget.customPages == null;
+    Get.put(
+      CalculatorController(remoteSource: CalculatorRemoteSource(Get.find())),
+    );
 
     _initializePages();
     _pages = widget.customPages ?? _defaultPages;
