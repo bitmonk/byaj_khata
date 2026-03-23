@@ -1,4 +1,5 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/calculator/presentation/controllers/calculator_controller.dart';
 
 class InterestRateSection extends StatefulWidget {
   final TextEditingController? controller;
@@ -10,18 +11,21 @@ class InterestRateSection extends StatefulWidget {
 
 class _InterestRateSectionState extends State<InterestRateSection> {
   late TextEditingController _controller;
-  String? _selectedRate;
+  final controller = Get.find<CalculatorController>();
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller ?? TextEditingController();
+    _controller.addListener(() {
+      controller.interestRate.value = _controller.text;
+    });
   }
 
   void _onRateSelected(String rate) {
     setState(() {
-      _selectedRate = rate;
       _controller.text = rate;
+      controller.interestRate.value = rate;
     });
   }
 
@@ -46,7 +50,6 @@ class _InterestRateSectionState extends State<InterestRateSection> {
               child: AppTextFormField(
                 controller: _controller,
                 hintText: 'e.g. 2 or 3',
-                // isDense: false,
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 14,
                   vertical: 15,
@@ -54,13 +57,6 @@ class _InterestRateSectionState extends State<InterestRateSection> {
                 textInputType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                onChanged: (value) {
-                  if (value != _selectedRate) {
-                    setState(() {
-                      _selectedRate = null;
-                    });
-                  }
-                },
                 prefixIcon: const Padding(
                   padding: EdgeInsets.only(left: 14),
                   child: Icon(
@@ -72,17 +68,17 @@ class _InterestRateSectionState extends State<InterestRateSection> {
               ),
             ),
             const HorizontalSpacing(12),
-            _RateButton(
-              label: 'Rs. 2',
-              isSelected: _selectedRate == '2',
-              onTap: () => _onRateSelected('2'),
-            ),
+            Obx(() => _RateButton(
+                  label: 'Rs. 2',
+                  isSelected: controller.interestRate.value == '2',
+                  onTap: () => _onRateSelected('2'),
+                )),
             const HorizontalSpacing(8),
-            _RateButton(
-              label: 'Rs. 3',
-              isSelected: _selectedRate == '3',
-              onTap: () => _onRateSelected('3'),
-            ),
+            Obx(() => _RateButton(
+                  label: 'Rs. 3',
+                  isSelected: controller.interestRate.value == '3',
+                  onTap: () => _onRateSelected('3'),
+                )),
           ],
         ),
       ],

@@ -31,10 +31,17 @@ class TimePeriodSection extends StatelessWidget {
             );
             if (start != null) {
               controller.setStartDate(start);
+
+              // Ensure end date is not before start date
+              if (controller.endDate.value != null &&
+                  controller.endDate.value!.isBefore(start)) {
+                controller.setEndDate(start);
+              }
+
               if (context.mounted) {
                 final end = await NepaliCalendar.show(
                   context,
-                  initialDate: controller.endDate.value,
+                  initialDate: controller.endDate.value ?? start,
                   firstDate: start,
                 );
                 if (end != null) {

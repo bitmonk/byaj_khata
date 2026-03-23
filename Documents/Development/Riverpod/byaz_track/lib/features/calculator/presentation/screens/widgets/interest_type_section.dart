@@ -1,4 +1,5 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/calculator/presentation/controllers/calculator_controller.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/widgets/interest_type_selector.dart';
 
 class InterestTypeSection extends StatefulWidget {
@@ -9,20 +10,18 @@ class InterestTypeSection extends StatefulWidget {
 }
 
 class _InterestTypeSectionState extends State<InterestTypeSection> {
-  int _selectedIndex = 0;
+  final controller = Get.find<CalculatorController>();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        InterestTypeSelector(
-          selectedIndex: _selectedIndex,
-          onSelected: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-        ),
+        Obx(() => InterestTypeSelector(
+              selectedIndex: controller.interestType.value,
+              onSelected: (index) {
+                controller.interestType.value = index;
+              },
+            )),
       ],
     );
   }
