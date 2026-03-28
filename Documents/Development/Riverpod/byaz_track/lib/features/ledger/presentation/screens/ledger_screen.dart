@@ -1,4 +1,7 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
+import '../widgets/ledger_summary_card.dart';
+import '../widgets/ledger_filter_tabs.dart';
 
 class LedgerScreen extends StatefulWidget {
   const LedgerScreen({super.key});
@@ -8,11 +11,206 @@ class LedgerScreen extends StatefulWidget {
 }
 
 class _LedgerScreenState extends State<LedgerScreen> {
+  int _selectedTabIndex = 0;
+  final List<String> _tabs = ['All', 'Active', 'Settled', 'Overdue'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Ledger')),
-      body: const Center(child: Text('Ledger Screen')),
+      // appBar: AppBar(title: const Text('Ledger')),
+      body: Padding(
+        padding: EdgeInsets.only(top: context.devicePaddingTop),
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.all(16.0).copyWith(bottom: 24.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  const LedgerHeader(),
+                  const VerticalSpacing(24),
+                  AppTextFormField(
+                    contentPadding: EdgeInsets.all(18),
+                    hintText: 'Search borrower or lender...',
+                    prefixIcon: const Icon(Icons.person_search_outlined),
+                  ),
+                  const VerticalSpacing(24),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: LedgerSummaryCard(
+                          title: 'Total Receivables',
+                          amount: 'Rs 4,50,000',
+                          trendPercentage: '+5.2%',
+                          isPositiveTrend: true,
+                        ),
+                      ),
+                      const HorizontalSpacing(16),
+                      Expanded(
+                        child: LedgerSummaryCard(
+                          title: 'Monthly Interest',
+                          amount: 'Rs 9,000',
+                          trendPercentage: '+2.1%',
+                          isPositiveTrend: true,
+                        ),
+                      ),
+                    ],
+                  ),
+                ]),
+              ),
+            ),
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _StickyTabBarDelegate(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                //   topPadding: context.devicePaddingTop,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: LedgerFilterTabs(
+                    tabs: _tabs,
+                    selectedIndex: _selectedTabIndex,
+                    onTabSelected: (index) {
+                      setState(() {
+                        _selectedTabIndex = index;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+              ).copyWith(top: 12.0, bottom: 16.0),
+              sliver: SliverList(
+                delegate: SliverChildListDelegate([
+                  LedgerListItemCard(
+                    name: 'John Doe',
+                    loanedDate: '2022-01-01',
+                    status: LedgerItemStatus.active,
+                    principalAmount: 'Rs 4,50,000',
+                    interestAmount: 'Rs 9,000',
+                    interestRateText: '10%',
+                    lastCollectedDate: '2022-01-01',
+                  ),
+                  const VerticalSpacing(16),
+                  LedgerListItemCard(
+                    name: 'John Doe',
+                    loanedDate: '2022-01-01',
+                    status: LedgerItemStatus.settled,
+                    principalAmount: 'Rs 4,50,000',
+                    interestAmount: 'Rs 9,000',
+                    interestRateText: '10%',
+                    lastCollectedDate: '2022-01-01',
+                  ),
+                  const VerticalSpacing(16),
+                  LedgerListItemCard(
+                    name: 'John Doe',
+                    loanedDate: '2022-01-01',
+                    status: LedgerItemStatus.overdue,
+                    principalAmount: 'Rs 4,50,000',
+                    interestAmount: 'Rs 9,000',
+                    interestRateText: '10%',
+                    lastCollectedDate: '2022-01-01',
+                  ),
+                  const VerticalSpacing(200),
+                ]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final Color backgroundColor;
+  final double topPadding;
+
+  _StickyTabBarDelegate({
+    required this.child,
+    required this.backgroundColor,
+    this.topPadding = 0.0,
+  });
+
+  @override
+  double get minExtent => 60.0 + topPadding;
+
+  @override
+  double get maxExtent => 60.0 + topPadding;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      color: backgroundColor,
+      padding: EdgeInsets.only(top: topPadding),
+      alignment: Alignment.center,
+      child: child,
+    );
+  }
+
+  @override
+  bool shouldRebuild(_StickyTabBarDelegate oldDelegate) {
+    return oldDelegate.child != child ||
+        oldDelegate.backgroundColor != backgroundColor ||
+        oldDelegate.topPadding != topPadding;
+  }
+}
+
+class LedgerHeader extends StatelessWidget {
+  const LedgerHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'My Ledger',
+                style: context.text.bodyLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Your loans and interests',
+                style: context.text.bodyLarge?.copyWith(
+                  color: Colors.grey.shade700,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.grey.shade200,
+          ),
+          child: IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.help_outline,
+              size: 20,
+              color: Colors.black54,
+            ),
+            tooltip: 'Ledger help',
+          ),
+        ),
+      ],
     );
   }
 }
