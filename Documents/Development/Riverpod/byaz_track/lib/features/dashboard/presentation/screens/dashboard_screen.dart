@@ -2,6 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/add/presentation/screens/add_screen.dart';
 import 'package:byaz_track/features/calculator/data/source/calculator_remote_source.dart';
+import 'package:byaz_track/features/create_loan/presentation/screens/create_loan_screen.dart';
 import 'package:byaz_track/features/calculator/presentation/controllers/calculator_controller.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/calculator_screen.dart';
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
@@ -127,13 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 ? null
                 : FloatingActionButton(
                   onPressed: () {
-                    setState(() {
-                      _isShowingDefaultPage = true;
-                      _bottomNavIndex = 4;
-                      if (widget.customPages != null) {
-                        _pages = _defaultPages;
-                      }
-                    });
+                    Get.toNamed(AppRoutes.createLoan);
                   },
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   shape: const CircleBorder(),

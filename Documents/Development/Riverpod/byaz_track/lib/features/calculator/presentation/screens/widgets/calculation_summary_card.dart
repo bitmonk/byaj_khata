@@ -12,7 +12,7 @@ class CalculationSummaryCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF161B12) : Colors.white,
+        color: isDark ? Theme.of(context).colorScheme.surface : Colors.white,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
           color: isDark ? const Color(0xFF2D3628) : const Color(0xFFE5E7EB),
@@ -32,14 +32,31 @@ class CalculationSummaryCard extends StatelessWidget {
                   color: isDark ? Colors.white : AppColors.primaryText,
                 ),
               ),
+              const Spacer(),
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(Icons.bookmark_border),
+                color: isDark ? Colors.white : AppColors.primaryText,
+                iconSize: 20,
+                onPressed: () {},
+              ),
+
+              // const HorizontalSpacing(16),
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: const Icon(Icons.share_outlined),
+                color: isDark ? Colors.white : AppColors.primaryText,
+                iconSize: 20,
+                onPressed: () {},
+              ),
             ],
           ),
-          const VerticalSpacing(24),
+          const VerticalSpacing(16),
           _SummaryItem(
             label: 'Principal (Sawa)',
             value: Obx(
               () => Text(
-                'रु ${controller.principalAmount.value.isEmpty ? "0" : controller.principalAmount.value}',
+                'Rs ${controller.principalAmount.value.isEmpty ? "0" : controller.principalAmount.value}',
               ),
             ),
           ),
@@ -52,7 +69,7 @@ class CalculationSummaryCard extends StatelessWidget {
                 children: [
                   Obx(
                     () => Text(
-                      'रु ${controller.totalInterestStr}',
+                      'Rs ${controller.totalInterestStr}',
                       style: context.text.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w700,
                         fontSize: 18,

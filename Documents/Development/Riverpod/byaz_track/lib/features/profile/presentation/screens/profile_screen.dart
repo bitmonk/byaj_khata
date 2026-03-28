@@ -70,7 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Ryan Lama',
+                            'Parbat Tamang',
                             style: context.textTheme.headlineMedium?.copyWith(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,

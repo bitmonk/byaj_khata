@@ -1,3 +1,5 @@
+import 'package:byaz_track/features/create_loan/presentation/controllers/create_loan_bindings.dart';
+import 'package:byaz_track/features/create_loan/presentation/screens/create_loan_screen.dart';
 import 'package:byaz_track/features/dashboard/presentation/screens/dashboard_screen.dart';
 
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
@@ -16,6 +18,7 @@ class AppRoutes {
   static const String interestType = '/interestType';
   static const String compoundFrequency = '/compoundFrequency';
   static const String defaultRate = '/defaultRate';
+  static const String createLoan = '/createLoan';
 
   static List<GetPage<dynamic>>? appPages = [
     GetPage(name: home, page: () => const HomeScreen()),
@@ -28,5 +31,10 @@ class AppRoutes {
       page: () => const CompoundFrequencyScreen(),
     ),
     GetPage(name: defaultRate, page: () => const DefaultRateScreen()),
+    GetPage(
+      name: createLoan,
+      page: () => const CreateLoanScreen(),
+      binding: CreateLoanBindings(),
+    ),
   ];
 }
