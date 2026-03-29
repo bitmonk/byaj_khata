@@ -29,7 +29,7 @@ class LedgerSummaryCard extends StatelessWidget {
     final trendColor = isPositiveTrend ? AppColors.success : AppColors.error;
 
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(18.0).copyWith(left: 20),
       decoration: BoxDecoration(
         color: isDark ? Theme.of(context).colorScheme.surface : Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -56,24 +56,25 @@ class LedgerSummaryCard extends StatelessWidget {
             style: theme.textTheme.titleMedium?.copyWith(
               color: titleColor,
               fontWeight: FontWeight.w500,
-              fontSize: 14,
+              fontSize: 12,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Text(
             amount,
-            style: theme.textTheme.headlineSmall?.copyWith(
+            style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
               color: amountColor,
+              fontSize: 20,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
           Row(
             children: [
               Icon(
                 isPositiveTrend ? Icons.trending_up : Icons.trending_down,
                 color: trendColor,
-                size: 18,
+                size: 16,
               ),
               const SizedBox(width: 4),
               Text(

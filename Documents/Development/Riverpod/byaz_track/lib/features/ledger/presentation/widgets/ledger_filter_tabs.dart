@@ -24,21 +24,21 @@ class LedgerFilterTabs extends StatelessWidget {
           final isDark = theme.brightness == Brightness.dark;
 
           return Padding(
-            padding: const EdgeInsets.only(right: 12.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: InkWell(
               onTap: () => onTabSelected(index),
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.circular(20),
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 10,
+                  horizontal: 16,
+                  vertical: 8,
                 ),
                 decoration: BoxDecoration(
                   color:
                       isSelected
                           ? AppColors.primary
                           : (isDark ? theme.colorScheme.surface : Colors.white),
-                  borderRadius: BorderRadius.circular(24),
+                  borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color:
                         isSelected
@@ -58,7 +58,7 @@ class LedgerFilterTabs extends StatelessWidget {
                                 ? AppColorsDark.textSecondary
                                 : AppColors.textPrimary.withOpacity(0.8)),
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                    fontSize: 15,
+                    fontSize: 13,
                   ),
                 ),
               ),

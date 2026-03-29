@@ -1,4 +1,5 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/interest_details/presentation/screens/interest_details_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
 import '../widgets/ledger_summary_card.dart';
 import '../widgets/ledger_filter_tabs.dart';
@@ -12,7 +13,13 @@ class LedgerScreen extends StatefulWidget {
 
 class _LedgerScreenState extends State<LedgerScreen> {
   int _selectedTabIndex = 0;
-  final List<String> _tabs = ['All', 'Active', 'Settled', 'Overdue'];
+  final List<String> _tabs = [
+    'All',
+    'Active',
+    'Settled',
+    'Overdue',
+    'Upcoming',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +30,19 @@ class _LedgerScreenState extends State<LedgerScreen> {
         child: CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: const EdgeInsets.all(16.0).copyWith(bottom: 24.0),
+              padding: const EdgeInsets.all(
+                12.0,
+              ).copyWith(bottom: 16.0, top: 0),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   const LedgerHeader(),
-                  const VerticalSpacing(24),
+                  const VerticalSpacing(16),
                   AppTextFormField(
-                    contentPadding: EdgeInsets.all(18),
+                    contentPadding: EdgeInsets.all(12),
                     hintText: 'Search borrower or lender...',
                     prefixIcon: const Icon(Icons.person_search_outlined),
                   ),
-                  const VerticalSpacing(24),
+                  const VerticalSpacing(16),
                   Row(
                     children: [
                       Expanded(
@@ -44,7 +53,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                           isPositiveTrend: true,
                         ),
                       ),
-                      const HorizontalSpacing(16),
+                      const HorizontalSpacing(12),
                       Expanded(
                         child: LedgerSummaryCard(
                           title: 'Monthly Interest',
@@ -64,7 +73,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 //   topPadding: context.devicePaddingTop,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: LedgerFilterTabs(
                     tabs: _tabs,
                     selectedIndex: _selectedTabIndex,
@@ -79,8 +88,8 @@ class _LedgerScreenState extends State<LedgerScreen> {
             ),
             SliverPadding(
               padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-              ).copyWith(top: 12.0, bottom: 16.0),
+                horizontal: 12.0,
+              ).copyWith(top: 8.0, bottom: 12.0),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   LedgerListItemCard(
@@ -91,8 +100,16 @@ class _LedgerScreenState extends State<LedgerScreen> {
                     interestAmount: 'Rs 9,000',
                     interestRateText: '10%',
                     lastCollectedDate: '2022-01-01',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const InterestDetailsScreen(),
+                        ),
+                      );
+                    },
                   ),
-                  const VerticalSpacing(16),
+                  const VerticalSpacing(12),
                   LedgerListItemCard(
                     name: 'John Doe',
                     loanedDate: '2022-01-01',
@@ -101,8 +118,16 @@ class _LedgerScreenState extends State<LedgerScreen> {
                     interestAmount: 'Rs 9,000',
                     interestRateText: '10%',
                     lastCollectedDate: '2022-01-01',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const InterestDetailsScreen(),
+                        ),
+                      );
+                    },
                   ),
-                  const VerticalSpacing(16),
+                  const VerticalSpacing(12),
                   LedgerListItemCard(
                     name: 'John Doe',
                     loanedDate: '2022-01-01',
@@ -111,6 +136,14 @@ class _LedgerScreenState extends State<LedgerScreen> {
                     interestAmount: 'Rs 9,000',
                     interestRateText: '10%',
                     lastCollectedDate: '2022-01-01',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const InterestDetailsScreen(),
+                        ),
+                      );
+                    },
                   ),
                   const VerticalSpacing(200),
                 ]),
@@ -135,10 +168,10 @@ class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  double get minExtent => 60.0 + topPadding;
+  double get minExtent => 50.0 + topPadding;
 
   @override
-  double get maxExtent => 60.0 + topPadding;
+  double get maxExtent => 50.0 + topPadding;
 
   @override
   Widget build(

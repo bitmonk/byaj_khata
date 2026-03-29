@@ -10,6 +10,7 @@ class LedgerListItemCard extends StatelessWidget {
   final String interestAmount;
   final String interestRateText;
   final String lastCollectedDate;
+  final VoidCallback onTap;
 
   const LedgerListItemCard({
     super.key,
@@ -20,6 +21,7 @@ class LedgerListItemCard extends StatelessWidget {
     required this.interestAmount,
     required this.interestRateText,
     required this.lastCollectedDate,
+    required this.onTap,
   });
 
   @override
@@ -28,10 +30,7 @@ class LedgerListItemCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final cardColor = isDark ? theme.colorScheme.surface : Colors.white;
-    final borderColor =
-        isDark
-            ? AppColorsDark.dividerColor
-            : AppColors.dividerColor.withOpacity(0.5);
+    final borderColor = AppColorsDark.dividerColor.withAlpha(30);
 
     // Dynamic Status Colors
     Color statusBgColor;
@@ -67,141 +66,144 @@ class LedgerListItemCard extends StatelessWidget {
     final textColorSecondary =
         isDark ? AppColorsDark.textSecondary : AppColors.textSecondary;
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: borderColor),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Header: Name & Date + Status Badge
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: textColorPrimary,
-                        fontSize: 18,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: borderColor),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Header: Name & Date + Status Badge
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: textColorPrimary,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Loaned on $loanedDate',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: textColorSecondary,
+                      const SizedBox(height: 2),
+                      Text(
+                        'Loaned on $loanedDate',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: textColorSecondary,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: statusBgColor,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  statusText,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    color: statusTextColor,
-                    fontWeight: FontWeight.w600,
+                    ],
                   ),
                 ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-          Divider(color: borderColor, thickness: 1),
-          const SizedBox(height: 16),
-
-          // Middle: Principal & Interest
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Principal (Sawa)',
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        color: textColorSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: statusBgColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    statusText,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: statusTextColor,
+                      fontWeight: FontWeight.w600,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      principalAmount,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: textColorPrimary,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Interest ($interestRateText)',
-                      style: theme.textTheme.labelLarge?.copyWith(
-                        color: textColorSecondary,
-                        fontWeight: FontWeight.w600,
+              ],
+            ),
+
+            const SizedBox(height: 6),
+            Divider(color: borderColor, thickness: 1),
+            const SizedBox(height: 6),
+
+            // Middle: Principal & Interest
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Principal (Sawa)',
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: textColorSecondary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      interestAmount,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.success,
-                        fontSize: 20,
+                      const SizedBox(height: 2),
+                      Text(
+                        principalAmount,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: textColorPrimary,
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'Interest ($interestRateText)',
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: textColorSecondary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        interestAmount,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.success,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
 
-          const SizedBox(height: 20),
+            const SizedBox(height: 12),
 
-          // Footer: Last Collected
-          Row(
-            children: [
-              Icon(
-                Icons.history,
-                size: 16,
-                color: textColorSecondary.withOpacity(0.8),
-              ),
-              const SizedBox(width: 6),
-              Text(
-                'Last collected: $lastCollectedDate',
-                style: theme.textTheme.bodyMedium?.copyWith(
+            // Footer: Last Collected
+            Row(
+              children: [
+                Icon(
+                  Icons.history,
+                  size: 14,
                   color: textColorSecondary.withOpacity(0.8),
-                  fontWeight: FontWeight.w500,
                 ),
-              ),
-            ],
-          ),
-        ],
+                const SizedBox(width: 4),
+                Text(
+                  'Last collected: $lastCollectedDate',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: textColorSecondary.withOpacity(0.8),
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
