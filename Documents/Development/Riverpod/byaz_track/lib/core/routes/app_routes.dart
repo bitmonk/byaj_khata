@@ -1,3 +1,4 @@
+import 'package:byaz_track/features/auth/presentation/screens/auth_screen.dart';
 import 'package:byaz_track/features/create_loan/presentation/controllers/create_loan_bindings.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/create_loan_screen.dart';
 import 'package:byaz_track/features/dashboard/presentation/screens/dashboard_screen.dart';
@@ -11,6 +12,7 @@ import 'package:byaz_track/features/profile/presentation/screens/default_rate_sc
 import 'package:get/get.dart';
 
 class AppRoutes {
+  static const String auth = '/auth';
   static const String home = '/home';
   static const String dashboard = '/dashboard';
   static const String theme = '/theme';
@@ -21,6 +23,7 @@ class AppRoutes {
   static const String createLoan = '/createLoan';
 
   static List<GetPage<dynamic>>? appPages = [
+    GetPage(name: auth, page: () => const AuthScreen()),
     GetPage(name: home, page: () => const HomeScreen()),
     GetPage(name: dashboard, page: () => const DashboardScreen()),
     GetPage(name: theme, page: () => const ThemeScreen()),

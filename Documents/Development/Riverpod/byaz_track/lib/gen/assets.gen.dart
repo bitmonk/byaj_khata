@@ -70,8 +70,41 @@ class $AssetsImagesGen {
   AssetGenImage get byajKhata =>
       const AssetGenImage('assets/images/Byaj Khata.png');
 
+  /// File path: assets/images/appledark.png
+  AssetGenImage get appledark =>
+      const AssetGenImage('assets/images/appledark.png');
+
+  /// File path: assets/images/googledark.png
+  AssetGenImage get googledark =>
+      const AssetGenImage('assets/images/googledark.png');
+
+  /// File path: assets/images/googlelight.png
+  AssetGenImage get googlelight =>
+      const AssetGenImage('assets/images/googlelight.png');
+
+  /// File path: assets/images/img1.jpg
+  AssetGenImage get img1 => const AssetGenImage('assets/images/img1.jpg');
+
+  /// File path: assets/images/img2.jpg
+  AssetGenImage get img2 => const AssetGenImage('assets/images/img2.jpg');
+
+  /// File path: assets/images/img3.jpg
+  AssetGenImage get img3 => const AssetGenImage('assets/images/img3.jpg');
+
+  /// File path: assets/images/img4.jpg
+  AssetGenImage get img4 => const AssetGenImage('assets/images/img4.jpg');
+
   /// List of all assets
-  List<AssetGenImage> get values => [byajKhata];
+  List<AssetGenImage> get values => [
+    byajKhata,
+    appledark,
+    googledark,
+    googlelight,
+    img1,
+    img2,
+    img3,
+    img4,
+  ];
 }
 
 class Assets {

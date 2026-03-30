@@ -34,7 +34,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
               Text(
                 'TOTAL SETTLEMENT AMOUNT',
                 style: theme.textTheme.labelLarge?.copyWith(
-                  color: contentColor,
+                  // color: contentColor,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.5,
                 ),
@@ -49,7 +49,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                         text: TextSpan(
                           text: 'रू  ',
                           style: theme.textTheme.headlineSmall?.copyWith(
-                            color: contentColor,
+                            // color: contentColor,
                             fontWeight: FontWeight.w800,
                             fontSize: 16,
                           ),
@@ -57,7 +57,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                             TextSpan(
                               text: '6,42,333',
                               style: theme.textTheme.headlineSmall?.copyWith(
-                                color: contentColor,
+                                // color: contentColor,
                                 fontWeight: FontWeight.w800,
                                 fontSize: 28,
                               ),
@@ -79,7 +79,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                           Text(
                             'Principal: रू 5,00,000',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: contentColor.withOpacity(0.8),
+                              // color: contentColor.withOpacity(0.8),
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
                             ),
@@ -88,7 +88,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                           Text(
                             'Interest: रू 1,42,333',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: contentColor.withOpacity(0.8),
+                              // color: contentColor.withOpacity(0.8),
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
                             ),

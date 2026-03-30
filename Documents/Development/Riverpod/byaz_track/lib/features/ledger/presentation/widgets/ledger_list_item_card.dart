@@ -30,7 +30,10 @@ class LedgerListItemCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final cardColor = isDark ? theme.colorScheme.surface : Colors.white;
-    final borderColor = AppColorsDark.dividerColor.withAlpha(30);
+    final borderColor =
+        isDark
+            ? AppColorsDark.dividerColor
+            : const Color(0xFFC3D0C3); // Faint greenish gray
 
     // Dynamic Status Colors
     Color statusBgColor;

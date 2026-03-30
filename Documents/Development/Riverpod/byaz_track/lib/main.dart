@@ -1,13 +1,9 @@
-import 'dart:async';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:byaz_track/core/build_variants/environment_entry_points.dart';
-import 'package:byaz_track/core/push_notification/firebase_notification_service.dart';
-import 'package:byaz_track/core/push_notification/local_notification_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // import 'flavors.dart';
 
@@ -31,6 +27,7 @@ void main() async {
   // F.appFlavor = Flavor.values.firstWhere(
   //   (element) => element.name == appFlavor,
   // );
+  await dotenv.load(fileName: ".env");
 
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
@@ -41,7 +38,10 @@ void main() async {
     ),
   );
 
-  // await Firebase.initializeApp();
+  await Supabase.initialize(
+    url: dotenv.env['SUPABASE_URL']!,
+    anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
+  );
 
   // Initialize local notifications
   // await LocalNotificationService().initialize();
