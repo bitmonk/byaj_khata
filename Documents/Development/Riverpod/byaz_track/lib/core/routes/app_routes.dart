@@ -1,3 +1,4 @@
+import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/auth/presentation/screens/auth_screen.dart';
 import 'package:byaz_track/features/create_loan/presentation/controllers/create_loan_bindings.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/create_loan_screen.dart';
@@ -38,6 +39,9 @@ class AppRoutes {
       name: createLoan,
       page: () => const CreateLoanScreen(),
       binding: CreateLoanBindings(),
+      transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 500),
+      curve: Curves.easeOutCirc,
     ),
   ];
 }
