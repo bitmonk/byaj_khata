@@ -1,9 +1,14 @@
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/core/language/language_controller.dart';
 import 'package:byaz_track/features/profile/presentation/widgets/profile_tile_widget.dart';
+import 'package:byaz_track/features/settings/presentation/controllers/profile_controller.dart';
 import 'package:byaz_track/gen/assets.gen.dart';
 import 'package:byaz_track/l10n/app_localizations.dart';
+import 'package:byaz_track/core/routes/app_routes.dart';
+import 'package:byaz_track/features/profile/presentation/widgets/logout_confirmation_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,6 +18,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final profileController = Get.find<ProfileController>();
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -106,6 +112,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ],
                       ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder:
+                              (context) => Obx(
+                                () => LogoutConfirmationDialog(
+                                  isLoading:
+                                      profileController.logoutState.value ==
+                                      TheStates.loading,
+                                  onConfirm: () async {
+                                    profileController.logout();
+                                  },
+                                ),
+                              ),
+                        );
+                      },
+                      icon: const Icon(Icons.logout),
                     ),
                   ],
                 ),

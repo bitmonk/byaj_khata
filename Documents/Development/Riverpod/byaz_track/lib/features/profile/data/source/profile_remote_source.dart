@@ -4,25 +4,24 @@ import 'package:byaz_track/core/dio_provider/dio_api_client.dart';
 import 'package:dartz/dartz.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 class ProfileRemoteSource {
-  const ProfileRemoteSource(this._client);
+  ProfileRemoteSource(this._client);
   final DioApiClient _client;
+  final supabase = Supabase.instance.client;
 
-  Future<Either<AppError,ApiResponse<dynamic>>> fetchData({required int pageKey, String? searchQuery }) async{
-        try {
-      // final param = <String, dynamic>{'page': pageKey};
-      // final url = searchQuery == null
-      //     ? AppEndpoints.countries
-      //     : AppEndpoints.countries + searchQuery;
-
-      // final response =
-      //     await _client.httpGet<dynamic>(url, queryParameters: param);
-      // return right(
-      //   ApiResponse(
-      //     data: null
-      //   ,)
-      // );
-      throw UnimplementedError();
+  Future<Either<AppError, String>> logout() async {
+    try {
+      await supabase.auth.signOut();
+      if (supabase.auth.currentUser == null) {
+        debugPrint('Logout successful');
+        return right('Logout successful');
+      } else {
+        return left(
+          InternalAppError(message: 'Logout failed. Please try again.'),
+        );
+      }
     } catch (e) {
       if (e is ApiErrorResponse) {
         return left(e);
@@ -30,6 +29,5 @@ class ProfileRemoteSource {
         return left(InternalAppError(message: e.toString()));
       }
     }
-
   }
 }

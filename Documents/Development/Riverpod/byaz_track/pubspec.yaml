@@ -108,6 +108,8 @@ dependencies:
   flutter_contacts: ^1.1.9+2
   fl_chart: ^0.68.0
   flutter_dotenv: ^6.0.0
+  google_sign_in: ^7.2.0
+  crypto: ^3.0.7
   # fl_chart: ^0.68.0
 
 dev_dependencies:

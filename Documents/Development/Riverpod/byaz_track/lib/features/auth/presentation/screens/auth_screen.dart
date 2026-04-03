@@ -1,7 +1,13 @@
 import 'dart:io';
 
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:byaz_track/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -11,19 +17,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // // Set status bar to light icons for the dark hero section
-    // SystemChrome.setSystemUIOverlayStyle(
-    //   const SystemUiOverlayStyle(
-    //     statusBarColor: Colors.transparent,
-    //     statusBarIconBrightness: Brightness.light,
-    //     statusBarBrightness: Brightness.dark,
-    //   ),
-    // );
-  }
-
+  final authController = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -172,10 +166,17 @@ class _AuthScreenState extends State<AuthScreen> {
                     const SizedBox(height: 28),
 
                     // Continue with Google
-                    _AuthButton(
-                      onTap: () {},
-                      icon: Assets.images.googlelight.image(),
-                      label: 'Continue with Google',
+                    Obx(
+                      () => _AuthButton(
+                        onTap: () {
+                          authController.continueWithGoogle();
+                        },
+                        icon: Assets.images.googlelight.image(),
+                        label: 'Continue with Google',
+                        isLoading:
+                            authController.googleAuthState.value ==
+                            TheStates.loading,
+                      ),
                     ),
 
                     const SizedBox(height: 12),
@@ -348,11 +349,13 @@ class _AuthButton extends StatelessWidget {
     required this.onTap,
     required this.icon,
     required this.label,
+    this.isLoading = false,
   });
 
   final VoidCallback onTap;
   final Widget icon;
   final String label;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -369,26 +372,34 @@ class _AuthButton extends StatelessWidget {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child: Row(
-              children: [
-                SizedBox(width: 24, height: 24, child: icon),
-                const Spacer(),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                  ),
-                ),
-                const Spacer(),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: Colors.white38,
-                  size: 20,
-                ),
-              ],
-            ),
+            child:
+                isLoading
+                    ? Center(
+                      child: LoadingAnimationWidget.beat(
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                    )
+                    : Row(
+                      children: [
+                        SizedBox(width: 24, height: 24, child: icon),
+                        const Spacer(),
+                        Text(
+                          label,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(
+                          Icons.chevron_right_rounded,
+                          color: Colors.white38,
+                          size: 20,
+                        ),
+                      ],
+                    ),
           ),
         ),
       ),

@@ -8,6 +8,7 @@ import 'package:byaz_track/features/calculator/presentation/screens/calculator_s
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/screens/ledger_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/profile_screen.dart';
+import 'package:byaz_track/features/settings/presentation/controllers/profile_bindings.dart';
 import 'package:flutter/services.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -45,6 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   late List<Widget> _pages;
 
   void _initializePages() {
+    ProfileInitializer.initialize();
     _defaultPages = [
       const HomeScreen(),
       const LedgerScreen(),
@@ -82,6 +84,12 @@ class _DashboardScreenState extends State<DashboardScreen>
 
     _initializePages();
     _pages = widget.customPages ?? _defaultPages;
+  }
+
+  @override
+  void dispose() {
+    ProfileInitializer.destroy();
+    super.dispose();
   }
 
   @override
