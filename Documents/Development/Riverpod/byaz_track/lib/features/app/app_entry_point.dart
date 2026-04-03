@@ -14,6 +14,6 @@ class AppEntryPoint {
   static Future<void> initializeStartUpDependenciesAndRun() async {
     await AppInitializer.init();
 
-    runApp(MyApp(initialRoute: AppRoutes.auth));
+    runApp(MyApp(initialRoute: AppRoutes.splash));
   }
 }

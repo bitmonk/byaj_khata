@@ -416,7 +416,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        'ByajTracker v2.4.1',
+                        'ByajTracker v1.0.0',
                         style: context.textTheme.labelLarge?.copyWith(
                           color: context.textTheme.bodyMedium?.color,
                           fontWeight: FontWeight.w600,

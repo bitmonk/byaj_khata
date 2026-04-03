@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/auth/presentation/controllers/auth_controller.dart';
+import 'package:byaz_track/features/auth/presentation/screens/widgets/auth_button.dart';
 import 'package:byaz_track/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -50,9 +51,24 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 // Landscape photo – cover-fit so it always fills the box
                 Positioned.fill(
-                  child: Assets.images.img1.image(
-                    fit: BoxFit.cover,
-                    alignment: Alignment.topCenter,
+                  child: TweenAnimationBuilder<double>(
+                    tween: Tween<double>(begin: 0.0, end: 1.0),
+                    duration: const Duration(milliseconds: 1400),
+                    curve: Curves.easeOutCubic,
+                    builder: (context, value, child) {
+                      return Opacity(
+                        opacity: value,
+                        // Subtle scale effect: starts at 1.1x and settles to 1.0x
+                        child: Transform.scale(
+                          scale: 1.1 - (value * 0.1),
+                          child: child,
+                        ),
+                      );
+                    },
+                    child: Assets.images.img1.image(
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                    ),
                   ),
                 ),
                 // Strong bottom-fade so the photo dissolves into the bg
@@ -167,7 +183,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                     // Continue with Google
                     Obx(
-                      () => _AuthButton(
+                      () => AuthButton(
                         onTap: () {
                           authController.continueWithGoogle();
                         },
@@ -183,7 +199,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
                     // Continue with Apple
                     if (Platform.isIOS)
-                      _AuthButton(
+                      AuthButton(
                         onTap: () {},
                         icon: const Icon(
                           Icons.apple,
@@ -337,71 +353,6 @@ class _AuthScreenState extends State<AuthScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ── Auth button ────────────────────────────────────────────────────────────────
-
-class _AuthButton extends StatelessWidget {
-  const _AuthButton({
-    required this.onTap,
-    required this.icon,
-    required this.label,
-    this.isLoading = false,
-  });
-
-  final VoidCallback onTap;
-  final Widget icon;
-  final String label;
-  final bool isLoading;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Ink(
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E2A1E).withOpacity(0.7),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.12), width: 1),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-            child:
-                isLoading
-                    ? Center(
-                      child: LoadingAnimationWidget.beat(
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    )
-                    : Row(
-                      children: [
-                        SizedBox(width: 24, height: 24, child: icon),
-                        const Spacer(),
-                        Text(
-                          label,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                          ),
-                        ),
-                        const Spacer(),
-                        const Icon(
-                          Icons.chevron_right_rounded,
-                          color: Colors.white38,
-                          size: 20,
-                        ),
-                      ],
-                    ),
-          ),
-        ),
       ),
     );
   }

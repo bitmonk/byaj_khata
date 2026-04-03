@@ -11,9 +11,12 @@ import 'package:byaz_track/features/profile/presentation/screens/language_screen
 import 'package:byaz_track/features/profile/presentation/screens/theme_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/compound_frequency_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/default_rate_screen.dart';
+import 'package:byaz_track/features/splash/presentation/controllers/splash_bindings.dart';
+import 'package:byaz_track/features/splash/presentation/screens/splash_screen.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
+  static const String splash = '/splash';
   static const String auth = '/auth';
   static const String home = '/home';
   static const String dashboard = '/dashboard';
@@ -25,6 +28,11 @@ class AppRoutes {
   static const String createLoan = '/createLoan';
 
   static List<GetPage<dynamic>>? appPages = [
+    GetPage(
+      name: splash,
+      page: () => const SplashScreen(),
+      binding: SplashBindings(),
+    ),
     GetPage(
       name: auth,
       page: () => const AuthScreen(),
