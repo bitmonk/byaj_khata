@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/interest_details/presentation/screens/interest_details_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
 import '../widgets/ledger_summary_card.dart';
 import '../widgets/ledger_filter_tabs.dart';
+import 'package:byaz_track/features/ledger/presentation/controllers/ledger_controller.dart';
 
 class LedgerScreen extends StatefulWidget {
   const LedgerScreen({super.key});
@@ -27,129 +30,129 @@ class _LedgerScreenState extends State<LedgerScreen> {
       // appBar: AppBar(title: const Text('Ledger')),
       body: Padding(
         padding: EdgeInsets.only(top: context.devicePaddingTop),
-        child: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.all(
-                12.0,
-              ).copyWith(bottom: 16.0, top: 0),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  const LedgerHeader(),
-                  const VerticalSpacing(16),
-                  AppTextFormField(
-                    contentPadding: EdgeInsets.all(12),
-                    hintText: 'Search borrower or lender...',
-                    prefixIcon: const Icon(Icons.person_search_outlined),
-                  ),
-                  const VerticalSpacing(16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: LedgerSummaryCard(
-                          title: 'Total Receivables',
-                          amount: 'Rs 4,50,000',
-                          trendPercentage: '+5.2%',
-                          isPositiveTrend: true,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await Get.find<LedgerController>().fetchLoans();
+          },
+          child: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(
+                  12.0,
+                ).copyWith(bottom: 16.0, top: 0),
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    const LedgerHeader(),
+                    const VerticalSpacing(16),
+                    AppTextFormField(
+                      contentPadding: EdgeInsets.all(12),
+                      hintText: 'Search borrower or lender...',
+                      prefixIcon: const Icon(Icons.person_search_outlined),
+                    ),
+                    const VerticalSpacing(16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: LedgerSummaryCard(
+                            title: 'Total Receivables',
+                            amount: 'Rs 4,50,000',
+                            trendPercentage: '+5.2%',
+                            isPositiveTrend: true,
+                          ),
                         ),
-                      ),
-                      const HorizontalSpacing(12),
-                      Expanded(
-                        child: LedgerSummaryCard(
-                          title: 'Monthly Interest',
-                          amount: 'Rs 9,000',
-                          trendPercentage: '+2.1%',
-                          isPositiveTrend: true,
+                        const HorizontalSpacing(12),
+                        Expanded(
+                          child: LedgerSummaryCard(
+                            title: 'Monthly Interest',
+                            amount: 'Rs 9,000',
+                            trendPercentage: '+2.1%',
+                            isPositiveTrend: true,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ]),
+                      ],
+                    ),
+                  ]),
+                ),
               ),
-            ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _StickyTabBarDelegate(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                //   topPadding: context.devicePaddingTop,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: LedgerFilterTabs(
-                    tabs: _tabs,
-                    selectedIndex: _selectedTabIndex,
-                    onTabSelected: (index) {
-                      setState(() {
-                        _selectedTabIndex = index;
-                      });
-                    },
+              SliverPersistentHeader(
+                pinned: true,
+                delegate: _StickyTabBarDelegate(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  //   topPadding: context.devicePaddingTop,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: LedgerFilterTabs(
+                      tabs: _tabs,
+                      selectedIndex: _selectedTabIndex,
+                      onTabSelected: (index) {
+                        setState(() {
+                          _selectedTabIndex = index;
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-              ).copyWith(top: 8.0, bottom: 12.0),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  LedgerListItemCard(
-                    name: 'John Doe',
-                    loanedDate: '2022-01-01',
-                    status: LedgerItemStatus.active,
-                    principalAmount: 'Rs 4,50,000',
-                    interestAmount: 'Rs 9,000',
-                    interestRateText: '10%',
-                    lastCollectedDate: '2022-01-01',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const InterestDetailsScreen(),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12.0,
+                ).copyWith(top: 8.0, bottom: 12.0),
+                sliver: Obx(() {
+                  final controller = Get.find<LedgerController>();
+
+                  if (controller.fetchLoanState.value == TheStates.loading) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                    );
+                  }
+
+                  if (controller.loans.isEmpty) {
+                    return const SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: Center(child: Text('No loans found.')),
+                      ),
+                    );
+                  }
+
+                  return SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final loan = controller.loans[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: LedgerListItemCard(
+                          name: loan.partyName,
+                          loanedDate:
+                              loan.startDate.toIso8601String().split('T').first,
+                          status: LedgerItemStatus.active,
+                          principalAmount: 'Rs ${loan.principalAmount}',
+                          interestAmount:
+                              loan.interestType == '1'
+                                  ? '${loan.rateValue}% pa'
+                                  : 'Rs ${loan.rateValue} /mo',
+                          interestRateText: '${loan.rateValue}',
+                          lastCollectedDate: 'N/A',
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => const InterestDetailsScreen(),
+                              ),
+                            );
+                          },
                         ),
                       );
-                    },
-                  ),
-                  const VerticalSpacing(12),
-                  LedgerListItemCard(
-                    name: 'John Doe',
-                    loanedDate: '2022-01-01',
-                    status: LedgerItemStatus.settled,
-                    principalAmount: 'Rs 4,50,000',
-                    interestAmount: 'Rs 9,000',
-                    interestRateText: '10%',
-                    lastCollectedDate: '2022-01-01',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const InterestDetailsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const VerticalSpacing(12),
-                  LedgerListItemCard(
-                    name: 'John Doe',
-                    loanedDate: '2022-01-01',
-                    status: LedgerItemStatus.overdue,
-                    principalAmount: 'Rs 4,50,000',
-                    interestAmount: 'Rs 9,000',
-                    interestRateText: '10%',
-                    lastCollectedDate: '2022-01-01',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const InterestDetailsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const VerticalSpacing(200),
-                ]),
+                    }, childCount: controller.loans.length),
+                  );
+                }),
               ),
-            ),
-          ],
+              SliverPadding(padding: EdgeInsets.only(bottom: 120)),
+            ],
+          ),
         ),
       ),
     );

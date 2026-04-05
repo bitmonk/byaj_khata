@@ -1,9 +1,35 @@
+import 'package:byaz_track/core/db/database_helper.dart';
+import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:byaz_track/features/ledger/data/source/ledger_remote_source.dart';
 
-class LedgerController extends GetxController{
+class LedgerController extends GetxController {
   LedgerController({required this.remoteSource});
   final LedgerRemoteSource remoteSource;
 
+  final RxList<LoanModel> loans = <LoanModel>[].obs;
 
+  Rx<TheStates> fetchLoanState = TheStates.initial.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchLoans();
+  }
+
+  Future<void> fetchLoans() async {
+    try {
+      fetchLoanState.value = TheStates.loading;
+      final db = await DatabaseHelper.instance.database;
+      final data = await db.query('loans', orderBy: 'created_at DESC');
+
+      loans.value = data.map((json) => LoanModel.fromMap(json)).toList();
+      fetchLoanState.value = TheStates.success;
+    } catch (e) {
+      debugPrint('Error fetching loans: $e');
+      fetchLoanState.value = TheStates.error;
+    }
+  }
 }

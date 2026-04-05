@@ -2,13 +2,8 @@ import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/core/language/language_controller.dart';
 import 'package:byaz_track/features/profile/presentation/widgets/profile_tile_widget.dart';
 import 'package:byaz_track/features/settings/presentation/controllers/profile_controller.dart';
-import 'package:byaz_track/gen/assets.gen.dart';
 import 'package:byaz_track/l10n/app_localizations.dart';
-import 'package:byaz_track/core/routes/app_routes.dart';
 import 'package:byaz_track/features/profile/presentation/widgets/logout_confirmation_dialog.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

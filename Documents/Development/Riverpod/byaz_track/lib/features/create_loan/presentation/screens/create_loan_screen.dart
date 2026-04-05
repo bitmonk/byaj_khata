@@ -22,6 +22,7 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
     // }
   }
 
+  final createLoanController = Get.find<CreateLoanController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +59,7 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
                     ),
                   ),
                 ),
+                controller: createLoanController.principalAmountController,
               ),
               const VerticalSpacing(20),
               const StartDateSection(),
@@ -80,6 +82,7 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Icon(Icons.person, color: AppColors.appGreen),
                 ),
+                controller: createLoanController.partyNameController,
               ),
               VerticalSpacing(24),
               Text(
@@ -94,11 +97,27 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
                 labelText: 'Add details or purpose...',
                 textInputType: TextInputType.text,
                 onChanged: (value) {},
+                controller: createLoanController.notesController,
               ),
               const VerticalSpacing(32),
               ActionButtonsSection(
                 onSave: () {
-                  // TODO: Implement save logic
+                  createLoanController.insertLoan(
+                    transactionType:
+                        createLoanController.transactionType.value.toString(),
+                    principalAmount: int.parse(
+                      createLoanController.principalAmountController.text,
+                    ),
+                    startDate: createLoanController.startDate.value!,
+                    interestType:
+                        createLoanController.interestRateType.value.toString(),
+                    rateValue: double.parse(
+                      createLoanController.rateValue.value,
+                    ),
+                    partyName: createLoanController.partyNameController.text,
+                    notes: createLoanController.notesController.text,
+                    context: context,
+                  );
                 },
                 onCancel: () {
                   Get.back();

@@ -6,6 +6,7 @@ import 'package:byaz_track/features/create_loan/presentation/screens/create_loan
 import 'package:byaz_track/features/calculator/presentation/controllers/calculator_controller.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/calculator_screen.dart';
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
+import 'package:byaz_track/features/ledger/presentation/controllers/ledger_bindings.dart';
 import 'package:byaz_track/features/ledger/presentation/screens/ledger_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/profile_screen.dart';
 import 'package:byaz_track/features/settings/presentation/controllers/profile_bindings.dart';
@@ -47,6 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   void _initializePages() {
     ProfileInitializer.initialize();
+    LedgerInitializer.initialize();
     _defaultPages = [
       const HomeScreen(),
       const LedgerScreen(),
@@ -89,6 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void dispose() {
     ProfileInitializer.destroy();
+    LedgerInitializer.destroy();
     super.dispose();
   }
 

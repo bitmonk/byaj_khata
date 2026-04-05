@@ -3,6 +3,7 @@ import 'package:byaz_track/features/auth/presentation/controllers/auth_bindings.
 import 'package:byaz_track/features/auth/presentation/screens/auth_screen.dart';
 import 'package:byaz_track/features/create_loan/presentation/controllers/create_loan_bindings.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/create_loan_screen.dart';
+import 'package:byaz_track/features/dashboard/presentation/controllers/dashboard_bindings.dart';
 import 'package:byaz_track/features/dashboard/presentation/screens/dashboard_screen.dart';
 
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
@@ -42,6 +43,7 @@ class AppRoutes {
     GetPage(
       name: dashboard,
       page: () => const DashboardScreen(),
+      binding: DashboardBindings(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 500),
       curve: Curves.easeOutCirc,

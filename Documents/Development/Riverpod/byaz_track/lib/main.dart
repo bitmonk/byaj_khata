@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:byaz_track/core/build_variants/environment_entry_points.dart';
+import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 // import 'flavors.dart';
@@ -42,6 +43,9 @@ void main() async {
     url: dotenv.env['SUPABASE_URL']!,
     anonKey: dotenv.env['SUPABASE_ANON_KEY']!,
   );
+
+  // Initialize local SQLite database
+  await DatabaseHelper.instance.database;
 
   // Initialize local notifications
   // await LocalNotificationService().initialize();
