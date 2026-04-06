@@ -3,6 +3,7 @@ import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:byaz_track/features/ledger/data/source/ledger_remote_source.dart';
 
 class LedgerController extends GetxController {
@@ -30,6 +31,43 @@ class LedgerController extends GetxController {
     } catch (e) {
       debugPrint('Error fetching loans: $e');
       fetchLoanState.value = TheStates.error;
+    }
+  }
+
+  Future<void> syncPendingLoans() async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final pendingLoans = await db.query(
+        'loans',
+        where: 'sync_status = ?',
+        whereArgs: ['pending'],
+      );
+
+      if (pendingLoans.isEmpty) {
+        debugPrint('No pending loans to sync.');
+        return;
+      }
+
+      final supabase = Supabase.instance.client;
+
+      for (final loanJson in pendingLoans) {
+        final loanMap = Map<String, dynamic>.from(loanJson);
+        loanMap.remove('sync_status');
+
+        await supabase.from('loans').upsert(loanMap);
+
+        await db.update(
+          'loans',
+          {'sync_status': 'synced'},
+          where: 'id = ?',
+          whereArgs: [loanJson['id']],
+        );
+      }
+
+      debugPrint('Successfully synced ${pendingLoans.length} loans.');
+      await fetchLoans();
+    } catch (e) {
+      debugPrint('Error syncing loans: $e');
     }
   }
 }

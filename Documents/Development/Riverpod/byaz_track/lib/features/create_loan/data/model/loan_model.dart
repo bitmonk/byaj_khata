@@ -1,3 +1,5 @@
+import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
+
 class LoanModel {
   final String id;
   final String transactionType;
@@ -10,6 +12,8 @@ class LoanModel {
   final DateTime createdAt;
   final DateTime updatedAt;
   final String syncStatus;
+  final LedgerItemStatus loanStatus;
+  final DateTime? lastCollectedDate;
 
   LoanModel({
     required this.id,
@@ -23,6 +27,8 @@ class LoanModel {
     required this.createdAt,
     required this.updatedAt,
     required this.syncStatus,
+    required this.loanStatus,
+    this.lastCollectedDate,
   });
 
   Map<String, dynamic> toMap() {
@@ -38,6 +44,8 @@ class LoanModel {
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
       'sync_status': syncStatus,
+      'loan_status': loanStatus.name,
+      'last_collected_date': lastCollectedDate?.toIso8601String(),
     };
   }
 
@@ -54,6 +62,14 @@ class LoanModel {
       createdAt: DateTime.parse(map['created_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
       syncStatus: map['sync_status'] as String,
+      loanStatus: LedgerItemStatus.values.firstWhere(
+        (e) => e.name == map['loan_status'],
+        orElse: () => LedgerItemStatus.active,
+      ),
+      lastCollectedDate:
+          map['last_collected_date'] != null
+              ? DateTime.parse(map['last_collected_date'] as String)
+              : null,
     );
   }
 }

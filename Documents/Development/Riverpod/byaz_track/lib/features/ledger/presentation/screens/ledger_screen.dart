@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:convert';
+
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/interest_details/presentation/screens/interest_details_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
+import 'package:logger/web.dart';
 import '../widgets/ledger_summary_card.dart';
 import '../widgets/ledger_filter_tabs.dart';
 import 'package:byaz_track/features/ledger/presentation/controllers/ledger_controller.dart';
@@ -100,7 +101,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                 sliver: Obx(() {
                   final controller = Get.find<LedgerController>();
 
-                  if (controller.fetchLoanState.value == TheStates.loading) {
+                  if (controller.fetchLoanState.value == TheStates.initial) {
                     return const SliverToBoxAdapter(
                       child: Padding(
                         padding: EdgeInsets.all(32.0),
@@ -124,18 +125,22 @@ class _LedgerScreenState extends State<LedgerScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: LedgerListItemCard(
-                          name: loan.partyName,
-                          loanedDate:
-                              loan.startDate.toIso8601String().split('T').first,
-                          status: LedgerItemStatus.active,
-                          principalAmount: 'Rs ${loan.principalAmount}',
-                          interestAmount:
-                              loan.interestType == '1'
-                                  ? '${loan.rateValue}% pa'
-                                  : 'Rs ${loan.rateValue} /mo',
-                          interestRateText: '${loan.rateValue}',
-                          lastCollectedDate: 'N/A',
+                          loan: loan,
+
+                          // name: loan.partyName,
+                          // loanedDate:
+                          //     loan.startDate.toIso8601String().split('T').first,
+                          // status: LedgerItemStatus.active,
+                          // principalAmount: 'Rs ${loan.principalAmount}',
+                          // interestAmount:
+                          //     loan.interestType == '1'
+                          //         ? '${loan.rateValue}% pa'
+                          //         : 'Rs ${loan.rateValue} /mo',
+                          // interestRateText: '${loan.rateValue}',
+                          // lastCollectedDate: 'N/A',
+                          // transactionType: loan.transactionType,
                           onTap: () {
+                            print(loan.transactionType);
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:byaz_track/features/create_loan/data/source/create_loan_remote_source.dart';
@@ -27,6 +28,8 @@ class CreateLoanController extends GetxController {
   TextEditingController notesController = TextEditingController();
 
   void setStartDate(NepaliDateTime? date) => startDate.value = date;
+
+
 
   Future<void> insertLoan({
     required String transactionType,
@@ -63,6 +66,7 @@ class CreateLoanController extends GetxController {
         createdAt: now,
         updatedAt: now,
         syncStatus: 'pending',
+        loanStatus: LedgerItemStatus.active,
       );
 
       final result = await db.insert('loans', loan.toMap());

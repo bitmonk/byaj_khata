@@ -1,5 +1,6 @@
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/core/language/language_controller.dart';
+import 'package:byaz_track/features/ledger/presentation/controllers/ledger_controller.dart';
 import 'package:byaz_track/features/profile/presentation/widgets/profile_tile_widget.dart';
 import 'package:byaz_track/features/settings/presentation/controllers/profile_controller.dart';
 import 'package:byaz_track/l10n/app_localizations.dart';
@@ -353,7 +354,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 32),
-
+                ProfileTileWidget(
+                  leadingIcon: Icons.upload,
+                  title: 'Upload Data',
+                  onTap: () {
+                    Get.find<LedgerController>().syncPendingLoans();
+                  },
+                ),
                 // DANGER ZONE
                 _buildSectionHeader(
                   context,

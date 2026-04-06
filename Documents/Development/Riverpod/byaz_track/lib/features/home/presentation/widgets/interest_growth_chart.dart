@@ -237,22 +237,22 @@ class _InterestGrowthChartState extends State<InterestGrowthChart> {
           ),
         ),
         leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            interval: 1,
-            reservedSize: 40,
-            getTitlesWidget: (value, meta) {
-              final text =
-                  const {1: '10k', 3: '30k', 5: '50k'}[value.toInt()] ?? '';
-              return Text(
-                text,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 8,
-                ),
-              );
-            },
-          ),
+          // sideTitles: SideTitles(
+          //   showTitles: true,
+          //   interval: 1,
+          //   reservedSize: 40,
+          //   getTitlesWidget: (value, meta) {
+          //     final text =
+          //         const {1: '10k', 3: '30k', 5: '50k'}[value.toInt()] ?? '';
+          //     return Text(
+          //       text,
+          //       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+          //         fontWeight: FontWeight.w500,
+          //         fontSize: 8,
+          //       ),
+          //     );
+          //   },
+          // ),
         ),
       ),
       borderData: FlBorderData(

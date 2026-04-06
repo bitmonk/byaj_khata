@@ -21,7 +21,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -40,13 +40,20 @@ class DatabaseHelper {
         notes TEXT,
         created_at TEXT,
         updated_at TEXT,
-        sync_status TEXT
+        sync_status TEXT,
+        loan_status TEXT,
+        last_collected_date TEXT
       )
     ''');
   }
 
   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
-    // TODO: Add any migration logic here for future database versions
+    if (oldVersion < 2) {
+      await db.execute(
+        "ALTER TABLE loans ADD COLUMN loan_status TEXT DEFAULT 'active'",
+      );
+      await db.execute("ALTER TABLE loans ADD COLUMN last_collected_date TEXT");
+    }
   }
 
   Future<void> close() async {

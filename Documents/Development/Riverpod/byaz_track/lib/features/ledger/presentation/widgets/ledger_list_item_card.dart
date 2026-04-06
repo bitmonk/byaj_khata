@@ -1,26 +1,29 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 
 enum LedgerItemStatus { active, settled, overdue }
 
 class LedgerListItemCard extends StatelessWidget {
-  final String name;
-  final String loanedDate;
-  final LedgerItemStatus status;
-  final String principalAmount;
-  final String interestAmount;
-  final String interestRateText;
-  final String lastCollectedDate;
+  // final String name;
+  // final String loanedDate;
+  // final String principalAmount;
+  // final String interestAmount;
+  // final String interestRateText;
+  // final String lastCollectedDate;
+  // final String transactionType;
+  final LoanModel loan;
   final VoidCallback onTap;
 
   const LedgerListItemCard({
     super.key,
-    required this.name,
-    required this.loanedDate,
-    required this.status,
-    required this.principalAmount,
-    required this.interestAmount,
-    required this.interestRateText,
-    required this.lastCollectedDate,
+    required this.loan,
+    // required this.name,
+    // required this.loanedDate,
+    // required this.principalAmount,
+    // required this.interestAmount,
+    // required this.interestRateText,
+    // required this.lastCollectedDate,
+    // required this.transactionType,
     required this.onTap,
   });
 
@@ -40,7 +43,7 @@ class LedgerListItemCard extends StatelessWidget {
     Color statusTextColor;
     String statusText;
 
-    switch (status) {
+    switch (loan.loanStatus) {
       case LedgerItemStatus.active:
         statusBgColor =
             isDark ? AppColorsDark.neutral700 : const Color(0xFFF1F5F9);
@@ -91,7 +94,7 @@ class LedgerListItemCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name,
+                        loan.partyName,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: textColorPrimary,
@@ -100,7 +103,7 @@ class LedgerListItemCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Loaned on $loanedDate',
+                        'Loaned on ${loan.startDate.toIso8601String().split('T').first}',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: textColorSecondary,
                         ),
@@ -149,7 +152,7 @@ class LedgerListItemCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        principalAmount,
+                        'Rs ${loan.principalAmount}',
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: textColorPrimary,
@@ -164,7 +167,7 @@ class LedgerListItemCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'Interest ($interestRateText)',
+                        'Interest (${loan.rateValue}%)',
                         style: theme.textTheme.labelLarge?.copyWith(
                           color: textColorSecondary,
                           fontWeight: FontWeight.w600,
@@ -172,7 +175,7 @@ class LedgerListItemCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        interestAmount,
+                        'Rs ${loan.rateValue}',
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColors.success,
@@ -197,7 +200,7 @@ class LedgerListItemCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  'Last collected: $lastCollectedDate',
+                  'Last collected: N/A',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: textColorSecondary.withOpacity(0.8),
                     fontWeight: FontWeight.w500,
