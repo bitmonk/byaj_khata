@@ -126,26 +126,14 @@ class _LedgerScreenState extends State<LedgerScreen> {
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: LedgerListItemCard(
                           loan: loan,
-
-                          // name: loan.partyName,
-                          // loanedDate:
-                          //     loan.startDate.toIso8601String().split('T').first,
-                          // status: LedgerItemStatus.active,
-                          // principalAmount: 'Rs ${loan.principalAmount}',
-                          // interestAmount:
-                          //     loan.interestType == '1'
-                          //         ? '${loan.rateValue}% pa'
-                          //         : 'Rs ${loan.rateValue} /mo',
-                          // interestRateText: '${loan.rateValue}',
-                          // lastCollectedDate: 'N/A',
-                          // transactionType: loan.transactionType,
                           onTap: () {
                             print(loan.transactionType);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder:
-                                    (context) => const InterestDetailsScreen(),
+                                    (context) =>
+                                        InterestDetailsScreen(loan: loan),
                               ),
                             );
                           },

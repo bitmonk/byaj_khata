@@ -1,7 +1,9 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 
 class InterestSummaryCards extends StatelessWidget {
-  const InterestSummaryCards({super.key});
+  final LoanModel? loan;
+  const InterestSummaryCards({super.key, this.loan});
 
   @override
   Widget build(BuildContext context) {
@@ -9,13 +11,39 @@ class InterestSummaryCards extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final borderColor =
-        isDark
-            ? AppColorsDark.dividerColor
-            : const Color(0xFFC3D0C3); // Faint greenish gray
+        isDark ? AppColorsDark.dividerColor : const Color(0xFFC3D0C3);
     final textColorPrimary =
         isDark ? AppColorsDark.textPrimary : const Color(0xFF1E1E1E);
     final textColorSecondary =
         isDark ? AppColorsDark.textSecondary : const Color(0xFF5A5A5A);
+
+    String primaryRateText = '-';
+    String secondaryRateText = '-';
+
+    if (loan != null) {
+      final rateStr =
+          loan!.rateValue == loan!.rateValue.truncateToDouble()
+              ? loan!.rateValue.toInt().toString()
+              : loan!.rateValue.toString();
+
+      if (loan!.interestType == '1') {
+        primaryRateText = '$rateStr% / yr';
+        final monthly = loan!.rateValue / 12;
+        final monthlyStr =
+            monthly == monthly.truncateToDouble()
+                ? monthly.toInt().toString()
+                : monthly.toStringAsFixed(2);
+        secondaryRateText = 'रू $monthlyStr / mo';
+      } else {
+        primaryRateText = 'रू $rateStr / mo';
+        final yearly = loan!.rateValue * 12;
+        final yearlyStr =
+            yearly == yearly.truncateToDouble()
+                ? yearly.toInt().toString()
+                : yearly.toStringAsFixed(2);
+        secondaryRateText = '$yearlyStr% Yearly';
+      }
+    }
 
     return IntrinsicHeight(
       child: Row(
@@ -42,7 +70,7 @@ class InterestSummaryCards extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'रू 5,00,000',
+                    'रू ${loan?.principalAmount ?? 0}',
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: textColorPrimary,
@@ -75,7 +103,7 @@ class InterestSummaryCards extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '2% / mo',
+                    primaryRateText,
                     style: theme.textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                       color: textColorPrimary,
@@ -84,7 +112,7 @@ class InterestSummaryCards extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '24% Yearly',
+                    secondaryRateText,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: textColorSecondary,

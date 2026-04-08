@@ -1,7 +1,11 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/core/utils/byaj_helper.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:nepali_utils/nepali_utils.dart';
 
 class InterestCalculationBreakdown extends StatelessWidget {
-  const InterestCalculationBreakdown({super.key});
+  final LoanModel loan;
+  const InterestCalculationBreakdown({super.key, required this.loan});
 
   @override
   Widget build(BuildContext context) {
@@ -9,13 +13,38 @@ class InterestCalculationBreakdown extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final borderColor =
-        isDark
-            ? AppColorsDark.dividerColor
-            : const Color(0xFFC3D0C3); // Faint greenish gray
+        isDark ? AppColorsDark.dividerColor : const Color(0xFFC3D0C3);
     final textColorPrimary =
         isDark ? AppColorsDark.textPrimary : const Color(0xFF1E1E1E);
     final textColorSecondary =
         isDark ? AppColorsDark.textSecondary : const Color(0xFF5A5A5A);
+
+    // Calculate dynamic data
+    final startNepali = loan.startDate.toNepaliSafe();
+    final endNepali = NepaliDateTime.now();
+    final isMonthly = loan.interestType == "0";
+
+    final result = ByajHelper.calculateInterest(
+      principal: loan.principalAmount.toDouble(),
+      rate: loan.rateValue,
+      isMonthly: isMonthly,
+      start: startNepali,
+      end: endNepali,
+    );
+
+    final duration = result.duration;
+    final double monthlyRate =
+        isMonthly ? loan.rateValue : loan.rateValue / 12.0;
+    final double monthlyInterest = (loan.principalAmount * monthlyRate) / 100;
+
+    final daysInCurrentMonth = ByajHelper.getDaysInMonth(
+      endNepali.year,
+      endNepali.month,
+    );
+    final double dailyInterest = monthlyInterest / daysInCurrentMonth;
+
+    final double fullMonthsTotal = monthlyInterest * duration.totalMonths;
+    final double extraDaysTotal = dailyInterest * duration.days;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,20 +70,28 @@ class InterestCalculationBreakdown extends StatelessWidget {
             children: [
               _CalculationStepRow(
                 number: '1',
-                title: 'Monthly Interest',
-                calculation: 'रू 5,00,000 × 2% = रू 10,000',
+                title:
+                    isMonthly
+                        ? 'Monthly Interest'
+                        : 'Monthly Interest (Calculated)',
+                calculation:
+                    isMonthly
+                        ? 'रू ${loan.principalAmount} × ${loan.rateValue}% = रू ${monthlyInterest}'
+                        : 'रू ${loan.principalAmount} × (${loan.rateValue}% ÷ 12) = रू ${monthlyInterest}',
               ),
               const SizedBox(height: 24),
               _CalculationStepRow(
                 number: '2',
-                title: 'Full Months (14)',
-                calculation: 'रू 10,000 × 14 = रू 1,40,000',
+                title: 'Full Months (${duration.totalMonths})',
+                calculation:
+                    'रू ${monthlyInterest.toStringAsFixed(2)} × ${duration.totalMonths} = रू ${fullMonthsTotal.toStringAsFixed(2)}',
               ),
               const SizedBox(height: 24),
               _CalculationStepRow(
                 number: '3',
-                title: 'Extra Days (7)',
-                calculation: 'रू 333.33/day × 7 = रू 2,333',
+                title: 'Extra Days (${duration.days})',
+                calculation:
+                    'रू ${dailyInterest.toStringAsFixed(2)}/day × ${duration.days} = रू ${extraDaysTotal.toStringAsFixed(2)}',
               ),
               const SizedBox(height: 32),
               Divider(color: borderColor, thickness: 1),
@@ -71,7 +108,7 @@ class InterestCalculationBreakdown extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'रू 1,42,333',
+                    'रू ${result.interest.toStringAsFixed(2)}',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
                       color: textColorPrimary,

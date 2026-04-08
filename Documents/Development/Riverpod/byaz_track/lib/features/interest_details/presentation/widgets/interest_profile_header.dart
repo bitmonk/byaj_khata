@@ -1,7 +1,9 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 
 class InterestProfileHeader extends StatelessWidget {
-  const InterestProfileHeader({super.key});
+  final LoanModel loan;
+  const InterestProfileHeader({super.key, required this.loan});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class InterestProfileHeader extends StatelessWidget {
           radius: 30,
           backgroundColor: badgeColor,
           child: Text(
-            'JD',
+            loan.partyName.substring(0, 2).toUpperCase(),
             style: theme.textTheme.titleLarge?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w600,
@@ -42,7 +44,7 @@ class InterestProfileHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'John Doe',
+                loan.partyName,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                   color: textColorPrimary,
@@ -59,7 +61,7 @@ class InterestProfileHeader extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'Started: 15 Jestha, 2080',
+                    'Started: ${loan.startDate.toIso8601String().split('T').first}',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: textColorSecondary,
                     ),
@@ -77,7 +79,7 @@ class InterestProfileHeader extends StatelessWidget {
             border: Border.all(color: badgeColor),
           ),
           child: Text(
-            'Active',
+            loan.loanStatus.name,
             style: theme.textTheme.labelLarge?.copyWith(
               color: badgeColor,
               fontWeight: FontWeight.w500,

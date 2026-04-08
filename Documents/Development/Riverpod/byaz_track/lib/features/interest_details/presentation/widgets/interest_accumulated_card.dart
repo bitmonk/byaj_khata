@@ -1,8 +1,12 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/core/utils/byaj_helper.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:nepali_utils/nepali_utils.dart';
 
 class InterestAccumulatedCard extends StatelessWidget {
-  const InterestAccumulatedCard({super.key});
+  final LoanModel loan;
+  const InterestAccumulatedCard({super.key, required this.loan});
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +14,7 @@ class InterestAccumulatedCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     final borderColor =
-        isDark
-            ? AppColorsDark.dividerColor
-            : const Color(0xFFC3D0C3); // Faint greenish gray
+        isDark ? AppColorsDark.dividerColor : const Color(0xFFC3D0C3);
     final textColorPrimary =
         isDark ? AppColorsDark.textPrimary : const Color(0xFF1E1E1E);
     final textColorSecondary =
@@ -29,6 +31,29 @@ class InterestAccumulatedCard extends StatelessWidget {
         isDark
             ? AppColorsDark.success500.withOpacity(0.2)
             : const Color(0xFFB9DDA4).withOpacity(0.5);
+
+    // Calculate dynamic data
+    final startNepali = loan.startDate.toNepaliSafe();
+    final endNepali = NepaliDateTime.now();
+    final isMonthly = loan.interestType == "0";
+
+    final result = ByajHelper.calculateInterest(
+      principal: loan.principalAmount.toDouble(),
+      rate: loan.rateValue,
+      isMonthly: isMonthly,
+      start: startNepali,
+      end: endNepali,
+    );
+
+    final duration = result.duration;
+    // Fractional months for display
+    final daysInCurrentMonth = ByajHelper.getDaysInMonth(
+      endNepali.year,
+      endNepali.month,
+    );
+    final totalMonthsFormatted = (duration.totalMonths +
+            (duration.days / daysInCurrentMonth))
+        .toStringAsFixed(1);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -58,7 +83,7 @@ class InterestAccumulatedCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'रू 1,42,333',
+                      'रू ${result.interest}',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColorPrimary,
@@ -78,7 +103,7 @@ class InterestAccumulatedCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  '+14.2 Months',
+                  '+$totalMonthsFormatted Months',
                   style: theme.textTheme.labelMedium?.copyWith(
                     color: pillTextColor,
                     fontWeight: FontWeight.w700,
@@ -99,7 +124,7 @@ class InterestAccumulatedCard extends StatelessWidget {
                 ),
               ),
               Text(
-                'Last 6 Months',
+                'Current Status',
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w700,
                   color: textColorPrimary,
@@ -131,24 +156,13 @@ class InterestAccumulatedCard extends StatelessWidget {
                       interval: 1,
                       getTitlesWidget: (value, meta) {
                         String text;
+                        // Simple logic to show some labels for the trend
                         switch (value.toInt()) {
                           case 0:
-                            text = 'Magh';
-                            break;
-                          case 1:
-                            text = 'Fal';
-                            break;
-                          case 2:
-                            text = 'Cha';
-                            break;
-                          case 3:
-                            text = 'Bai';
-                            break;
-                          case 4:
-                            text = 'Jes';
+                            text = 'Start';
                             break;
                           case 5:
-                            text = 'Asa';
+                            text = 'Now';
                             break;
                           default:
                             text = '';
@@ -203,24 +217,7 @@ class InterestAccumulatedCard extends StatelessWidget {
                     ),
                   ),
                 ],
-                lineTouchData: LineTouchData(
-                  enabled: true,
-                  touchTooltipData: LineTouchTooltipData(
-                    getTooltipItems: (touchedSpots) {
-                      return touchedSpots.map((LineBarSpot touchedSpot) {
-                        final textStyle = TextStyle(
-                          color: isDark ? Colors.white : Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        );
-                        return LineTooltipItem(
-                          touchedSpot.y.toString(),
-                          textStyle,
-                        );
-                      }).toList();
-                    },
-                  ),
-                ),
+                lineTouchData: LineTouchData(enabled: true),
               ),
             ),
           ),

@@ -1,19 +1,33 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/core/utils/byaj_helper.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:nepali_utils/nepali_utils.dart';
 
 class InterestTotalSettlementCard extends StatelessWidget {
-  const InterestTotalSettlementCard({super.key});
+  final LoanModel loan;
+  const InterestTotalSettlementCard({super.key, required this.loan});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    // Using colors directly matching the reference design for immediate visual accuracy
-    const cardColor = Color(0xFF267D25); // Deep green
+
     final borderColor =
-        isDark
-            ? AppColorsDark.dividerColor
-            : const Color(0xFFC3D0C3); // Faint greenish gray
+        isDark ? AppColorsDark.dividerColor : const Color(0xFFC3D0C3);
     const contentColor = Color(0xFF0B3626); // Very dark green/slate for text
+
+    // Calculate dynamic data
+    final startNepali = loan.startDate.toNepaliSafe();
+    final endNepali = NepaliDateTime.now();
+    final isMonthly = loan.interestType == "0";
+
+    final result = ByajHelper.calculateInterest(
+      principal: loan.principalAmount.toDouble(),
+      rate: loan.rateValue,
+      isMonthly: isMonthly,
+      start: startNepali,
+      end: endNepali,
+    );
 
     return Material(
       color: Colors.transparent,
@@ -24,7 +38,6 @@ class InterestTotalSettlementCard extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
           decoration: BoxDecoration(
-            // color: cardColor,
             borderRadius: BorderRadius.circular(24),
             border: Border.all(color: borderColor),
           ),
@@ -34,7 +47,6 @@ class InterestTotalSettlementCard extends StatelessWidget {
               Text(
                 'TOTAL SETTLEMENT AMOUNT',
                 style: theme.textTheme.labelLarge?.copyWith(
-                  // color: contentColor,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0.5,
                 ),
@@ -49,17 +61,15 @@ class InterestTotalSettlementCard extends StatelessWidget {
                         text: TextSpan(
                           text: 'रू  ',
                           style: theme.textTheme.headlineSmall?.copyWith(
-                            // color: contentColor,
                             fontWeight: FontWeight.w800,
-                            fontSize: 16,
+                            fontSize: 14,
                           ),
                           children: [
                             TextSpan(
-                              text: '6,42,333',
+                              text: result.totalAmount.toStringAsFixed(2),
                               style: theme.textTheme.headlineSmall?.copyWith(
-                                // color: contentColor,
                                 fontWeight: FontWeight.w800,
-                                fontSize: 28,
+                                fontSize: 24,
                               ),
                             ),
                           ],
@@ -67,7 +77,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                       ),
                     ),
                     VerticalDivider(
-                      color: contentColor.withOpacity(0.2),
+                      color: contentColor.withOpacity(0.1),
                       thickness: 1,
                       width: 24,
                     ),
@@ -77,18 +87,16 @@ class InterestTotalSettlementCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Principal: रू 5,00,000',
+                            'Principal: रू ${loan.principalAmount.toStringAsFixed(2)}',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              // color: contentColor.withOpacity(0.8),
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Interest: रू 1,42,333',
+                            'Interest: रू ${result.interest.toStringAsFixed(2)}',
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              // color: contentColor.withOpacity(0.8),
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
                             ),

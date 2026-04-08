@@ -2,13 +2,14 @@ import 'dart:convert';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:byaz_track/core/db/database_helper.dart';
+import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:fast_contacts/fast_contacts.dart';
 import 'package:byaz_track/features/create_loan/data/source/create_loan_remote_source.dart';
 import 'package:logger/web.dart';
 import 'package:nepali_date_picker/nepali_date_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:uuid/uuid.dart';
@@ -28,8 +29,6 @@ class CreateLoanController extends GetxController {
   TextEditingController notesController = TextEditingController();
 
   void setStartDate(NepaliDateTime? date) => startDate.value = date;
-
-
 
   Future<void> insertLoan({
     required String transactionType,
@@ -102,5 +101,54 @@ class CreateLoanController extends GetxController {
         ..hideCurrentSnackBar()
         ..showSnackBar(snackBar);
     }
+  }
+
+  Rx<TheStates> loadContactState = TheStates.initial.obs;
+  RxBool hasContactPermission = false.obs;
+  RxList<Contact> contacts = <Contact>[].obs;
+  List<Contact> allContacts = [];
+
+  Future<List<Contact>> loadContacts() async {
+    print('loading contacts');
+    try {
+      final status = await Permission.contacts.request();
+      print('contact permission status: $status');
+      loadContactState.value = TheStates.loading;
+      if (status.isGranted) {
+        final rawContacts = await FastContacts.getAllContacts();
+        allContacts = rawContacts;
+        loadContactState.value = TheStates.success;
+        hasContactPermission.value = true;
+        contacts.assignAll(rawContacts);
+        return rawContacts;
+      } else {
+        hasContactPermission.value = false;
+        loadContactState.value = TheStates.error;
+        allContacts.clear();
+        contacts.clear();
+        return [];
+      }
+    } catch (e) {
+      loadContactState.value = TheStates.error;
+      debugPrint('Error getting contacts: $e');
+      allContacts.clear();
+      contacts.clear();
+      return [];
+    }
+  }
+
+  void searchContacts(String query) {
+    if (query.isEmpty) {
+      contacts.assignAll(allContacts);
+      return;
+    }
+    contacts.assignAll(
+      allContacts
+          .where(
+            (contact) =>
+                contact.displayName.toLowerCase().contains(query.toLowerCase()),
+          )
+          .toList(),
+    );
   }
 }

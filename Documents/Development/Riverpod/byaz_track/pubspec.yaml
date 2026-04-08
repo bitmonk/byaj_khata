@@ -71,6 +71,7 @@ dependencies:
   material_2_switch: ^1.0.0
   mime_type: ^1.0.1
   nepali_date_picker: ^7.0.1
+  nepali_utils: ^3.0.8
   permission_handler: ^12.0.0+1
   persistent_bottom_nav_bar_v2: ^5.3.1
   pinput: ^5.0.1
@@ -115,6 +116,7 @@ dependencies:
   uuid: ^4.5.3
   awesome_snackbar_content: ^0.1.7
   top_snackbar_flutter: ^3.3.0
+  fast_contacts: ^5.0.1
   # fl_chart: ^0.68.0
 
 dev_dependencies:

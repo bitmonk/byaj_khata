@@ -1,4 +1,5 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 import '../widgets/interest_profile_header.dart';
 import '../widgets/interest_summary_cards.dart';
 import '../widgets/interest_accumulated_card.dart';
@@ -7,7 +8,8 @@ import '../widgets/interest_total_settlement_card.dart';
 import '../widgets/interest_action_buttons.dart';
 
 class InterestDetailsScreen extends StatelessWidget {
-  const InterestDetailsScreen({super.key});
+  final LoanModel? loan;
+  const InterestDetailsScreen({super.key, this.loan});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,36 @@ class InterestDetailsScreen extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+            child: PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert),
+              offset: const Offset(0, 50),
+              elevation: 10,
+              shadowColor: Colors.black,
+
+              onSelected: (String result) {
+                // Handle different menu option selections here
+                print('Selected option: $result');
+              },
+              itemBuilder:
+                  (BuildContext context) => <PopupMenuEntry<String>>[
+                    const PopupMenuItem<String>(
+                      value: 'edit',
+                      child: Text('Edit Loan'),
+                    ),
+                    const PopupMenuItem<String>(
+                      value: 'share',
+                      child: Text('Share Details'),
+                    ),
+                    const PopupMenuDivider(),
+                    const PopupMenuItem<String>(
+                      value: 'delete',
+                      child: Text(
+                        'Delete Loan',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  ],
+            ),
           ),
         ],
       ),
@@ -26,15 +57,15 @@ class InterestDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const InterestProfileHeader(),
+            InterestProfileHeader(loan: loan!),
             const SizedBox(height: 24),
-            const InterestSummaryCards(),
+            InterestSummaryCards(loan: loan),
             const SizedBox(height: 24),
-            const InterestAccumulatedCard(),
+            InterestAccumulatedCard(loan: loan!),
             const SizedBox(height: 32),
-            const InterestCalculationBreakdown(),
+            InterestCalculationBreakdown(loan: loan!),
             const SizedBox(height: 32),
-            const InterestTotalSettlementCard(),
+            InterestTotalSettlementCard(loan: loan!),
             const SizedBox(height: 32),
             const InterestActionButtons(),
             const SizedBox(height: 48),

@@ -4,6 +4,7 @@ import 'package:byaz_track/features/create_loan/presentation/screens/widgets/tra
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/start_date_section.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/interest_rate_type_section.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/action_buttons_section.dart';
+import 'package:byaz_track/features/create_loan/presentation/screens/widgets/contact_list_bottom_sheet.dart';
 
 class CreateLoanScreen extends StatefulWidget {
   const CreateLoanScreen({super.key});
@@ -82,6 +83,27 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Icon(Icons.person, color: AppColors.appGreen),
                 ),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    Icons.contacts_outlined,
+                    color: AppColors.appGreen,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) {
+                        return ContactListBottomSheet(
+                          onContactSelected: (contact) {
+                            createLoanController.partyNameController.text =
+                                contact.displayName;
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
                 controller: createLoanController.partyNameController,
               ),
               VerticalSpacing(24),
@@ -108,7 +130,8 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
                     principalAmount: int.parse(
                       createLoanController.principalAmountController.text,
                     ),
-                    startDate: createLoanController.startDate.value!,
+                    startDate:
+                        createLoanController.startDate.value!.toDateTime(),
                     interestType:
                         createLoanController.interestRateType.value.toString(),
                     rateValue: double.parse(
