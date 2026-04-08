@@ -66,7 +66,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: result.totalAmount.toStringAsFixed(2),
+                              text: result.totalAmount.toStringAsFixed(0),
                               style: theme.textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.w800,
                                 fontSize: 24,
@@ -87,7 +87,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Principal: रू ${loan.principalAmount.toStringAsFixed(2)}',
+                            'Principal: रू ${loan.principalAmount.toStringAsFixed(0)}',
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                               fontSize: 12,
@@ -95,7 +95,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Interest: रू ${result.interest.toStringAsFixed(2)}',
+                            'Interest: रू ${result.interest.toStringAsFixed(0)}',
                             style: theme.textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.w600,
                               fontSize: 12,

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/dashboard/presentation/controllers/dashboard_bindings.dart';
+import 'package:byaz_track/features/interest_details/presentation/controllers/interest_details_bindings.dart';
 import 'package:byaz_track/features/interest_details/presentation/screens/interest_details_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
 import 'package:logger/web.dart';
@@ -127,6 +129,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                         child: LedgerListItemCard(
                           loan: loan,
                           onTap: () {
+                            InterestDetailsInitializer.initialize();
                             print(loan.transactionType);
                             Navigator.push(
                               context,

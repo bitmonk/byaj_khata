@@ -76,22 +76,23 @@ class InterestCalculationBreakdown extends StatelessWidget {
                         : 'Monthly Interest (Calculated)',
                 calculation:
                     isMonthly
-                        ? 'रू ${loan.principalAmount} × ${loan.rateValue}% = रू ${monthlyInterest}'
-                        : 'रू ${loan.principalAmount} × (${loan.rateValue}% ÷ 12) = रू ${monthlyInterest}',
+                        ? 'रू ${loan.principalAmount.toStringAsFixed(0)} × ${loan.rateValue.toStringAsFixed(0)}% = रू ${monthlyInterest.toStringAsFixed(0)}'
+                        : 'रू ${loan.principalAmount.toStringAsFixed(0)} × (${loan.rateValue.toStringAsFixed(0)}% ÷ 12) = रू ${monthlyInterest.toStringAsFixed(0)}',
               ),
               const SizedBox(height: 24),
               _CalculationStepRow(
                 number: '2',
-                title: 'Full Months (${duration.totalMonths})',
+                title:
+                    'Full Months (${duration.totalMonths.toStringAsFixed(0)})',
                 calculation:
-                    'रू ${monthlyInterest.toStringAsFixed(2)} × ${duration.totalMonths} = रू ${fullMonthsTotal.toStringAsFixed(2)}',
+                    'रू ${monthlyInterest.toStringAsFixed(0)} × ${duration.totalMonths.toStringAsFixed(0)} = रू ${fullMonthsTotal.toStringAsFixed(0)}',
               ),
               const SizedBox(height: 24),
               _CalculationStepRow(
                 number: '3',
                 title: 'Extra Days (${duration.days})',
                 calculation:
-                    'रू ${dailyInterest.toStringAsFixed(2)}/day × ${duration.days} = रू ${extraDaysTotal.toStringAsFixed(2)}',
+                    'रू ${dailyInterest.toStringAsFixed(0)}/day × ${duration.days} = रू ${extraDaysTotal.toStringAsFixed(0)}',
               ),
               const SizedBox(height: 32),
               Divider(color: borderColor, thickness: 1),
@@ -108,7 +109,7 @@ class InterestCalculationBreakdown extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'रू ${result.interest.toStringAsFixed(2)}',
+                    'रू ${result.interest.toStringAsFixed(0)}',
                     style: theme.textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w800,
                       color: textColorPrimary,

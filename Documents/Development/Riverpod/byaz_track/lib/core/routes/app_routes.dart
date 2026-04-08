@@ -7,6 +7,8 @@ import 'package:byaz_track/features/dashboard/presentation/controllers/dashboard
 import 'package:byaz_track/features/dashboard/presentation/screens/dashboard_screen.dart';
 
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
+import 'package:byaz_track/features/interest_details/presentation/controllers/interest_details_bindings.dart';
+import 'package:byaz_track/features/interest_details/presentation/screens/interest_details_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/interest_type_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/language_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/theme_screen.dart';
@@ -27,6 +29,7 @@ class AppRoutes {
   static const String compoundFrequency = '/compoundFrequency';
   static const String defaultRate = '/defaultRate';
   static const String createLoan = '/createLoan';
+  static const String interestDetails = '/interestDetails';
 
   static List<GetPage<dynamic>>? appPages = [
     GetPage(
@@ -61,6 +64,14 @@ class AppRoutes {
       page: () => const CreateLoanScreen(),
       binding: CreateLoanBindings(),
       transition: Transition.downToUp,
+      transitionDuration: const Duration(milliseconds: 500),
+      curve: Curves.easeOutCirc,
+    ),
+    GetPage(
+      name: interestDetails,
+      page: () => const InterestDetailsScreen(),
+      binding: InterestDetailsBindings(),
+      transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 500),
       curve: Curves.easeOutCirc,
     ),

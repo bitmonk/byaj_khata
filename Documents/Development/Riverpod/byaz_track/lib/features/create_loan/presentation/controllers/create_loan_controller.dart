@@ -4,6 +4,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:byaz_track/features/ledger/presentation/controllers/ledger_controller.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
 import 'package:fast_contacts/fast_contacts.dart';
 import 'package:byaz_track/features/create_loan/data/source/create_loan_remote_source.dart';
@@ -80,6 +81,7 @@ class CreateLoanController extends GetxController {
           message: "Loan created successfully",
         ),
       );
+      Get.find<LedgerController>().fetchLoans();
       Navigator.pop(context);
     } catch (e) {
       debugPrint('Error inserting loan: $e');

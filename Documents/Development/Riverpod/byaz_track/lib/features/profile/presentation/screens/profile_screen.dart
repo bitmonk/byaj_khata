@@ -4,7 +4,7 @@ import 'package:byaz_track/features/ledger/presentation/controllers/ledger_contr
 import 'package:byaz_track/features/profile/presentation/widgets/profile_tile_widget.dart';
 import 'package:byaz_track/features/settings/presentation/controllers/profile_controller.dart';
 import 'package:byaz_track/l10n/app_localizations.dart';
-import 'package:byaz_track/features/profile/presentation/widgets/logout_confirmation_dialog.dart';
+import 'package:byaz_track/features/profile/presentation/widgets/confirmation_dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -115,7 +115,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           context: context,
                           builder:
                               (context) => Obx(
-                                () => LogoutConfirmationDialog(
+                                () => ConfirmationDialog(
+                                  title: 'Log Out?',
+                                  message:
+                                      'Are you sure you want to log out? You will need to sign in again to sync your data.',
+                                  confirmText: 'Log Out',
+                                  cancelText: 'Cancel',
+                                  icon: Icons.logout,
+
                                   isLoading:
                                       profileController.logoutState.value ==
                                       TheStates.loading,

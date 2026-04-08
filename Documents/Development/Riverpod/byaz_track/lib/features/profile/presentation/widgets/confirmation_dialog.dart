@@ -1,15 +1,24 @@
 import 'package:byaz_track/core/extension/extensions.dart';
-import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-class LogoutConfirmationDialog extends StatelessWidget {
+class ConfirmationDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final bool isLoading;
+  final String title;
+  final String message;
+  final String confirmText;
+  final String cancelText;
+  final IconData icon;
 
-  const LogoutConfirmationDialog({
+  const ConfirmationDialog({
     super.key,
     required this.onConfirm,
     required this.isLoading,
+    required this.title,
+    required this.message,
+    required this.confirmText,
+    required this.cancelText,
+    required this.icon,
   });
 
   @override
@@ -35,14 +44,14 @@ class LogoutConfirmationDialog extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(
-                Icons.logout,
+                icon,
                 color: isDark ? const Color(0xFF2E7D32) : colorScheme.primary,
                 size: 28,
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              'Log Out?',
+              title,
               style: context.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white : colorScheme.onSurface,
@@ -51,7 +60,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              'Are you sure you want to log out? You will need to sign in again to sync your data.',
+              message,
               textAlign: TextAlign.center,
               style: context.textTheme.bodyMedium?.copyWith(
                 color:
@@ -84,9 +93,9 @@ class LogoutConfirmationDialog extends StatelessWidget {
                           color: Colors.white,
                           size: 24,
                         )
-                        : const Text(
-                          'Log Out',
-                          style: TextStyle(
+                        : Text(
+                          confirmText,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
@@ -110,9 +119,12 @@ class LogoutConfirmationDialog extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context); // Close dialog
                 },
-                child: const Text(
-                  'Cancel',
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                child: Text(
+                  cancelText,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),

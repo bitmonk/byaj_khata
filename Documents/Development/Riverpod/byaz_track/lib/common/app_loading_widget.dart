@@ -17,8 +17,6 @@ class AppLoadingWidget extends StatelessWidget {
   final Color color;
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: LoadingAnimationWidget.hexagonDots(color: color, size: size),
-    );
+    return Center(child: LoadingAnimationWidget.beat(color: color, size: size));
   }
 }

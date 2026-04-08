@@ -83,7 +83,7 @@ class InterestAccumulatedCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'रू ${result.interest}',
+                      'रू ${result.interest.toStringAsFixed(0)}',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: textColorPrimary,

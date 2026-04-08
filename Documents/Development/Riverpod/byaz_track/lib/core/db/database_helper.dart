@@ -56,8 +56,23 @@ class DatabaseHelper {
     }
   }
 
+  Future<int> deleteLoan(String loanId) async {
+    final db = await instance.database;
+    return await db.delete('loans', where: 'id = ?', whereArgs: [loanId]);
+  }
+
   Future<void> close() async {
     final db = await instance.database;
     db.close();
+  }
+
+  Future<int> settleLoan(String loanId) async {
+    final db = await instance.database;
+    return await db.update(
+      'loans',
+      {'loan_status': 'settled'},
+      where: 'id = ?',
+      whereArgs: [loanId],
+    );
   }
 }

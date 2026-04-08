@@ -1,7 +1,13 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:byaz_track/features/interest_details/presentation/controllers/interest_details_controller.dart';
+import 'package:byaz_track/features/profile/presentation/widgets/confirmation_dialog.dart';
 
 class InterestActionButtons extends StatelessWidget {
-  const InterestActionButtons({super.key});
+  final LoanModel loan;
+  InterestActionButtons({super.key, required this.loan});
+
+  final interestDetailsController = Get.find<InterestDetailsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,24 +48,52 @@ class InterestActionButtons extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Expanded(
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 18),
-              backgroundColor: primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
+        Obx(
+          () => Expanded(
+            child: ElevatedButton.icon(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => ConfirmationDialog(
+                        title: 'Settle Loan',
+                        message:
+                            'Are you sure you want to settle this loan? This action cannot be undone.',
+                        confirmText: 'Settle',
+                        cancelText: 'Cancel',
+                        icon: Icons.check_circle,
+                        isLoading:
+                            interestDetailsController.settleLoanState.value ==
+                            TheStates.loading,
+                        onConfirm: () {
+                          interestDetailsController.settleLoan(
+                            loan.id!,
+                            context,
+                          );
+                        },
+                      ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                backgroundColor: primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                elevation: 0,
               ),
-              elevation: 0,
-            ),
-            icon: Icon(Icons.check_circle_outline, color: AppColors.white),
-            label: Text(
-              'Settle Loan',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.white,
-              ),
+              icon: Icon(Icons.check_circle_outline, color: AppColors.white),
+              label:
+                  interestDetailsController.settleLoanState.value ==
+                          TheStates.loading
+                      ? const AppLoadingWidget(size: 20)
+                      : Text(
+                        'Settle Loan',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.white,
+                        ),
+                      ),
             ),
           ),
         ),
