@@ -51,9 +51,39 @@ class InterestAccumulatedCard extends StatelessWidget {
       endNepali.year,
       endNepali.month,
     );
-    final totalMonthsFormatted = (duration.totalMonths +
-            (duration.days / daysInCurrentMonth))
-        .toStringAsFixed(1);
+    final totalMonthsFractional =
+        duration.totalMonths + (duration.days / daysInCurrentMonth);
+    final totalMonthsFormatted = totalMonthsFractional.toStringAsFixed(1);
+
+    // Generate spots for the chart
+    final List<FlSpot> spots = [];
+    final totalMonthsFull = duration.totalMonths;
+
+    for (int i = 0; i <= totalMonthsFull; i++) {
+      double monthInterest;
+      if (isMonthly) {
+        monthInterest = (loan.principalAmount * i * loan.rateValue) / 100;
+      } else {
+        monthInterest =
+            (loan.principalAmount * (i / 12.0) * loan.rateValue) / 100;
+      }
+      spots.add(FlSpot(i.toDouble(), monthInterest));
+    }
+
+    // Add final spot for the current date (fractional interest for a smooth curve)
+    if (duration.days > 0) {
+      spots.add(FlSpot(totalMonthsFractional, result.interest));
+    }
+
+    // If no months have passed yet, ensure we have at least two points to draw a line
+    if (spots.length == 1) {
+      spots.add(
+        FlSpot(totalMonthsFractional > 0 ? totalMonthsFractional : 1.0, 0),
+      );
+    }
+
+    final maxX = spots.last.x;
+    final maxY = spots.last.y == 0 ? 100.0 : spots.last.y * 1.2;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -153,21 +183,19 @@ class InterestAccumulatedCard extends StatelessWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       reservedSize: 22,
-                      interval: 1,
+                      interval: (maxX / 5).clamp(1, double.infinity),
                       getTitlesWidget: (value, meta) {
                         String text;
-                        // Simple logic to show some labels for the trend
-                        switch (value.toInt()) {
-                          case 0:
-                            text = 'Start';
-                            break;
-                          case 5:
-                            text = 'Now';
-                            break;
-                          default:
-                            text = '';
-                            break;
+                        if (value == 0) {
+                          text = 'Start';
+                        } else if ((value - maxX).abs() < 0.1) {
+                          text = 'Now';
+                        } else {
+                          text = '';
                         }
+
+                        if (text.isEmpty) return const SizedBox.shrink();
+
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
                           space: 8,
@@ -184,28 +212,27 @@ class InterestAccumulatedCard extends StatelessWidget {
                 ),
                 borderData: FlBorderData(show: false),
                 minX: 0,
-                maxX: 5,
+                maxX: maxX,
                 minY: 0,
-                maxY: 6,
+                maxY: maxY,
                 lineBarsData: [
                   LineChartBarData(
-                    spots: const [
-                      FlSpot(0, 1),
-                      FlSpot(1, 1.8),
-                      FlSpot(2, 2.6),
-                      FlSpot(3, 3.4),
-                      FlSpot(4, 4.3),
-                      FlSpot(5, 4.8),
-                    ],
-                    isCurved: false,
+                    spots: spots,
+                    isCurved: true,
+                    curveSmoothness: 0.35,
+                    isStepLineChart: false,
                     color: chartLineColor,
                     barWidth: 3.5,
                     isStrokeCapRound: true,
                     dotData: FlDotData(
                       show: true,
                       getDotPainter: (spot, percent, barData, index) {
+                        // Only show dots at integer months and the final point
+                        if (spot.x % 1.0 != 0 && spot.x != maxX) {
+                          return FlDotCirclePainter(radius: 0, strokeWidth: 0);
+                        }
                         return FlDotCirclePainter(
-                          radius: 4,
+                          radius: 3,
                           color: chartLineColor,
                           strokeWidth: 0,
                         );
@@ -217,7 +244,25 @@ class InterestAccumulatedCard extends StatelessWidget {
                     ),
                   ),
                 ],
-                lineTouchData: LineTouchData(enabled: true),
+                lineTouchData: LineTouchData(
+                  enabled: true,
+                  touchTooltipData: LineTouchTooltipData(
+                    getTooltipColor:
+                        (spot) =>
+                            isDark ? const Color(0xFF2C2C2C) : Colors.white,
+                    getTooltipItems: (touchedSpots) {
+                      return touchedSpots.map((spot) {
+                        return LineTooltipItem(
+                          'Month ${spot.x.toStringAsFixed(1)}\nरू ${spot.y.toStringAsFixed(0)}',
+                          theme.textTheme.labelSmall!.copyWith(
+                            color: textColorPrimary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      }).toList();
+                    },
+                  ),
+                ),
               ),
             ),
           ),

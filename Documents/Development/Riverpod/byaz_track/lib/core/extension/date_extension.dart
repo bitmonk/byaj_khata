@@ -23,5 +23,9 @@ extension ShowDataInOwnFormat on DateTime {
     // Otherwise, convert from AD to BS normally.
     return NepaliDateTime.fromDateTime(this);
   }
+
+  String toBS() {
+    return NepaliDateFormat('yyyy-MM-dd').format(toNepaliSafe());
+  }
 }
 

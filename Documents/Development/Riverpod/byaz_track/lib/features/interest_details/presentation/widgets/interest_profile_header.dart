@@ -61,7 +61,7 @@ class InterestProfileHeader extends StatelessWidget {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    'Started: ${loan.startDate.toIso8601String().split('T').first}',
+                    'Started: ${loan.startDate.toBS()}',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       color: textColorSecondary,
                     ),

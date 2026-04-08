@@ -103,7 +103,7 @@ class LedgerListItemCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Loaned on ${loan.startDate.toIso8601String().split('T').first}',
+                        'Loaned on ${loan.startDate.toBS()}',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: textColorSecondary,
                         ),
