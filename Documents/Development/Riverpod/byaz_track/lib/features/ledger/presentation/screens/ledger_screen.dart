@@ -5,6 +5,7 @@ import 'package:byaz_track/features/dashboard/presentation/controllers/dashboard
 import 'package:byaz_track/features/interest_details/presentation/controllers/interest_details_bindings.dart';
 import 'package:byaz_track/features/interest_details/presentation/screens/interest_details_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/web.dart';
 import '../widgets/ledger_summary_card.dart';
 import '../widgets/ledger_filter_tabs.dart';
@@ -26,6 +27,8 @@ class _LedgerScreenState extends State<LedgerScreen> {
     // 'Overdue',
     'Upcoming',
   ];
+
+  final ledgerController = Get.find<LedgerController>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +54,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
                       contentPadding: EdgeInsets.all(12),
                       hintText: 'Search borrower or lender...',
                       prefixIcon: const Icon(Icons.person_search_outlined),
+                      onChanged: (value) {
+                        ledgerController.searchLoan(value);
+                      },
                     ),
                     const VerticalSpacing(16),
                     Row(
@@ -96,56 +102,75 @@ class _LedgerScreenState extends State<LedgerScreen> {
                   ),
                 ),
               ),
-              SliverPadding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12.0,
-                ).copyWith(top: 8.0, bottom: 12.0),
-                sliver: Obx(() {
-                  final controller = Get.find<LedgerController>();
 
-                  if (controller.fetchLoanState.value == TheStates.initial) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.all(32.0),
-                        child: Center(child: CircularProgressIndicator()),
+              Obx(() {
+                if (ledgerController.searchLoanState.value ==
+                    TheStates.loading) {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.all(32.0),
+                      child: Center(
+                        child: LoadingAnimationWidget.beat(
+                          // leftDotColor: AppColors.appGreen,
+                          // rightDotColor: AppColors.appGreen,
+                          color: AppColors.appGreen,
+                          size: 36,
+                        ),
                       ),
-                    );
-                  }
+                    ),
+                  );
+                }
+                return SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                  ).copyWith(top: 8.0, bottom: 12.0),
+                  sliver: Obx(() {
+                    final controller = Get.find<LedgerController>();
 
-                  if (controller.loans.isEmpty) {
-                    return const SliverToBoxAdapter(
-                      child: Padding(
-                        padding: EdgeInsets.all(32.0),
-                        child: Center(child: Text('No loans found.')),
-                      ),
-                    );
-                  }
-
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      final loan = controller.loans[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 12.0),
-                        child: LedgerListItemCard(
-                          loan: loan,
-                          onTap: () {
-                            InterestDetailsInitializer.initialize();
-                            print(loan.transactionType);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) =>
-                                        InterestDetailsScreen(loan: loan),
-                              ),
-                            );
-                          },
+                    if (controller.fetchLoanState.value == TheStates.initial) {
+                      return const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(32.0),
+                          child: Center(child: CircularProgressIndicator()),
                         ),
                       );
-                    }, childCount: controller.loans.length),
-                  );
-                }),
-              ),
+                    }
+
+                    if (controller.loans.isEmpty) {
+                      return const SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(32.0),
+                          child: Center(child: Text('No loans found.')),
+                        ),
+                      );
+                    }
+
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final loan = controller.loans[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: LedgerListItemCard(
+                            loan: loan,
+                            onTap: () {
+                              InterestDetailsInitializer.initialize();
+                              print(loan.transactionType);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) =>
+                                          InterestDetailsScreen(loan: loan),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      }, childCount: controller.loans.length),
+                    );
+                  }),
+                );
+              }),
               SliverPadding(padding: EdgeInsets.only(bottom: 120)),
             ],
           ),

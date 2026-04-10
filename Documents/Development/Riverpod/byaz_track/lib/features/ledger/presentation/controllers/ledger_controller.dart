@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
@@ -11,6 +12,7 @@ class LedgerController extends GetxController {
   final LedgerRemoteSource remoteSource;
 
   final RxList<LoanModel> loans = <LoanModel>[].obs;
+  Timer? _debounce;
 
   Rx<TheStates> fetchLoanState = TheStates.initial.obs;
 
@@ -18,6 +20,12 @@ class LedgerController extends GetxController {
   void onInit() {
     super.onInit();
     fetchLoans();
+  }
+
+  @override
+  void onClose() {
+    _debounce?.cancel();
+    super.onClose();
   }
 
   Future<void> fetchLoans() async {
@@ -69,5 +77,35 @@ class LedgerController extends GetxController {
     } catch (e) {
       debugPrint('Error syncing loans: $e');
     }
+  }
+
+  Rx<TheStates> searchLoanState = TheStates.initial.obs;
+  Future<void> searchLoan(String query) async {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+
+    searchLoanState.value = TheStates.loading;
+
+    _debounce = Timer(const Duration(milliseconds: 500), () async {
+      try {
+        if (query.isEmpty) {
+          await fetchLoans();
+          searchLoanState.value = TheStates.success;
+          return;
+        }
+        final db = await DatabaseHelper.instance.database;
+        final data = await db.query(
+          'loans',
+          where: 'party_name LIKE ?',
+          whereArgs: ['%$query%'],
+          orderBy: 'created_at DESC',
+        );
+
+        loans.value = data.map((json) => LoanModel.fromMap(json)).toList();
+        searchLoanState.value = TheStates.success;
+      } catch (e) {
+        debugPrint('Error searching loans: $e');
+        searchLoanState.value = TheStates.error;
+      }
+    });
   }
 }

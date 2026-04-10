@@ -6,12 +6,12 @@ class AppLoadingWidget extends StatelessWidget {
   const AppLoadingWidget({
     super.key,
     this.size = 52,
-    this.color = AppColors.primary500,
+    this.color = AppColors.appGreen,
   });
   const AppLoadingWidget.small({
     super.key,
     this.size = 36,
-    this.color = AppColors.primary500,
+    this.color = AppColors.appGreen,
   });
   final double size;
   final Color color;

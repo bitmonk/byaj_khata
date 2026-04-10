@@ -90,7 +90,7 @@ class LedgerListItemCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Loaned on ${loan.startDate.toBS()}',
+                        '${loan.transactionType == '0' ? 'Lent' : 'Borrowed'} on ${loan.startDate.toBS()}',
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: textColorSecondary,
                         ),
