@@ -72,4 +72,6 @@ class LoanModel {
               : null,
     );
   }
+
+  get status => null;
 }

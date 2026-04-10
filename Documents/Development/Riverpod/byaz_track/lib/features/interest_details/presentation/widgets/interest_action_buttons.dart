@@ -1,6 +1,8 @@
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 import 'package:byaz_track/features/interest_details/presentation/controllers/interest_details_controller.dart';
+import 'package:byaz_track/features/interest_details/presentation/widgets/add_payment_dialog.dart';
+import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
 import 'package:byaz_track/features/profile/presentation/widgets/confirmation_dialog.dart';
 
 class InterestActionButtons extends StatelessWidget {
@@ -22,7 +24,8 @@ class InterestActionButtons extends StatelessWidget {
     final darkGreenText = const Color(
       0xFF0C2B1D,
     ); // Dark text on green background
-
+    bool isSettled = loan.loanStatus == LedgerItemStatus.settled;
+    print(isSettled);
     return Row(
       children: [
         Expanded(
@@ -37,12 +40,13 @@ class InterestActionButtons extends StatelessWidget {
               backgroundColor:
                   isDark ? theme.colorScheme.surface : Colors.white,
             ),
-            icon: Icon(Icons.add_circle_outline, color: darkTextColor),
+            icon: Icon(Icons.share, color: darkTextColor),
             label: Text(
-              'Add Payment',
+              'Share',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: darkTextColor,
+                fontSize: 18,
               ),
             ),
           ),
@@ -52,46 +56,55 @@ class InterestActionButtons extends StatelessWidget {
           () => Expanded(
             child: ElevatedButton.icon(
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder:
-                      (context) => ConfirmationDialog(
-                        title: 'Settle Loan',
-                        message:
-                            'Are you sure you want to settle this loan? This action cannot be undone.',
-                        confirmText: 'Settle',
-                        cancelText: 'Cancel',
-                        icon: Icons.check_circle,
-                        isLoading:
-                            interestDetailsController.settleLoanState.value ==
-                            TheStates.loading,
-                        onConfirm: () {
-                          interestDetailsController.settleLoan(
-                            loan.id!,
-                            context,
-                          );
-                        },
-                      ),
-                );
+                isSettled
+                    ? null
+                    : showDialog(
+                      context: context,
+                      builder:
+                          (context) => ConfirmationDialog(
+                            title: 'Settle Loan',
+                            message:
+                                'Are you sure you want to settle this loan? This action cannot be undone.',
+                            confirmText: 'Settle',
+                            cancelText: 'Cancel',
+                            icon: Icons.check_circle,
+                            isLoading:
+                                interestDetailsController
+                                    .settleLoanState
+                                    .value ==
+                                TheStates.loading,
+                            onConfirm: () {
+                              interestDetailsController.settleLoan(
+                                loan.id!,
+                                context,
+                              );
+                            },
+                          ),
+                    );
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 18),
-                backgroundColor: primaryColor,
+                backgroundColor:
+                    isSettled ? Colors.grey.withAlpha(30) : primaryColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
                 elevation: 0,
               ),
-              icon: Icon(Icons.check_circle_outline, color: AppColors.white),
+              icon: Icon(
+                isSettled ? Icons.check_circle : Icons.check_circle_outline,
+                color: AppColors.white,
+              ),
               label:
                   interestDetailsController.settleLoanState.value ==
                           TheStates.loading
                       ? const AppLoadingWidget(size: 20)
                       : Text(
-                        'Settle Loan',
+                        isSettled ? 'Settled' : 'Settle Loan',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.white,
+                          color: darkTextColor,
+                          fontSize: 18,
                         ),
                       ),
             ),

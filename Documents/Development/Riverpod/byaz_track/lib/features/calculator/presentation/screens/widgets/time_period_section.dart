@@ -15,12 +15,39 @@ class TimePeriodSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Time Period',
-          style: context.text.bodyLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Time Period',
+              style: context.text.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+            Obx(() {
+              if (controller.startDate.value == null &&
+                  controller.endDate.value == null) {
+                return const SizedBox.shrink();
+              }
+              return GestureDetector(
+                onTap: () {
+                  controller.setStartDate(null);
+                  controller.setEndDate(null);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 12.0),
+                  child: Text(
+                    'Clear',
+                    style: context.text.bodyMedium?.copyWith(
+                      color: AppColors.appRed,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ],
         ),
         const VerticalSpacing(10),
         GestureDetector(
@@ -82,18 +109,27 @@ class TimePeriodSection extends StatelessWidget {
                       ),
                       const VerticalSpacing(4),
                       Obx(() {
+                        final start = controller.startDate.value;
+                        final end = controller.endDate.value;
+
+                        if (start == null && end == null) {
+                          return Text(
+                            'Tap to select date range',
+                            style: context.text.labelLarge?.copyWith(
+                              color: AppColors.subTitle,
+                              fontSize: 14,
+                            ),
+                          );
+                        }
+
                         final startStr =
-                            controller.startDate.value != null
-                                ? NepaliDateFormat(
-                                  'yyyy-MM-dd',
-                                ).format(controller.startDate.value!)
-                                : '...';
+                            start != null
+                                ? NepaliDateFormat('yyyy-MM-dd').format(start)
+                                : 'Select Start';
                         final endStr =
-                            controller.endDate.value != null
-                                ? NepaliDateFormat(
-                                  'yyyy-MM-dd',
-                                ).format(controller.endDate.value!)
-                                : 'Today';
+                            end != null
+                                ? NepaliDateFormat('yyyy-MM-dd').format(end)
+                                : 'Select End';
 
                         return Text(
                           'From: $startStr  To: $endStr',

@@ -21,7 +21,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -45,6 +45,17 @@ class DatabaseHelper {
         last_collected_date TEXT
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS payments (
+        id TEXT PRIMARY KEY,
+        loan_id TEXT,
+        amount REAL,
+        payment_date TEXT,
+        created_at TEXT,
+        FOREIGN KEY (loan_id) REFERENCES loans (id) ON DELETE CASCADE
+      )
+    ''');
   }
 
   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
@@ -53,6 +64,18 @@ class DatabaseHelper {
         "ALTER TABLE loans ADD COLUMN loan_status TEXT DEFAULT 'active'",
       );
       await db.execute("ALTER TABLE loans ADD COLUMN last_collected_date TEXT");
+    }
+    if (oldVersion < 3) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS payments (
+          id TEXT PRIMARY KEY,
+          loan_id TEXT,
+          amount REAL,
+          payment_date TEXT,
+          created_at TEXT,
+          FOREIGN KEY (loan_id) REFERENCES loans (id) ON DELETE CASCADE
+        )
+      ''');
     }
   }
 
@@ -73,6 +96,23 @@ class DatabaseHelper {
       {'loan_status': 'settled'},
       where: 'id = ?',
       whereArgs: [loanId],
+    );
+  }
+
+  // --- Payment Methods ---
+
+  Future<int> insertPayment(Map<String, dynamic> payment) async {
+    final db = await instance.database;
+    return await db.insert('payments', payment);
+  }
+
+  Future<List<Map<String, dynamic>>> getPaymentsForLoan(String loanId) async {
+    final db = await instance.database;
+    return await db.query(
+      'payments',
+      where: 'loan_id = ?',
+      whereArgs: [loanId],
+      orderBy: 'payment_date DESC',
     );
   }
 }

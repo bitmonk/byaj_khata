@@ -42,45 +42,67 @@ class _InterestRateSectionState extends State<InterestRateSection> {
           ),
         ),
         const VerticalSpacing(10),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 3,
-              child: AppTextFormField(
-                controller: _controller,
-                hintText: 'e.g. 2 or 3',
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 15,
-                ),
-                textInputType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.only(left: 14),
-                  child: Icon(
-                    Icons.percent,
-                    color: AppColors.appGreen,
-                    size: 26,
+        Obx(() {
+          final isByajType = controller.interestType.value == 0;
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 3,
+                child: AppTextFormField(
+                  controller: _controller,
+                  hintText: isByajType ? 'e.g. 2 or 3' : 'e.g. 12 or 18',
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 15,
+                  ),
+                  textInputType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.only(left: 14),
+                    child:
+                        isByajType
+                            ? Center(
+                              widthFactor: 1,
+                              child: Text(
+                                'रु',
+                                style: TextStyle(
+                                  color: AppColors.appGreen,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            )
+                            : const Icon(
+                              Icons.percent,
+                              color: AppColors.appGreen,
+                              size: 26,
+                            ),
                   ),
                 ),
               ),
-            ),
-            const HorizontalSpacing(12),
-            Obx(() => _RateButton(
-                  label: 'Rs. 2',
-                  isSelected: controller.interestRate.value == '2',
-                  onTap: () => _onRateSelected('2'),
-                )),
-            const HorizontalSpacing(8),
-            Obx(() => _RateButton(
-                  label: 'Rs. 3',
-                  isSelected: controller.interestRate.value == '3',
-                  onTap: () => _onRateSelected('3'),
-                )),
-          ],
-        ),
+              const HorizontalSpacing(12),
+              _RateButton(
+                label: isByajType ? 'Rs. 2' : '12%',
+                isSelected:
+                    isByajType
+                        ? controller.interestRate.value == '2'
+                        : controller.interestRate.value == '12',
+                onTap: () => _onRateSelected(isByajType ? '2' : '12'),
+              ),
+              const HorizontalSpacing(8),
+              _RateButton(
+                label: isByajType ? 'Rs. 3' : '18%',
+                isSelected:
+                    isByajType
+                        ? controller.interestRate.value == '3'
+                        : controller.interestRate.value == '18',
+                onTap: () => _onRateSelected(isByajType ? '3' : '18'),
+              ),
+            ],
+          );
+        }),
       ],
     );
   }

@@ -37,10 +37,7 @@ class InterestDetailsScreen extends GetView<InterestDetailsController> {
                       value: 'edit',
                       child: Text('Edit Loan'),
                     ),
-                    const PopupMenuItem<String>(
-                      value: 'share',
-                      child: Text('Share Details'),
-                    ),
+
                     const PopupMenuDivider(),
                     PopupMenuItem<String>(
                       value: 'delete',

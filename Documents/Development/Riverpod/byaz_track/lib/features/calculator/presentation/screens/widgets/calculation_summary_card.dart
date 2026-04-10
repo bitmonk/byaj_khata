@@ -61,6 +61,16 @@ class CalculationSummaryCard extends StatelessWidget {
             ),
           ),
           const VerticalSpacing(16),
+          _SummaryItem(
+            label: 'Duration',
+            value: Obx(() => Text(controller.durationStr)),
+          ),
+          const VerticalSpacing(16),
+          _SummaryItem(
+            label: 'Monthly Interest',
+            value: Obx(() => Text('Rs ${controller.monthlyInterestStr}')),
+          ),
+          const VerticalSpacing(16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -134,24 +144,69 @@ class CalculationSummaryCard extends StatelessWidget {
             ],
           ),
           const VerticalSpacing(20),
-          Container(
-            height: 10,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppColors.appGreen.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: 0.7, // Stylized progress
-              child: Container(
+          Obx(() {
+            final principal = controller.principal;
+            final interest = controller.calculatedInterest;
+            final total = principal + interest;
+
+            if (total <= 0) {
+              return Container(
+                height: 10,
+                width: double.infinity,
                 decoration: BoxDecoration(
-                  color: AppColors.appGreen,
+                  color:
+                      isDark
+                          ? const Color(0xFF2D3628)
+                          : const Color(0xFFE5E7EB),
                   borderRadius: BorderRadius.circular(10),
                 ),
-              ),
-            ),
-          ),
+              );
+            }
+
+            final principalFactor = principal / total;
+
+            return Column(
+              children: [
+                Container(
+                  height: 10,
+                  width: double.infinity,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    color: AppColors.appGreen.withOpacity(0.2), // Interest part
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: FractionallySizedBox(
+                    alignment: Alignment.centerLeft,
+                    widthFactor: principalFactor,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.appGreen, // Principal part
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                const VerticalSpacing(12),
+                Row(
+                  children: [
+                    _BreakdownIndicator(
+                      color: AppColors.appGreen,
+                      label: 'Principal',
+                      percentage:
+                          '${(principalFactor * 100).toStringAsFixed(0)}%',
+                    ),
+                    const HorizontalSpacing(20),
+                    _BreakdownIndicator(
+                      color: AppColors.appGreen.withOpacity(0.4),
+                      label: 'Interest',
+                      percentage:
+                          '${((1 - principalFactor) * 100).toStringAsFixed(0)}%',
+                    ),
+                  ],
+                ),
+              ],
+            );
+          }),
         ],
       ),
     );
@@ -198,6 +253,39 @@ class _SummaryLabel extends StatelessWidget {
         color: const Color(0xFF9CA3AF),
         fontWeight: FontWeight.w500,
       ),
+    );
+  }
+}
+
+class _BreakdownIndicator extends StatelessWidget {
+  final Color color;
+  final String label;
+  final String percentage;
+
+  const _BreakdownIndicator({
+    required this.color,
+    required this.label,
+    required this.percentage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const HorizontalSpacing(6),
+        Text(
+          '$label ($percentage)',
+          style: context.text.labelSmall?.copyWith(
+            color: const Color(0xFF9CA3AF),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }

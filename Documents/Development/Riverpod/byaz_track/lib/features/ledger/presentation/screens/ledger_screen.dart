@@ -23,7 +23,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
     'All',
     'Active',
     'Settled',
-    'Overdue',
+    // 'Overdue',
     'Upcoming',
   ];
 

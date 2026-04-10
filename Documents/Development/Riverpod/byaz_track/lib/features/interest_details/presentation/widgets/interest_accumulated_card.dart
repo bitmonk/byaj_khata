@@ -85,6 +85,18 @@ class InterestAccumulatedCard extends StatelessWidget {
     final maxX = spots.last.x;
     final maxY = spots.last.y == 0 ? 100.0 : spots.last.y * 1.2;
 
+    // Helper to get formatted Nepali month name
+    String getNepaliMonthName(double value, {bool includeYear = false}) {
+      // Calculate total months from start to get current year/month
+      int totalMonths = startNepali.month + value.toInt() - 1;
+      int year = startNepali.year + (totalMonths ~/ 12);
+      int month = (totalMonths % 12) + 1;
+
+      final date = NepaliDateTime(year, month);
+      final monthName = NepaliDateFormat.MMMM().format(date);
+      return includeYear ? "$monthName $year" : monthName;
+    }
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       decoration: BoxDecoration(
@@ -183,18 +195,12 @@ class InterestAccumulatedCard extends StatelessWidget {
                     sideTitles: SideTitles(
                       showTitles: true,
                       reservedSize: 22,
-                      interval: (maxX / 5).clamp(1, double.infinity),
+                      interval: (maxX / 3).clamp(1, double.infinity),
                       getTitlesWidget: (value, meta) {
-                        String text;
-                        if (value == 0) {
-                          text = 'Start';
-                        } else if ((value - maxX).abs() < 0.1) {
-                          text = 'Now';
-                        } else {
-                          text = '';
-                        }
+                        // Only show titles for integer values to represent full months
+                        if (value % 1.0 != 0) return const SizedBox.shrink();
 
-                        if (text.isEmpty) return const SizedBox.shrink();
+                        String text = getNepaliMonthName(value);
 
                         return SideTitleWidget(
                           axisSide: meta.axisSide,
@@ -203,6 +209,7 @@ class InterestAccumulatedCard extends StatelessWidget {
                             text,
                             style: theme.textTheme.labelMedium?.copyWith(
                               color: textColorSecondary,
+                              fontSize: 10,
                             ),
                           ),
                         );
@@ -252,8 +259,12 @@ class InterestAccumulatedCard extends StatelessWidget {
                             isDark ? const Color(0xFF2C2C2C) : Colors.white,
                     getTooltipItems: (touchedSpots) {
                       return touchedSpots.map((spot) {
+                        final monthLabel = getNepaliMonthName(
+                          spot.x,
+                          includeYear: true,
+                        );
                         return LineTooltipItem(
-                          'Month ${spot.x.toStringAsFixed(1)}\nरू ${spot.y.toStringAsFixed(0)}',
+                          '$monthLabel\nरू ${spot.y.toStringAsFixed(0)}',
                           theme.textTheme.labelSmall!.copyWith(
                             color: textColorPrimary,
                             fontWeight: FontWeight.bold,

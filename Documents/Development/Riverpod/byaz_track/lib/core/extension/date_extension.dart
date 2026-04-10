@@ -28,4 +28,3 @@ extension ShowDataInOwnFormat on DateTime {
     return NepaliDateFormat('yyyy-MM-dd').format(toNepaliSafe());
   }
 }
-

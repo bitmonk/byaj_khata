@@ -45,7 +45,8 @@ void main() async {
   );
 
   // Initialize local SQLite database
-  await DatabaseHelper.instance.database;
+  final db = await DatabaseHelper.instance.database;
+  print(db);
 
   // Initialize local notifications
   // await LocalNotificationService().initialize();

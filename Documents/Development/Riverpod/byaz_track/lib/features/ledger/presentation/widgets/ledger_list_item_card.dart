@@ -4,26 +4,13 @@ import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 enum LedgerItemStatus { active, settled, overdue }
 
 class LedgerListItemCard extends StatelessWidget {
-  // final String name;
-  // final String loanedDate;
-  // final String principalAmount;
-  // final String interestAmount;
-  // final String interestRateText;
-  // final String lastCollectedDate;
-  // final String transactionType;
   final LoanModel loan;
   final VoidCallback onTap;
 
   const LedgerListItemCard({
     super.key,
     required this.loan,
-    // required this.name,
-    // required this.loanedDate,
-    // required this.principalAmount,
-    // required this.interestAmount,
-    // required this.interestRateText,
-    // required this.lastCollectedDate,
-    // required this.transactionType,
+
     required this.onTap,
   });
 

@@ -69,7 +69,7 @@ class InterestTotalSettlementCard extends StatelessWidget {
                               text: result.totalAmount.toStringAsFixed(0),
                               style: theme.textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.w800,
-                                fontSize: 24,
+                                fontSize: 34,
                               ),
                             ),
                           ],
