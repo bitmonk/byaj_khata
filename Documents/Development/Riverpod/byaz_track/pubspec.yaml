@@ -118,7 +118,6 @@ dependencies:
   awesome_snackbar_content: ^0.1.7
   top_snackbar_flutter: ^3.3.0
   fast_contacts: ^5.0.1
-  flutter_animate: ^4.5.2
   # fl_chart: ^0.68.0
 
 dev_dependencies:

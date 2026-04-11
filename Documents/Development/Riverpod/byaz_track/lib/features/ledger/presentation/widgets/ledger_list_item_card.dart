@@ -187,7 +187,7 @@ class LedgerListItemCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 4),
                 Text(
-                  'Last collected: N/A',
+                  'Last collected: ${loan.lastCollectedDate?.toBS() ?? 'N/A'}',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: textColorSecondary.withOpacity(0.8),
                     fontWeight: FontWeight.w500,

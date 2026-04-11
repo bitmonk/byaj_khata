@@ -18,6 +18,7 @@ class LedgerController extends GetxController {
 
   final RxList<LoanModel> loans = <LoanModel>[].obs;
   Timer? _debounce;
+  final RxString _searchQuery = ''.obs;
 
   Rx<TheStates> fetchLoanState = TheStates.initial.obs;
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
@@ -91,32 +92,45 @@ class LedgerController extends GetxController {
 
   Rx<TheStates> searchLoanState = TheStates.initial.obs;
   Future<void> searchLoan(String query) async {
+    _searchQuery.value = query;
     if (_debounce?.isActive ?? false) _debounce?.cancel();
 
     searchLoanState.value = TheStates.loading;
 
     _debounce = Timer(const Duration(milliseconds: 500), () async {
-      try {
-        if (query.isEmpty) {
-          await fetchLoans();
-          searchLoanState.value = TheStates.success;
-          return;
-        }
-        final db = await DatabaseHelper.instance.database;
-        final data = await db.query(
-          'loans',
-          where: 'party_name LIKE ? AND is_deleted = 0',
-          whereArgs: ['%$query%'],
-          orderBy: 'created_at DESC',
-        );
-
-        loans.value = data.map((json) => LoanModel.fromMap(json)).toList();
-        searchLoanState.value = TheStates.success;
-      } catch (e) {
-        debugPrint('Error searching loans: $e');
-        searchLoanState.value = TheStates.error;
-      }
+      await _executeSearch(query);
     });
+  }
+
+  Future<void> _executeSearch(String query) async {
+    try {
+      if (query.isEmpty) {
+        await fetchLoans();
+        searchLoanState.value = TheStates.success;
+        return;
+      }
+      final db = await DatabaseHelper.instance.database;
+      final data = await db.query(
+        'loans',
+        where: 'party_name LIKE ? AND is_deleted = 0',
+        whereArgs: ['%$query%'],
+        orderBy: 'created_at DESC',
+      );
+
+      loans.value = data.map((json) => LoanModel.fromMap(json)).toList();
+      searchLoanState.value = TheStates.success;
+    } catch (e) {
+      debugPrint('Error searching loans: $e');
+      searchLoanState.value = TheStates.error;
+    }
+  }
+
+  Future<void> _refreshLedger() async {
+    if (_searchQuery.value.isEmpty) {
+      await fetchLoans();
+    } else {
+      await _executeSearch(_searchQuery.value);
+    }
   }
 
   Rx<TheStates> deleteLoanState = TheStates.initial.obs;
@@ -127,8 +141,8 @@ class LedgerController extends GetxController {
       final result = await dbHelper.deleteLoan(loanId);
       if (result > 0) {
         deleteLoanState.value = TheStates.success;
-        // Refresh ledger
-        fetchLoans();
+        // Refresh ledger respecting current search
+        await _refreshLedger();
 
         // showTopSnackBar(
         //   Overlay.of(context),
@@ -170,7 +184,7 @@ class LedgerController extends GetxController {
       final result = await dbHelper.restoreLoan(loanId);
       if (result > 0) {
         restoreLoanState.value = TheStates.success;
-        fetchLoans();
+        await _refreshLedger();
         print("Loan restored successfully");
       } else {
         restoreLoanState.value = TheStates.error;
