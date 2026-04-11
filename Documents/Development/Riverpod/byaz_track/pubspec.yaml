@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   custom_refresh_indicator: ^4.0.1
   dartz: ^0.10.1
+  delightful_toast: ^1.1.0
   device_info_plus: ^11.5.0
   dio: ^5.8.0+1
   dropdown_button2: ^2.3.9
@@ -50,7 +51,7 @@ dependencies:
   flutter_native_splash: ^2.4.6
   flutter_screenutil: ^5.9.3
   flutter_secure_storage: ^9.2.4
-  flutter_slidable: ^4.0.0
+  flutter_slidable: ^4.0.3
   flutter_svg: ^2.1.0
   flutter_widget_from_html: ^0.16.0
   form_validator: ^2.1.1
@@ -117,6 +118,7 @@ dependencies:
   awesome_snackbar_content: ^0.1.7
   top_snackbar_flutter: ^3.3.0
   fast_contacts: ^5.0.1
+  flutter_animate: ^4.5.2
   # fl_chart: ^0.68.0
 
 dev_dependencies:

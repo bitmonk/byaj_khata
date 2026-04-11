@@ -5,11 +5,14 @@ import 'package:byaz_track/features/dashboard/presentation/controllers/dashboard
 import 'package:byaz_track/features/interest_details/presentation/controllers/interest_details_bindings.dart';
 import 'package:byaz_track/features/interest_details/presentation/screens/interest_details_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
+import 'package:byaz_track/features/profile/presentation/widgets/confirmation_dialog.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:logger/web.dart';
 import '../widgets/ledger_summary_card.dart';
 import '../widgets/ledger_filter_tabs.dart';
 import 'package:byaz_track/features/ledger/presentation/controllers/ledger_controller.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class LedgerScreen extends StatefulWidget {
   const LedgerScreen({super.key});
@@ -150,21 +153,82 @@ class _LedgerScreenState extends State<LedgerScreen> {
                         final loan = controller.loans[index];
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 12.0),
-                          child: LedgerListItemCard(
-                            loan: loan,
-                            onTap: () {
-                              InterestDetailsInitializer.initialize();
-                              print(loan.transactionType);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          InterestDetailsScreen(loan: loan),
+                          child: Slidable(
+                                key: ValueKey(loan.id),
+                                endActionPane: ActionPane(
+                                  dismissible: DismissiblePane(
+                                    onDismissed: () {
+                                      controller.deleteLoan(loan.id, context);
+                                    },
+                                    closeOnCancel: true,
+                                    key: ValueKey(loan.id),
+                                  ),
+                                  motion: const DrawerMotion(),
+                                  extentRatio: 0.4,
+                                  children: [
+                                    SlidableAction(
+                                      key: ValueKey(loan.id),
+                                      onPressed: (context) {
+                                        showDialog(
+                                          context: context,
+                                          builder:
+                                              (context) => Obx(
+                                                () => ConfirmationDialog(
+                                                  title: 'Delete Loan',
+                                                  message:
+                                                      'Are you sure you want to delete this loan?',
+                                                  confirmText: 'Delete',
+                                                  cancelText: 'Cancel',
+                                                  icon: Icons.delete,
+                                                  isLoading:
+                                                      controller
+                                                          .deleteLoanState
+                                                          .value ==
+                                                      TheStates.loading,
+                                                  onConfirm: () {
+                                                    controller.deleteLoan(
+                                                      loan.id,
+                                                      context,
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                        );
+                                      },
+                                      backgroundColor: AppColors.appGreen,
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.delete,
+                                      label: 'Delete',
+
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            },
-                          ),
+                                child: LedgerListItemCard(
+                                  loan: loan,
+                                  onTap: () {
+                                    InterestDetailsInitializer.initialize();
+                                    print(loan.transactionType);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => InterestDetailsScreen(
+                                              loan: loan,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                              .animate(delay: (index * 30).ms)
+                              .fade(duration: 400.ms, curve: Curves.easeOut)
+                              .slideY(
+                                begin: 0.1,
+                                end: 0,
+                                duration: 400.ms,
+                                curve: Curves.easeOutBack,
+                              ),
                         );
                       }, childCount: controller.loans.length),
                     );

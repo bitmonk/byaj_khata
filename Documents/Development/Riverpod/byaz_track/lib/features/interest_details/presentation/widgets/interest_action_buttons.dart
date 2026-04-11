@@ -75,7 +75,8 @@ class InterestActionButtons extends StatelessWidget {
                                 TheStates.loading,
                             onConfirm: () {
                               interestDetailsController.settleLoan(
-                                loan.id!,
+                                loan.id,
+                                DateTime.now(),
                                 context,
                               );
                             },

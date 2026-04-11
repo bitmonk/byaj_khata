@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:delightful_toast/delight_toast.dart';
+import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:byaz_track/features/ledger/data/source/ledger_remote_source.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class LedgerController extends GetxController {
   LedgerController({required this.remoteSource});
@@ -15,6 +20,7 @@ class LedgerController extends GetxController {
   Timer? _debounce;
 
   Rx<TheStates> fetchLoanState = TheStates.initial.obs;
+  final DatabaseHelper dbHelper = DatabaseHelper.instance;
 
   @override
   void onInit() {
@@ -32,7 +38,11 @@ class LedgerController extends GetxController {
     try {
       fetchLoanState.value = TheStates.loading;
       final db = await DatabaseHelper.instance.database;
-      final data = await db.query('loans', orderBy: 'created_at DESC');
+      final data = await db.query(
+        'loans',
+        where: 'is_deleted = 0',
+        orderBy: 'created_at DESC',
+      );
 
       loans.value = data.map((json) => LoanModel.fromMap(json)).toList();
       fetchLoanState.value = TheStates.success;
@@ -95,7 +105,7 @@ class LedgerController extends GetxController {
         final db = await DatabaseHelper.instance.database;
         final data = await db.query(
           'loans',
-          where: 'party_name LIKE ?',
+          where: 'party_name LIKE ? AND is_deleted = 0',
           whereArgs: ['%$query%'],
           orderBy: 'created_at DESC',
         );
@@ -107,5 +117,67 @@ class LedgerController extends GetxController {
         searchLoanState.value = TheStates.error;
       }
     });
+  }
+
+  Rx<TheStates> deleteLoanState = TheStates.initial.obs;
+
+  Future<void> deleteLoan(String loanId, BuildContext context) async {
+    try {
+      deleteLoanState.value = TheStates.loading;
+      final result = await dbHelper.deleteLoan(loanId);
+      if (result > 0) {
+        deleteLoanState.value = TheStates.success;
+        // Refresh ledger
+        fetchLoans();
+
+        // showTopSnackBar(
+        //   Overlay.of(context),
+        //   dismissType: DismissType.onSwipe,
+        //   onTap: () {
+        //     restoreLoan(loanId);
+        //   },
+        DelightToastBar(
+          autoDismiss: true,
+          snackbarDuration: const Duration(seconds: 3),
+          builder:
+              (context) => ToastCard(
+                trailing: TextButton(
+                  onPressed: () {
+                    restoreLoan(loanId);
+                  },
+                  child: const Text("Undo"),
+                ),
+                title: const Text(
+                  "Loan deleted successfully",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                ),
+              ),
+        ).show(context);
+        // );
+      } else {
+        deleteLoanState.value = TheStates.error;
+      }
+    } catch (e) {
+      deleteLoanState.value = TheStates.error;
+      print(e);
+    }
+  }
+
+  Rx<TheStates> restoreLoanState = TheStates.initial.obs;
+  Future<void> restoreLoan(String loanId) async {
+    try {
+      restoreLoanState.value = TheStates.loading;
+      final result = await dbHelper.restoreLoan(loanId);
+      if (result > 0) {
+        restoreLoanState.value = TheStates.success;
+        fetchLoans();
+        print("Loan restored successfully");
+      } else {
+        restoreLoanState.value = TheStates.error;
+      }
+    } catch (e) {
+      restoreLoanState.value = TheStates.error;
+      print("Error restoring loan: $e");
+    }
   }
 }

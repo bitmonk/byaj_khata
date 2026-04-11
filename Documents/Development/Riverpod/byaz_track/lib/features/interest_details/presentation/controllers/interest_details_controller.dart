@@ -23,15 +23,19 @@ class InterestDetailsController extends GetxController {
       if (result > 0) {
         deleteLoanState.value = TheStates.success;
         // Refresh ledger
-        Get.find<LedgerController>().fetchLoans();
+        final ledgerController = Get.find<LedgerController>();
+        ledgerController.fetchLoans();
         showTopSnackBar(
-          Overlay.of(context!),
+          Overlay.of(context),
           dismissType: DismissType.onSwipe,
+          onTap: () {
+            ledgerController.restoreLoan(loanId);
+          },
           CustomSnackBar.success(
             iconRotationAngle: 0,
-            icon: Icon(Icons.check_circle, color: Color(0x15000000), size: 120),
+            icon: Icon(Icons.undo, color: Color(0x15000000), size: 120),
             backgroundColor: DefaultColors.successGreen,
-            message: "Loan deleted successfully",
+            message: "Loan deleted. Tap to Undo",
           ),
         );
         Navigator.pop(context);
@@ -45,16 +49,20 @@ class InterestDetailsController extends GetxController {
   }
 
   Rx<TheStates> settleLoanState = TheStates.initial.obs;
-  Future<void> settleLoan(String loanId, BuildContext context) async {
+  Future<void> settleLoan(
+    String loanId,
+    DateTime date,
+    BuildContext context,
+  ) async {
     try {
       settleLoanState.value = TheStates.loading;
-      final result = await dbHelper.settleLoan(loanId);
+      final result = await dbHelper.settleLoan(loanId, date);
       if (result > 0) {
         settleLoanState.value = TheStates.success;
         // Refresh ledger
         Get.find<LedgerController>().fetchLoans();
         showTopSnackBar(
-          Overlay.of(context!),
+          Overlay.of(context),
           dismissType: DismissType.onSwipe,
           CustomSnackBar.success(
             iconRotationAngle: 0,

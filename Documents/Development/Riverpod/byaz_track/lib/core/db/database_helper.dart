@@ -21,7 +21,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 3,
+      version: 5,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -42,7 +42,8 @@ class DatabaseHelper {
         updated_at TEXT,
         sync_status TEXT,
         loan_status TEXT,
-        last_collected_date TEXT
+        last_collected_date TEXT,
+        is_deleted INTEGER DEFAULT 0
       )
     ''');
 
@@ -77,11 +78,37 @@ class DatabaseHelper {
         )
       ''');
     }
+    if (oldVersion < 5) {
+      // Ensuring is_deleted exists even if version 4 was skipped or failed
+      try {
+        await db.execute(
+          "ALTER TABLE loans ADD COLUMN is_deleted INTEGER DEFAULT 0",
+        );
+      } catch (e) {
+        // If column already exists (from a partial v4 upgrade), ignore the error
+        print("Migration to v5: is_deleted might already exist: $e");
+      }
+    }
   }
 
   Future<int> deleteLoan(String loanId) async {
     final db = await instance.database;
-    return await db.delete('loans', where: 'id = ?', whereArgs: [loanId]);
+    return await db.update(
+      'loans',
+      {'is_deleted': 1},
+      where: 'id = ?',
+      whereArgs: [loanId],
+    );
+  }
+
+  Future<int> restoreLoan(String loanId) async {
+    final db = await instance.database;
+    return await db.update(
+      'loans',
+      {'is_deleted': 0},
+      where: 'id = ?',
+      whereArgs: [loanId],
+    );
   }
 
   Future<void> close() async {
@@ -89,11 +116,11 @@ class DatabaseHelper {
     db.close();
   }
 
-  Future<int> settleLoan(String loanId) async {
+  Future<int> settleLoan(String loanId, DateTime date) async {
     final db = await instance.database;
     return await db.update(
       'loans',
-      {'loan_status': 'settled'},
+      {'loan_status': 'settled', 'last_collected_date': date.toIso8601String()},
       where: 'id = ?',
       whereArgs: [loanId],
     );
