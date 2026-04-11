@@ -19,6 +19,7 @@ class LedgerController extends GetxController {
   final RxList<LoanModel> loans = <LoanModel>[].obs;
   Timer? _debounce;
   final RxString _searchQuery = ''.obs;
+  final RxString _selectedFilter = 'All'.obs;
 
   Rx<TheStates> fetchLoanState = TheStates.initial.obs;
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
@@ -39,9 +40,13 @@ class LedgerController extends GetxController {
     try {
       fetchLoanState.value = TheStates.loading;
       final db = await DatabaseHelper.instance.database;
+
+      final queryData = _buildWhereClause(_searchQuery.value);
+
       final data = await db.query(
         'loans',
-        where: 'is_deleted = 0',
+        where: queryData['where'],
+        whereArgs: queryData['whereArgs'],
         orderBy: 'created_at DESC',
       );
 
@@ -51,6 +56,47 @@ class LedgerController extends GetxController {
       debugPrint('Error fetching loans: $e');
       fetchLoanState.value = TheStates.error;
     }
+  }
+
+  Map<String, dynamic> _buildWhereClause(String query) {
+    String where = 'is_deleted = 0';
+    List<dynamic> whereArgs = [];
+
+    if (query.isNotEmpty) {
+      where += ' AND party_name LIKE ?';
+      whereArgs.add('%$query%');
+    }
+
+    switch (_selectedFilter.value) {
+      case 'Active':
+        where += ' AND loan_status = ?';
+        whereArgs.add('active');
+        break;
+      case 'Settled':
+        where += ' AND loan_status = ?';
+        whereArgs.add('settled');
+        break;
+      case 'Upcoming':
+        where += ' AND start_date > ?';
+        whereArgs.add(DateTime.now().toIso8601String());
+        break;
+      case 'Borrowed':
+        where += ' AND transaction_type = ?';
+        whereArgs.add('1');
+        break;
+      case 'Lent':
+        where += ' AND transaction_type = ?';
+        whereArgs.add('0');
+        break;
+    }
+
+    return {'where': where, 'whereArgs': whereArgs};
+  }
+
+  final RxInt selectedTabIndex = 0.obs;
+  void setFilter(String filter) {
+    _selectedFilter.value = filter;
+    _refreshLedger();
   }
 
   Future<void> syncPendingLoans() async {
@@ -104,16 +150,13 @@ class LedgerController extends GetxController {
 
   Future<void> _executeSearch(String query) async {
     try {
-      if (query.isEmpty) {
-        await fetchLoans();
-        searchLoanState.value = TheStates.success;
-        return;
-      }
       final db = await DatabaseHelper.instance.database;
+      final queryData = _buildWhereClause(query);
+
       final data = await db.query(
         'loans',
-        where: 'party_name LIKE ? AND is_deleted = 0',
-        whereArgs: ['%$query%'],
+        where: queryData['where'],
+        whereArgs: queryData['whereArgs'],
         orderBy: 'created_at DESC',
       );
 
@@ -125,12 +168,15 @@ class LedgerController extends GetxController {
     }
   }
 
+  Rx<TheStates> refreshLedgerState = TheStates.initial.obs;
   Future<void> _refreshLedger() async {
+    refreshLedgerState.value = TheStates.loading;
     if (_searchQuery.value.isEmpty) {
       await fetchLoans();
     } else {
       await _executeSearch(_searchQuery.value);
     }
+    refreshLedgerState.value = TheStates.success;
   }
 
   Rx<TheStates> deleteLoanState = TheStates.initial.obs;

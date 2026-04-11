@@ -22,13 +22,14 @@ class LedgerScreen extends StatefulWidget {
 }
 
 class _LedgerScreenState extends State<LedgerScreen> {
-  int _selectedTabIndex = 0;
   final List<String> _tabs = [
     'All',
     'Active',
     'Settled',
     // 'Overdue',
     'Upcoming',
+    'Borrowed',
+    'Lent',
   ];
 
   final ledgerController = Get.find<LedgerController>();
@@ -93,14 +94,15 @@ class _LedgerScreenState extends State<LedgerScreen> {
                   //   topPadding: context.devicePaddingTop,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: LedgerFilterTabs(
-                      tabs: _tabs,
-                      selectedIndex: _selectedTabIndex,
-                      onTabSelected: (index) {
-                        setState(() {
-                          _selectedTabIndex = index;
-                        });
-                      },
+                    child: Obx(
+                      () => LedgerFilterTabs(
+                        tabs: _tabs,
+                        selectedIndex: ledgerController.selectedTabIndex.value,
+                        onTabSelected: (index) {
+                          ledgerController.selectedTabIndex.value = index;
+                          ledgerController.setFilter(_tabs[index]);
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -108,7 +110,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
 
               Obx(() {
                 if (ledgerController.searchLoanState.value ==
-                    TheStates.loading) {
+                        TheStates.loading ||
+                    ledgerController.refreshLedgerState.value ==
+                        TheStates.loading) {
                   return SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.all(32.0),
@@ -131,10 +135,17 @@ class _LedgerScreenState extends State<LedgerScreen> {
                     final controller = Get.find<LedgerController>();
 
                     if (controller.fetchLoanState.value == TheStates.initial) {
-                      return const SliverToBoxAdapter(
+                      return SliverToBoxAdapter(
                         child: Padding(
                           padding: EdgeInsets.all(32.0),
-                          child: Center(child: CircularProgressIndicator()),
+                          child: Center(
+                            child: LoadingAnimationWidget.beat(
+                              // leftDotColor: AppColors.appGreen,
+                              // rightDotColor: AppColors.appGreen,
+                              color: AppColors.appGreen,
+                              size: 36,
+                            ),
+                          ),
                         ),
                       );
                     }

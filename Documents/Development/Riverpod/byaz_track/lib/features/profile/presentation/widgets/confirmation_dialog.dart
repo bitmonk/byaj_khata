@@ -27,7 +27,10 @@ class ConfirmationDialog extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Dialog(
-      backgroundColor: isDark ? const Color(0xFF1A1A1A) : colorScheme.surface,
+      backgroundColor:
+          isDark
+              ? Theme.of(context).scaffoldBackgroundColor
+              : colorScheme.surface,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -75,7 +78,10 @@ class ConfirmationDialog extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF188018),
+                  backgroundColor:
+                      isDark
+                          ? const Color(0xFF188018).withAlpha(150)
+                          : Color(0xFF188018),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
