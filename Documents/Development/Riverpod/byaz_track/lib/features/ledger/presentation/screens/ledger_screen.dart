@@ -63,26 +63,34 @@ class _LedgerScreenState extends State<LedgerScreen> {
                       },
                     ),
                     const VerticalSpacing(16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: LedgerSummaryCard(
-                            title: 'Total Receivables',
-                            amount: 'Rs 4,50,000',
-                            trendPercentage: '+5.2%',
-                            isPositiveTrend: true,
+                    Obx(
+                      () => Row(
+                        children: [
+                          Expanded(
+                            child: LedgerSummaryCard(
+                              title: 'Total Receivables',
+                              amount:
+                                  'Rs ${ledgerController.totalReceivables.value.toStringAsFixed(0)}',
+                              trendPercentage:
+                                  ledgerController.receivablesTrend.value,
+                              isPositiveTrend:
+                                  ledgerController.isReceivablesPositive.value,
+                            ),
                           ),
-                        ),
-                        const HorizontalSpacing(12),
-                        Expanded(
-                          child: LedgerSummaryCard(
-                            title: 'Monthly Interest',
-                            amount: 'Rs 9,000',
-                            trendPercentage: '+2.1%',
-                            isPositiveTrend: true,
+                          const HorizontalSpacing(12),
+                          Expanded(
+                            child: LedgerSummaryCard(
+                              title: 'Monthly Interest',
+                              amount:
+                                  'Rs ${ledgerController.monthlyInterest.value.toStringAsFixed(0)}',
+                              trendPercentage:
+                                  ledgerController.interestTrend.value,
+                              isPositiveTrend:
+                                  ledgerController.isInterestPositive.value,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ]),
                 ),

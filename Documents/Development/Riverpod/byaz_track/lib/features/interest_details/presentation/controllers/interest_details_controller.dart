@@ -2,6 +2,8 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/interest_details/data/source/interest_details_remote_source.dart';
+import 'package:delightful_toast/delight_toast.dart';
+import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:byaz_track/features/interest_details/data/model/payment_model.dart';
@@ -25,19 +27,23 @@ class InterestDetailsController extends GetxController {
         // Refresh ledger
         final ledgerController = Get.find<LedgerController>();
         ledgerController.fetchLoans();
-        showTopSnackBar(
-          Overlay.of(context),
-          dismissType: DismissType.onSwipe,
-          onTap: () {
-            ledgerController.restoreLoan(loanId);
-          },
-          CustomSnackBar.success(
-            iconRotationAngle: 0,
-            icon: Icon(Icons.undo, color: Color(0x15000000), size: 120),
-            backgroundColor: DefaultColors.successGreen,
-            message: "Loan deleted. Tap to Undo",
-          ),
-        );
+        DelightToastBar(
+          autoDismiss: true,
+          snackbarDuration: const Duration(seconds: 3),
+          builder:
+              (context) => ToastCard(
+                trailing: TextButton(
+                  onPressed: () {
+                    ledgerController.restoreLoan(loanId);
+                  },
+                  child: const Text("Undo"),
+                ),
+                title: const Text(
+                  "Loan deleted successfully",
+                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+                ),
+              ),
+        ).show(context);
         Navigator.pop(context);
       } else {
         deleteLoanState.value = TheStates.error;

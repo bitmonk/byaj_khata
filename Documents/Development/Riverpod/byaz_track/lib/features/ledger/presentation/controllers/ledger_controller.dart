@@ -3,6 +3,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
 import 'package:delightful_toast/delight_toast.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:flutter/foundation.dart';
@@ -24,6 +25,14 @@ class LedgerController extends GetxController {
   Rx<TheStates> fetchLoanState = TheStates.initial.obs;
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
 
+  // Summary Observables
+  final RxDouble totalReceivables = 0.0.obs;
+  final RxDouble monthlyInterest = 0.0.obs;
+  final RxString receivablesTrend = '0%'.obs;
+  final RxString interestTrend = '0%'.obs;
+  final RxBool isReceivablesPositive = true.obs;
+  final RxBool isInterestPositive = true.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -41,16 +50,49 @@ class LedgerController extends GetxController {
       fetchLoanState.value = TheStates.loading;
       final db = await DatabaseHelper.instance.database;
 
-      final queryData = _buildWhereClause(_searchQuery.value);
+      // --- Summary Calculation ---
+      final summaryData = await db.query('loans', where: 'is_deleted = 0');
+      final rawLoansForSummary =
+          summaryData.map((json) => LoanModel.fromMap(json)).toList();
+      calculateSummaries(rawLoansForSummary);
 
-      final data = await db.query(
-        'loans',
-        where: queryData['where'],
-        whereArgs: queryData['whereArgs'],
-        orderBy: 'created_at DESC',
-      );
+      // --- List Fetching ---
+      List<LoanModel> filteredLoans = [];
 
-      loans.value = data.map((json) => LoanModel.fromMap(json)).toList();
+      if (_selectedFilter.value == 'Upcoming') {
+        // Fetch all active loans and sort by upcoming due date
+        final data = await db.query(
+          'loans',
+          where: 'is_deleted = 0 AND loan_status = ?',
+          whereArgs: ['active'],
+        );
+        final allActive = data.map((json) => LoanModel.fromMap(json)).toList();
+
+        // Sort by next collection date
+        allActive.sort((a, b) {
+          final nextA = _calculateNextMonthlyDate(
+            a.lastCollectedDate ?? a.startDate,
+          );
+          final nextB = _calculateNextMonthlyDate(
+            b.lastCollectedDate ?? b.startDate,
+          );
+          return nextA.compareTo(nextB);
+        });
+
+        filteredLoans = allActive;
+      } else {
+        final queryData = _buildWhereClause(_searchQuery.value);
+        final listData = await db.query(
+          'loans',
+          where: queryData['where'],
+          whereArgs: queryData['whereArgs'],
+          orderBy: 'created_at DESC',
+        );
+        filteredLoans =
+            listData.map((json) => LoanModel.fromMap(json)).toList();
+      }
+
+      loans.value = filteredLoans;
       fetchLoanState.value = TheStates.success;
     } catch (e) {
       debugPrint('Error fetching loans: $e');
@@ -76,10 +118,7 @@ class LedgerController extends GetxController {
         where += ' AND loan_status = ?';
         whereArgs.add('settled');
         break;
-      case 'Upcoming':
-        where += ' AND start_date > ?';
-        whereArgs.add(DateTime.now().toIso8601String());
-        break;
+      // 'Upcoming' is handled specially in fetchLoans
       case 'Borrowed':
         where += ' AND transaction_type = ?';
         whereArgs.add('1');
@@ -151,8 +190,14 @@ class LedgerController extends GetxController {
   Future<void> _executeSearch(String query) async {
     try {
       final db = await DatabaseHelper.instance.database;
-      final queryData = _buildWhereClause(query);
 
+      // Update summaries globally even during search
+      final summaryData = await db.query('loans', where: 'is_deleted = 0');
+      final rawLoansForSummary =
+          summaryData.map((json) => LoanModel.fromMap(json)).toList();
+      calculateSummaries(rawLoansForSummary);
+
+      final queryData = _buildWhereClause(query);
       final data = await db.query(
         'loans',
         where: queryData['where'],
@@ -177,6 +222,80 @@ class LedgerController extends GetxController {
       await _executeSearch(_searchQuery.value);
     }
     refreshLedgerState.value = TheStates.success;
+  }
+
+  void calculateSummaries(List<LoanModel> allLoans) {
+    final now = DateTime.now();
+    final thirtyDaysAgo = now.subtract(const Duration(days: 30));
+
+    // Filter to only consider "Lent" loans (transactionType == '0')
+    // and "Borrowed" loans (transactionType == '1')
+    // for separate receivables/payables calculation if needed.
+    // However, the requested metrics are "Total Receivables" and "Monthly Interest".
+
+    final lentLoans = allLoans.where((l) => l.transactionType == '0').toList();
+
+    // --- Current Metrics ---
+    final activeLoans =
+        lentLoans
+            .where((l) => l.loanStatus == LedgerItemStatus.active)
+            .toList();
+
+    double currentTotal = 0;
+    double currentInterest = 0;
+
+    for (var loan in activeLoans) {
+      currentTotal += loan.principalAmount;
+      // Monthly interest calculation
+      if (loan.interestType == '0') {
+        // 0 = Monthly (Rupee per 100)
+        currentInterest += (loan.principalAmount * loan.rateValue) / 100;
+      } else {
+        // 1 = Per Annum (%)
+        currentInterest += (loan.principalAmount * loan.rateValue) / 1200;
+      }
+    }
+
+    totalReceivables.value = currentTotal;
+    monthlyInterest.value = currentInterest;
+
+    // --- Past Metrics (30 days ago) ---
+    final pastActiveLoans =
+        lentLoans.where((l) {
+          final isCreatedBefore = l.createdAt.isBefore(thirtyDaysAgo);
+          final isStillActive = l.loanStatus == LedgerItemStatus.active;
+          final wasSettledRecently =
+              l.loanStatus == LedgerItemStatus.settled &&
+              (l.lastCollectedDate?.isAfter(thirtyDaysAgo) ?? false);
+
+          return isCreatedBefore && (isStillActive || wasSettledRecently);
+        }).toList();
+
+    double pastTotal = 0;
+    double pastInterest = 0;
+
+    for (var loan in pastActiveLoans) {
+      pastTotal += loan.principalAmount;
+      if (loan.interestType == '0') {
+        pastInterest += (loan.principalAmount * loan.rateValue) / 100;
+      } else {
+        pastInterest += (loan.principalAmount * loan.rateValue) / 1200;
+      }
+    }
+
+    // --- Trend Calculation ---
+    receivablesTrend.value = _calculateTrend(currentTotal, pastTotal);
+    isReceivablesPositive.value = currentTotal >= pastTotal;
+
+    interestTrend.value = _calculateTrend(currentInterest, pastInterest);
+    isInterestPositive.value = currentInterest >= pastInterest;
+  }
+
+  String _calculateTrend(double current, double past) {
+    if (past == 0) return current > 0 ? '+100%' : '0%';
+    final change = ((current - past) / past) * 100;
+    final sign = change >= 0 ? '+' : '';
+    return '$sign${change.toStringAsFixed(1)}%';
   }
 
   Rx<TheStates> deleteLoanState = TheStates.initial.obs;
@@ -239,5 +358,21 @@ class LedgerController extends GetxController {
       restoreLoanState.value = TheStates.error;
       print("Error restoring loan: $e");
     }
+  }
+
+  DateTime _calculateNextMonthlyDate(DateTime date) {
+    int nextMonth = date.month + 1;
+    int nextYear = date.year;
+    if (nextMonth > 12) {
+      nextMonth = 1;
+      nextYear += 1;
+    }
+    int daysInNextMonth = _getDaysInMonth(nextYear, nextMonth);
+    int nextDay = date.day > daysInNextMonth ? daysInNextMonth : date.day;
+    return DateTime(nextYear, nextMonth, nextDay);
+  }
+
+  int _getDaysInMonth(int year, int month) {
+    return DateTime(year, month + 1, 0).day;
   }
 }

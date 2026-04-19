@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:byaz_track/features/dashboard/data/source/dashboard_remote_source.dart';
 import 'package:byaz_track/features/dashboard/presentation/controllers/dashboard_controller.dart';
+import 'package:byaz_track/features/home/presentation/controllers/home_controller.dart';
 
 class DashboardBindings extends Bindings{
   @override
@@ -11,7 +12,8 @@ class DashboardBindings extends Bindings{
         DashboardController(
           remoteSource: Get.find<DashboardRemoteSource>(),
         ),
-      );
+      )
+      ..put(HomeController());
   }
 
 }
@@ -24,12 +26,14 @@ class DashboardInitializer {
         DashboardController(
           remoteSource: Get.find<DashboardRemoteSource>(),
         ),
-      );
+      )
+      ..put(HomeController());
   }
   static void destroy(){
         Get
       ..delete<DashboardRemoteSource>()
-      ..delete<DashboardController>();
+      ..delete<DashboardController>()
+      ..delete<HomeController>();
 
   }
 }

@@ -1,7 +1,18 @@
 import 'package:flutter/material.dart';
 
 class NetBalanceCard extends StatelessWidget {
-  const NetBalanceCard({super.key});
+  final String totalBalance;
+  final String monthlyIncome;
+  final String avgRate;
+  final String nextCollection;
+
+  const NetBalanceCard({
+    super.key,
+    required this.totalBalance,
+    required this.monthlyIncome,
+    required this.avgRate,
+    required this.nextCollection,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +49,9 @@ class NetBalanceCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'रू 1,24,500',
-                    style: TextStyle(
+                  Text(
+                    totalBalance,
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
@@ -67,9 +78,9 @@ class NetBalanceCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      '2.5% /mo',
-                      style: TextStyle(
+                    Text(
+                      avgRate,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -102,9 +113,9 @@ class NetBalanceCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'रू 3,720',
-                      style: TextStyle(
+                    Text(
+                      monthlyIncome,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -125,9 +136,9 @@ class NetBalanceCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'In 2 Days',
-                      style: TextStyle(
+                    Text(
+                      nextCollection,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
