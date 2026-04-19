@@ -24,11 +24,13 @@ class UpcomingCollectionItem {
 class UpcomingCollectionsWidget extends StatelessWidget {
   final List<UpcomingCollectionItem> items;
   final Function(LoanModel loan)? onTap;
+  final VoidCallback? onViewAll;
 
   const UpcomingCollectionsWidget({
     super.key,
     this.items = const [],
     this.onTap,
+    this.onViewAll,
   });
 
   @override
@@ -58,7 +60,7 @@ class UpcomingCollectionsWidget extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              onPressed: () {},
+              onPressed: onViewAll,
               child: const Text('View All'),
             ),
           ],

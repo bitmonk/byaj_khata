@@ -5,6 +5,7 @@ import 'package:byaz_track/features/calculator/data/source/calculator_remote_sou
 import 'package:byaz_track/features/create_loan/presentation/screens/create_loan_screen.dart';
 import 'package:byaz_track/features/calculator/presentation/controllers/calculator_controller.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/calculator_screen.dart';
+import 'package:byaz_track/features/dashboard/presentation/controllers/dashboard_controller.dart';
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/controllers/ledger_bindings.dart';
 import 'package:byaz_track/features/ledger/presentation/screens/ledger_screen.dart';
@@ -23,7 +24,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen>
     with TickerProviderStateMixin {
-  var _bottomNavIndex = 0;
+  final dashboardController = Get.find<DashboardController>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<int> _navigationStack = [];
 
@@ -59,26 +60,24 @@ class _DashboardScreenState extends State<DashboardScreen>
   }
 
   void onItemTapped(int index) {
-    if (_bottomNavIndex == index) {
+    if (dashboardController.currentIndex.value == index) {
       return;
     }
 
-    if (_bottomNavIndex != index) {
-      _navigationStack.add(_bottomNavIndex);
-      setState(() {
-        _bottomNavIndex = index;
-        _isShowingDefaultPage = true;
-        if (widget.customPages != null) {
-          _pages = _defaultPages;
-        }
-      });
-    }
+    _navigationStack.add(dashboardController.currentIndex.value);
+    setState(() {
+      dashboardController.currentIndex.value = index;
+      _isShowingDefaultPage = true;
+      if (widget.customPages != null) {
+        _pages = _defaultPages;
+      }
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    _bottomNavIndex = widget.initialIndex;
+    dashboardController.currentIndex.value = widget.initialIndex;
     _isShowingDefaultPage = widget.customPages == null;
     Get.put(
       CalculatorController(remoteSource: CalculatorRemoteSource(Get.find())),
@@ -108,15 +107,15 @@ class _DashboardScreenState extends State<DashboardScreen>
 
         if (_navigationStack.isNotEmpty) {
           setState(() {
-            _bottomNavIndex = _navigationStack.removeLast();
+            dashboardController.currentIndex.value = _navigationStack.removeLast();
             _isShowingDefaultPage = true;
             if (widget.customPages != null) {
               _pages = _defaultPages;
             }
           });
-        } else if (_bottomNavIndex != 0) {
+        } else if (dashboardController.currentIndex.value != 0) {
           setState(() {
-            _bottomNavIndex = 0;
+            dashboardController.currentIndex.value = 0;
             _isShowingDefaultPage = true;
             if (widget.customPages != null) {
               _pages = _defaultPages;
@@ -126,103 +125,111 @@ class _DashboardScreenState extends State<DashboardScreen>
           SystemNavigator.pop();
         }
       },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        key: _scaffoldKey,
-        extendBody: true,
-        body: IndexedStack(
-          index: _bottomNavIndex >= _pages.length ? 0 : _bottomNavIndex,
-          children: _pages,
-        ),
-        floatingActionButton:
-            isKeyboardOpen
-                ? null
-                : FloatingActionButton(
-                  onPressed: () {
-                    Get.toNamed(AppRoutes.createLoan);
-                  },
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  shape: const CircleBorder(),
-                  child: const Icon(Icons.add, color: Colors.white),
-                ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-          leftCornerRadius: 24,
-          rightCornerRadius: 24,
-          height: 70,
-          elevation: 1,
-          borderWidth: BorderSide.strokeAlignInside,
-          itemCount: coloredImageList.length,
-          tabBuilder: (int index, bool isActive) {
-            final color =
-                isActive
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(
-                          context,
-                        ).textTheme.bodyMedium?.color?.withOpacity(0.5) ??
-                        Colors.grey;
+      child: Obx(
+        () => Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          key: _scaffoldKey,
+          extendBody: true,
+          body: IndexedStack(
+            index:
+                dashboardController.currentIndex.value >= _pages.length
+                    ? 0
+                    : dashboardController.currentIndex.value,
+            children: _pages,
+          ),
+          floatingActionButton:
+              isKeyboardOpen
+                  ? null
+                  : FloatingActionButton(
+                    onPressed: () {
+                      Get.toNamed(AppRoutes.createLoan);
+                    },
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    shape: const CircleBorder(),
+                    child: const Icon(Icons.add, color: Colors.white),
+                  ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+            leftCornerRadius: 24,
+            rightCornerRadius: 24,
+            height: 70,
+            elevation: 1,
+            borderWidth: BorderSide.strokeAlignInside,
+            itemCount: coloredImageList.length,
+            tabBuilder: (int index, bool isActive) {
+              final color =
+                  isActive
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.color?.withOpacity(0.5) ??
+                          Colors.grey;
 
-            return Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: Icon(
-                      isActive
-                          ? coloredImageList[index]
-                          : unColoredImageList[index],
-                      color: color,
+              return Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Icon(
+                        isActive
+                            ? coloredImageList[index]
+                            : unColoredImageList[index],
+                        color: color,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Column(
-                      children: [
-                        Text(
-                          name[index],
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: color,
+                    const SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Column(
+                        children: [
+                          Text(
+                            name[index],
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: color,
+                            ),
                           ),
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          margin: const EdgeInsets.only(top: 2),
-                          height: 3,
-                          width: 6,
-                          decoration: BoxDecoration(
-                            color:
-                                isActive
-                                    ? Theme.of(context).colorScheme.primary
-                                    : Colors.transparent,
-                            borderRadius: BorderRadius.circular(100),
+                          AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            margin: const EdgeInsets.only(top: 2),
+                            height: 3,
+                            width: 6,
+                            decoration: BoxDecoration(
+                              color:
+                                  isActive
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Colors.transparent,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
-          backgroundColor:
-              Theme.of(context).bottomNavigationBarTheme.backgroundColor ??
-              Theme.of(context).scaffoldBackgroundColor,
-          activeIndex:
-              _isShowingDefaultPage
-                  ? (_bottomNavIndex == 4 ? -1 : _bottomNavIndex)
-                  : -1,
-          splashColor: Theme.of(context).scaffoldBackgroundColor,
-          splashSpeedInMilliseconds: 300,
-          notchSmoothness: NotchSmoothness.smoothEdge,
-          gapLocation: GapLocation.center,
-          onTap: (index) => onItemTapped(index),
+                  ],
+                ),
+              );
+            },
+            backgroundColor:
+                Theme.of(context).bottomNavigationBarTheme.backgroundColor ??
+                Theme.of(context).scaffoldBackgroundColor,
+            activeIndex:
+                _isShowingDefaultPage
+                    ? (dashboardController.currentIndex.value == 4
+                        ? -1
+                        : dashboardController.currentIndex.value)
+                    : -1,
+            splashColor: Theme.of(context).scaffoldBackgroundColor,
+            splashSpeedInMilliseconds: 300,
+            notchSmoothness: NotchSmoothness.smoothEdge,
+            gapLocation: GapLocation.center,
+            onTap: (index) => onItemTapped(index),
+          ),
         ),
       ),
     );

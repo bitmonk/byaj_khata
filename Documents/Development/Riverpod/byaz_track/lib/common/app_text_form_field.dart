@@ -126,17 +126,8 @@ class _AppTextFormFieldState extends State<AppTextFormField> {
       },
       obscureText: widget.obscureText,
       validator: (value) {
-        // Don't show validation error if user hasn't interacted with the field yet
-        if (!hasInteracted) {
-          return null;
-        }
-
-        // Don't show validation error if field is empty
-        if (value == null || value.isEmpty) {
-          return null;
-        }
-
-        // Run the actual validation only after user interaction and when field has content
+        // Run the actual validation. TextFormField's autovalidateMode 
+        // will handle when the error actually shows up in the UI.
         return widget.validator?.call(value);
       },
       onFieldSubmitted: (value) {

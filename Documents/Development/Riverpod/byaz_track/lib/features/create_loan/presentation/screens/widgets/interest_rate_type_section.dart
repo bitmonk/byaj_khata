@@ -77,6 +77,15 @@ class InterestRateTypeSection extends StatelessWidget {
             ),
             textInputType: const TextInputType.numberWithOptions(decimal: true),
             onChanged: (value) => controller.rateValue.value = value,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a rate value';
+              }
+              if (double.tryParse(value) == null || double.parse(value) <= 0) {
+                return 'Please enter a valid rate';
+              }
+              return null;
+            },
             fillColor:
                 Colors
                     .transparent, // remove default fill color since it behaves like plain text input on image
