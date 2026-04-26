@@ -7,6 +7,8 @@ import 'package:byaz_track/features/home/presentation/widgets/upcoming_collectio
 import 'package:get/get.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 import 'package:byaz_track/core/utils/byaj_helper.dart';
+import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeStats {
   final double totalLending;
@@ -166,6 +168,10 @@ class HomeController extends GetxController {
       final spots6m = _calculateChartData(allLoans, 6);
       final spots1y = _calculateChartData(allLoans, 12);
 
+      // Save latest interest growth to database
+      await _saveInterestGrowth(spots1y);
+      await syncInterestGrowth();
+
       stats.value = HomeStats(
         totalLending: totalLending,
         totalBorrowing: totalBorrowing,
@@ -255,6 +261,92 @@ class HomeController extends GetxController {
     }
 
     return spots;
+  }
+
+  Future<void> _saveInterestGrowth(List<FlSpot> spots) async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final supabase = Supabase.instance.client;
+      final userId = supabase.auth.currentUser?.id;
+      final now = DateTime.now();
+
+      for (int i = 0; i < spots.length; i++) {
+        final spot = spots[i];
+        // Calculate the month for this spot
+        // In _calculateChartData(allLoans, 12):
+        // i = 0 is 11 months ago, i = 11 is current month
+        final monthOffset = 11 - i;
+        final date = DateTime(now.year, now.month - monthOffset, 1);
+        final monthYear = DateFormat('yyyy-MM').format(date);
+
+        // Check if already exists for this month and user
+        final List<Map<String, dynamic>> existing = await db.query(
+          'interest_growth',
+          where: 'month_year = ? AND user_id = ?',
+          whereArgs: [monthYear, userId],
+        );
+
+        if (existing.isEmpty) {
+          await db.insert('interest_growth', {
+            'id':
+                DateTime.now().millisecondsSinceEpoch.toString() + i.toString(),
+            'month_year': monthYear,
+            'amount': spot.y,
+            'user_id': userId,
+            'sync_status': 'pending',
+          });
+        } else {
+          // Update existing if amount changed
+          if (existing.first['amount'] != spot.y) {
+            await db.update(
+              'interest_growth',
+              {'amount': spot.y, 'sync_status': 'pending'},
+              where: 'id = ?',
+              whereArgs: [existing.first['id']],
+            );
+          }
+        }
+      }
+    } catch (e) {
+      print('Error saving interest growth: $e');
+    }
+  }
+
+  Future<void> syncInterestGrowth() async {
+    try {
+      final db = await DatabaseHelper.instance.database;
+      final supabase = Supabase.instance.client;
+      final userId = supabase.auth.currentUser?.id;
+
+      if (userId == null) return;
+
+      final pendingSync = await db.query(
+        'interest_growth',
+        where: 'sync_status = ? AND user_id = ?',
+        whereArgs: ['pending', userId],
+      );
+
+      if (pendingSync.isEmpty) return;
+
+      for (final row in pendingSync) {
+        final map = Map<String, dynamic>.from(row);
+        map.remove('sync_status');
+
+        await supabase.from('interest_growth').upsert(map);
+
+        await db.update(
+          'interest_growth',
+          {'sync_status': 'synced'},
+          where: 'id = ?',
+          whereArgs: [row['id']],
+        );
+      }
+      debugPrint(
+        'Synced ${pendingSync.length} interest growth records to Supabase',
+      );
+    } catch (e) {
+      debugPrint('Error syncing interest growth: $e');
+    }
   }
 
   DateTime _calculateNextMonthlyDate(DateTime fromDate) {

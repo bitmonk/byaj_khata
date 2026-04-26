@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       totalBalance: '${stats.netBalance.toStringAsFixed(0)}',
                       monthlyIncome:
                           'रू ${stats.monthlyIncome.toStringAsFixed(0)}',
-                      avgRate: '${stats.avgRate.toStringAsFixed(1)}% /mo',
+                      avgRate: stats.avgRate,
                       nextCollection: stats.nextCollection,
                     ),
                     const SizedBox(height: 16),
@@ -129,8 +129,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             MaterialPageRoute(
                               builder:
-                                  (context) =>
-                                      InterestDetailsScreen(loan: loan),
+                                  (context) => InterestDetailsScreen(
+                                    loanId: loan.id!,
+                                  ),
                             ),
                           );
                         },

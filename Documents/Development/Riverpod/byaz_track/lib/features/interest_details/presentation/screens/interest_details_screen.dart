@@ -1,5 +1,7 @@
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:byaz_track/features/create_loan/presentation/controllers/create_loan_bindings.dart';
+import 'package:byaz_track/features/create_loan/presentation/screens/create_loan_screen.dart';
 import 'package:byaz_track/features/interest_details/presentation/controllers/interest_details_controller.dart';
 import 'package:byaz_track/features/profile/presentation/widgets/confirmation_dialog.dart';
 import '../widgets/interest_profile_header.dart';
@@ -9,10 +11,22 @@ import '../widgets/interest_calculation_breakdown.dart';
 import '../widgets/interest_total_settlement_card.dart';
 import '../widgets/interest_action_buttons.dart';
 
-class InterestDetailsScreen extends GetView<InterestDetailsController> {
-  final LoanModel? loan;
-  const InterestDetailsScreen({super.key, this.loan});
+class InterestDetailsScreen extends StatefulWidget {
+  final String? loanId;
+  const InterestDetailsScreen({super.key, this.loanId});
 
+  @override
+  State<InterestDetailsScreen> createState() => _InterestDetailsScreenState();
+}
+
+class _InterestDetailsScreenState extends State<InterestDetailsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    interestDetailsController.fetchLoan(widget.loanId!);
+  }
+
+  final interestDetailsController = Get.find<InterestDetailsController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,9 +41,18 @@ class InterestDetailsScreen extends GetView<InterestDetailsController> {
               elevation: 10,
               shadowColor: Colors.black,
 
-              onSelected: (String result) {
-                // Handle different menu option selections here
-                print('Selected option: $result');
+              onSelected: (String result) async {
+                if (result == 'edit') {
+                  CreateLoanInitializer.initialize();
+                  await Get.to(
+                    () => CreateLoanScreen(
+                      loan: interestDetailsController.selectedLoan.value,
+                    ),
+                  );
+                  if (widget.loanId != null) {
+                    interestDetailsController.fetchLoan(widget.loanId!);
+                  }
+                }
               },
               itemBuilder:
                   (BuildContext context) => <PopupMenuEntry<String>>[
@@ -57,10 +80,15 @@ class InterestDetailsScreen extends GetView<InterestDetailsController> {
                                 cancelText: 'Cancel',
                                 icon: Icons.delete,
                                 isLoading:
-                                    controller.deleteLoanState.value ==
+                                    interestDetailsController
+                                        .deleteLoanState
+                                        .value ==
                                     TheStates.loading,
                                 onConfirm: () {
-                                  controller.deleteLoan(loan!.id!, context);
+                                  interestDetailsController.deleteLoan(
+                                    widget.loanId!,
+                                    context,
+                                  );
                                 },
                               ),
                         );
@@ -71,30 +99,61 @@ class InterestDetailsScreen extends GetView<InterestDetailsController> {
           ),
         ],
       ),
-      body: Obx(
-        () =>
-            controller.deleteLoanState.value == TheStates.loading
-                ? const Center(child: AppLoadingWidget(size: 40))
-                : SingleChildScrollView(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      InterestProfileHeader(loan: loan!),
-                      const SizedBox(height: 24),
-                      InterestSummaryCards(loan: loan),
-                      const SizedBox(height: 24),
-                      InterestAccumulatedCard(loan: loan!),
-                      const SizedBox(height: 32),
-                      InterestCalculationBreakdown(loan: loan!),
-                      const SizedBox(height: 32),
-                      InterestTotalSettlementCard(loan: loan!),
-                      const SizedBox(height: 32),
-                      InterestActionButtons(loan: loan!),
-                      const SizedBox(height: 48),
-                    ],
-                  ),
-                ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await interestDetailsController.fetchLoan(widget.loanId!);
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Obx(() {
+            // Handle global loading/deleting state
+            if (interestDetailsController.deleteLoanState.value ==
+                TheStates.loading) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: const Center(child: AppLoadingWidget(size: 40)),
+              );
+            }
+
+            // Handle initial fetch loading state
+            if (interestDetailsController.selectedLoan.value == null) {
+              if (interestDetailsController.fetchLoanState.value ==
+                  TheStates.loading) {
+                return SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: const Center(child: AppLoadingWidget(size: 40)),
+                );
+              }
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: const Center(child: Text('No data available')),
+              );
+            }
+
+            // Main Content
+            final loan = interestDetailsController.selectedLoan.value!;
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  InterestProfileHeader(loan: loan),
+                  const SizedBox(height: 24),
+                  InterestSummaryCards(loan: loan),
+                  const SizedBox(height: 24),
+                  InterestAccumulatedCard(loan: loan),
+                  const SizedBox(height: 32),
+                  InterestCalculationBreakdown(loan: loan),
+                  const SizedBox(height: 32),
+                  InterestTotalSettlementCard(loan: loan),
+                  const SizedBox(height: 32),
+                  InterestActionButtons(loan: loan),
+                  const SizedBox(height: 48),
+                ],
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

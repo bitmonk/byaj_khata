@@ -15,6 +15,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final profileController = Get.find<ProfileController>();
+  final ledgerController = Get.find<LedgerController>();
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -357,17 +358,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         title:
                             '${AppLocalizations.of(context)?.exportData ?? 'Export Data'} (Excel/PDF)',
                       ),
+                      Divider(
+                        height: 1,
+                        indent: 56,
+                        endIndent: 16,
+                        color: divider,
+                      ),
+                      Obx(
+                        () => ProfileTileWidget(
+                          leadingIcon: Icons.upload,
+                          title: 'Upload Data',
+                          trailing:
+                              ledgerController.syncState.value ==
+                                      TheStates.loading
+                                  ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                  : null,
+                          onTap: () {
+                            ledgerController.syncAllData(context);
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 32),
-                ProfileTileWidget(
-                  leadingIcon: Icons.upload,
-                  title: 'Upload Data',
-                  onTap: () {
-                    Get.find<LedgerController>().syncPendingLoans();
-                  },
-                ),
+
                 // DANGER ZONE
                 _buildSectionHeader(
                   context,

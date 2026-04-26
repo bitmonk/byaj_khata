@@ -197,19 +197,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
                     const SizedBox(height: 12),
 
-                    // Continue with Apple
-                    if (Platform.isIOS)
-                      AuthButton(
-                        onTap: () {},
-                        icon: const Icon(
-                          Icons.apple,
-                          color: Colors.white,
-                          size: 22,
-                        ),
-                        label: 'Continue with Apple',
-                      ),
-                    if (Platform.isIOS) const SizedBox(height: 28),
-
                     // ── OR divider ──
                     Row(
                       children: [

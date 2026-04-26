@@ -23,6 +23,7 @@ class LedgerController extends GetxController {
   final RxString _selectedFilter = 'All'.obs;
 
   Rx<TheStates> fetchLoanState = TheStates.initial.obs;
+  Rx<TheStates> syncState = TheStates.initial.obs;
   final DatabaseHelper dbHelper = DatabaseHelper.instance;
 
   // Summary Observables
@@ -138,28 +139,24 @@ class LedgerController extends GetxController {
     _refreshLedger();
   }
 
-  Future<void> syncPendingLoans() async {
+  Future<void> syncAllData(BuildContext context) async {
     try {
-      final db = await DatabaseHelper.instance.database;
-      final pendingLoans = await db.query(
-        'loans',
-        where: 'sync_status = ?',
-        whereArgs: ['pending'],
-      );
+      syncState.value = TheStates.loading;
+      final db = await dbHelper.database;
+      final supabase = Supabase.instance.client;
+      final userId = supabase.auth.currentUser?.id;
 
-      if (pendingLoans.isEmpty) {
-        debugPrint('No pending loans to sync.');
+      if (userId == null) {
+        syncState.value = TheStates.error;
         return;
       }
 
-      final supabase = Supabase.instance.client;
-
-      for (final loanJson in pendingLoans) {
+      // 1. Sync Loans
+      final loansToSync = await db.query('loans');
+      for (final loanJson in loansToSync) {
         final loanMap = Map<String, dynamic>.from(loanJson);
         loanMap.remove('sync_status');
-
         await supabase.from('loans').upsert(loanMap);
-
         await db.update(
           'loans',
           {'sync_status': 'synced'},
@@ -168,11 +165,72 @@ class LedgerController extends GetxController {
         );
       }
 
-      debugPrint('Successfully synced ${pendingLoans.length} loans.');
+      // 2. Sync Payments
+      final paymentsToSync = await db.query('payments');
+      for (final paymentJson in paymentsToSync) {
+        final paymentMap = Map<String, dynamic>.from(paymentJson);
+        paymentMap.remove('sync_status');
+        await supabase.from('payments').upsert(paymentMap);
+        await db.update(
+          'payments',
+          {'sync_status': 'synced'},
+          where: 'id = ?',
+          whereArgs: [paymentJson['id']],
+        );
+      }
+
+      // 3. Sync Interest Growth (from HomeController logic)
+      final growthToSync = await db.query(
+        'interest_growth',
+        where: 'user_id = ?',
+        whereArgs: [userId],
+      );
+      for (final row in growthToSync) {
+        final map = Map<String, dynamic>.from(row);
+        map.remove('sync_status');
+        await supabase.from('interest_growth').upsert(map);
+        await db.update(
+          'interest_growth',
+          {'sync_status': 'synced'},
+          where: 'id = ?',
+          whereArgs: [row['id']],
+        );
+      }
+
+      syncState.value = TheStates.success;
+      DelightToastBar(
+        autoDismiss: true,
+        builder:
+            (context) => const ToastCard(
+              title: Text(
+                "All data synced successfully",
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+              ),
+            ),
+      ).show(context);
       await fetchLoans();
     } catch (e) {
-      debugPrint('Error syncing loans: $e');
+      syncState.value = TheStates.error;
+      debugPrint('Error syncing data: $e');
+      DelightToastBar(
+        autoDismiss: true,
+        builder:
+            (context) => ToastCard(
+              title: Text(
+                "Sync failed: $e",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+      ).show(context);
     }
+  }
+
+  Future<void> syncPendingLoans() async {
+    // Keep this for background sync if needed, or point to syncAllData
+    // For now, let's keep it minimal or just call syncAllData
   }
 
   Rx<TheStates> searchLoanState = TheStates.initial.obs;

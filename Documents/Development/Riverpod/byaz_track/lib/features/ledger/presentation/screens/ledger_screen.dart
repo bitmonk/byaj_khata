@@ -233,7 +233,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                       MaterialPageRoute(
                                         builder:
                                             (context) => InterestDetailsScreen(
-                                              loan: loan,
+                                              loanId: loan.id,
                                             ),
                                       ),
                                     );

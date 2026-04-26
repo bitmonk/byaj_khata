@@ -1,3 +1,4 @@
+import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/dio_provider/api_error.dart';
 import 'package:byaz_track/core/dio_provider/api_response.dart';
 import 'package:byaz_track/core/dio_provider/dio_api_client.dart';
@@ -15,7 +16,9 @@ class ProfileRemoteSource {
     try {
       await supabase.auth.signOut();
       if (supabase.auth.currentUser == null) {
-        debugPrint('Logout successful');
+        // Clear local database on logout
+        await DatabaseHelper.instance.clearDatabase();
+        debugPrint('Logout successful and database cleared');
         return right('Logout successful');
       } else {
         return left(

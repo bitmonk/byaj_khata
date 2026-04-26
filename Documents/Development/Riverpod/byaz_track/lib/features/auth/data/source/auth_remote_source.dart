@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/dio_provider/api_response.dart';
 import 'package:byaz_track/core/dio_provider/dio_api_client.dart';
 import 'package:dartz/dartz.dart';
@@ -46,6 +46,10 @@ class AuthRemoteSource {
             'session': result.session?.toJson(),
           }.toString(),
         );
+
+        // Fetch and sync data from Supabase before going to dashboard
+        await fetchAndSyncFromSupabase();
+
         Get.offAllNamed(AppRoutes.dashboard);
       }
       return right('success');
@@ -57,4 +61,41 @@ class AuthRemoteSource {
       }
     }
   }
+
+  Future<void> fetchAndSyncFromSupabase() async {
+    try {
+      debugPrint('Fetching loans from Supabase...');
+      final response = await supabase.from('loans').select();
+
+      if (response is List) {
+        final List<dynamic> data = response;
+        debugPrint(
+          'Found ${data.length} loans on Supabase. Syncing to local DB...',
+        );
+
+        // Clear local DB first to ensure we have a fresh state for this user
+        await DatabaseHelper.instance.clearDatabase();
+
+        for (final item in data) {
+          await DatabaseHelper.instance.insertLoanFromSupabase(
+            item as Map<String, dynamic>,
+          );
+        }
+        debugPrint('Sync completed successfully.');
+      }
+    } catch (e) {
+      debugPrint('Error during Supabase sync: $e');
+      // We don't want to block login if sync fails, but we should log it
+    }
+  }
+
+  // Future<Either<AppError, String>> continueWithApple() async {
+  //   try {} catch (e) {
+  //     if (e is ApiErrorResponse) {
+  //       return left(e);
+  //     } else {
+  //       return left(InternalAppError(message: e.toString()));
+  //     }
+  //   }
+  // }
 }

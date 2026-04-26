@@ -77,6 +77,7 @@ class InterestRateTypeSection extends StatelessWidget {
             ),
             textInputType: const TextInputType.numberWithOptions(decimal: true),
             onChanged: (value) => controller.rateValue.value = value,
+            controller: controller.rateValueController,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter a rate value';

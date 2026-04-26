@@ -1,4 +1,5 @@
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 import 'package:byaz_track/features/create_loan/presentation/controllers/create_loan_controller.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/transaction_type_section.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/start_date_section.dart';
@@ -7,7 +8,8 @@ import 'package:byaz_track/features/create_loan/presentation/screens/widgets/act
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/contact_list_bottom_sheet.dart';
 
 class CreateLoanScreen extends StatefulWidget {
-  const CreateLoanScreen({super.key});
+  final LoanModel? loan;
+  const CreateLoanScreen({super.key, this.loan});
 
   @override
   State<CreateLoanScreen> createState() => _CreateLoanScreenState();
@@ -15,17 +17,24 @@ class CreateLoanScreen extends StatefulWidget {
 
 class _CreateLoanScreenState extends State<CreateLoanScreen> {
   final _formKey = GlobalKey<FormState>();
+  final createLoanController = Get.find<CreateLoanController>();
 
   @override
   void initState() {
     super.initState();
+    if (widget.loan != null) {
+      createLoanController.prefillData(widget.loan!);
+    } else {
+      createLoanController.resetData();
+    }
   }
 
-  final createLoanController = Get.find<CreateLoanController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Loan')),
+      appBar: AppBar(
+        title: Text(widget.loan != null ? 'Edit Loan' : 'Create Loan'),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -139,28 +148,55 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
                 ),
                 const VerticalSpacing(32),
                 ActionButtonsSection(
+                  buttonText: widget.loan != null ? 'Update' : 'Save',
                   onSave: () {
                     if (_formKey.currentState!.validate()) {
-                      createLoanController.insertLoan(
-                        transactionType:
-                            createLoanController.transactionType.value
-                                .toString(),
-                        principalAmount: int.parse(
-                          createLoanController.principalAmountController.text,
-                        ),
-                        startDate:
-                            createLoanController.startDate.value!.toDateTime(),
-                        interestType:
-                            createLoanController.interestRateType.value
-                                .toString(),
-                        rateValue: double.parse(
-                          createLoanController.rateValue.value,
-                        ),
-                        partyName:
-                            createLoanController.partyNameController.text,
-                        notes: createLoanController.notesController.text,
-                        context: context,
-                      );
+                      if (widget.loan != null) {
+                        createLoanController.updateLoan(
+                          id: widget.loan!.id,
+                          transactionType:
+                              createLoanController.transactionType.value
+                                  .toString(),
+                          principalAmount: int.parse(
+                            createLoanController.principalAmountController.text,
+                          ),
+                          startDate:
+                              createLoanController.startDate.value!.toDateTime(),
+                          interestType:
+                              createLoanController.interestRateType.value
+                                  .toString(),
+                          rateValue: double.parse(
+                            createLoanController.rateValueController.text,
+                          ),
+                          partyName:
+                              createLoanController.partyNameController.text,
+                          notes: createLoanController.notesController.text,
+                          loanStatus: widget.loan!.loanStatus,
+                          createdAt: widget.loan!.createdAt,
+                          context: context,
+                        );
+                      } else {
+                        createLoanController.insertLoan(
+                          transactionType:
+                              createLoanController.transactionType.value
+                                  .toString(),
+                          principalAmount: int.parse(
+                            createLoanController.principalAmountController.text,
+                          ),
+                          startDate:
+                              createLoanController.startDate.value!.toDateTime(),
+                          interestType:
+                              createLoanController.interestRateType.value
+                                  .toString(),
+                          rateValue: double.parse(
+                            createLoanController.rateValueController.text,
+                          ),
+                          partyName:
+                              createLoanController.partyNameController.text,
+                          notes: createLoanController.notesController.text,
+                          context: context,
+                        );
+                      }
                     }
                   },
                   onCancel: () {

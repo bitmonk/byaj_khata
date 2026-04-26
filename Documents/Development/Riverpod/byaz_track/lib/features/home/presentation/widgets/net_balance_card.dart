@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class NetBalanceCard extends StatelessWidget {
   final String totalBalance;
   final String monthlyIncome;
-  final String avgRate;
+  final double avgRate;
   final String nextCollection;
 
   const NetBalanceCard({
@@ -134,7 +134,7 @@ class NetBalanceCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            avgRate,
+                            avgRate.toStringAsFixed(2),
                             style: theme.textTheme.bodyLarge?.copyWith(
                               color: theme.colorScheme.onSurface,
                               fontWeight: FontWeight.w800,

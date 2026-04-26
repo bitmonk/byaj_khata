@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
+import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
 import 'package:byaz_track/features/interest_details/data/source/interest_details_remote_source.dart';
 import 'package:delightful_toast/delight_toast.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
@@ -17,6 +18,8 @@ class InterestDetailsController extends GetxController {
   final dbHelper = DatabaseHelper.instance;
 
   Rx<TheStates> deleteLoanState = TheStates.initial.obs;
+  Rx<TheStates> fetchLoanState = TheStates.initial.obs;
+  Rx<LoanModel?> selectedLoan = Rx<LoanModel?>(null);
 
   Future<void> deleteLoan(String loanId, BuildContext context) async {
     try {
@@ -34,7 +37,7 @@ class InterestDetailsController extends GetxController {
               (context) => ToastCard(
                 trailing: TextButton(
                   onPressed: () {
-                    ledgerController.restoreLoan(loanId);
+                    ledgerController.restoreLoan(loanId.toString());
                   },
                   child: const Text("Undo"),
                 ),
@@ -148,6 +151,28 @@ class InterestDetailsController extends GetxController {
       payments.value = data.map((map) => PaymentModel.fromMap(map)).toList();
     } catch (e) {
       print("Error fetching payments: $e");
+    }
+  }
+
+  Future<void> fetchLoan(String loanId) async {
+    try {
+      fetchLoanState.value = TheStates.loading;
+      final db = await dbHelper.database;
+      final List<Map<String, dynamic>> maps = await db.query(
+        'loans',
+        where: 'id = ?',
+        whereArgs: [loanId],
+      );
+
+      if (maps.isNotEmpty) {
+        selectedLoan.value = LoanModel.fromMap(maps.first);
+        fetchLoanState.value = TheStates.success;
+      } else {
+        fetchLoanState.value = TheStates.error;
+      }
+    } catch (e) {
+      fetchLoanState.value = TheStates.error;
+      print("Error fetching loan: $e");
     }
   }
 }

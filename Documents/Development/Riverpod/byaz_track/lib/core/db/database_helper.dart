@@ -21,7 +21,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 5,
+      version: 7,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -54,7 +54,18 @@ class DatabaseHelper {
         amount REAL,
         payment_date TEXT,
         created_at TEXT,
+        sync_status TEXT DEFAULT 'pending',
         FOREIGN KEY (loan_id) REFERENCES loans (id) ON DELETE CASCADE
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS interest_growth (
+        id TEXT PRIMARY KEY,
+        month_year TEXT,
+        amount REAL,
+        user_id TEXT,
+        sync_status TEXT DEFAULT 'pending'
       )
     ''');
   }
@@ -89,6 +100,17 @@ class DatabaseHelper {
         print("Migration to v5: is_deleted might already exist: $e");
       }
     }
+    if (oldVersion < 6) {
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS interest_growth (
+          id TEXT PRIMARY KEY,
+          month_year TEXT,
+          amount REAL,
+          user_id TEXT,
+          sync_status TEXT DEFAULT 'pending'
+        )
+      ''');
+    }
   }
 
   Future<int> deleteLoan(String loanId) async {
@@ -114,6 +136,26 @@ class DatabaseHelper {
   Future<void> close() async {
     final db = await instance.database;
     db.close();
+  }
+
+  Future<void> clearDatabase() async {
+    final db = await instance.database;
+    await db.delete('loans');
+    await db.delete('payments');
+    print("Local database cleared");
+  }
+
+  Future<int> insertLoanFromSupabase(Map<String, dynamic> loan) async {
+    final db = await instance.database;
+    // Ensure sync_status is set to synced since it's coming from Supabase
+    final loanToInsert = Map<String, dynamic>.from(loan);
+    loanToInsert['sync_status'] = 'synced';
+    
+    return await db.insert(
+      'loans',
+      loanToInsert,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<int> settleLoan(String loanId, DateTime date) async {

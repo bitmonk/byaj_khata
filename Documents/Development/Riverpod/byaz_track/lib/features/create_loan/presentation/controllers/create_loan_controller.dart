@@ -26,10 +26,33 @@ class CreateLoanController extends GetxController {
   );
   final RxInt interestRateType = 0.obs;
   final RxString rateValue = ''.obs;
+  TextEditingController rateValueController = TextEditingController();
   TextEditingController partyNameController = TextEditingController();
   TextEditingController notesController = TextEditingController();
 
   void setStartDate(NepaliDateTime? date) => startDate.value = date;
+
+  void prefillData(LoanModel loan) {
+    transactionType.value = loan.transactionType == '0' ? 0 : 1;
+    principalAmountController.text = loan.principalAmount.toString();
+    startDate.value = loan.startDate.toNepaliDateTime();
+    interestRateType.value = loan.interestType == '0' ? 0 : 1;
+    rateValue.value = loan.rateValue.toString();
+    rateValueController.text = loan.rateValue.toString();
+    partyNameController.text = loan.partyName;
+    notesController.text = loan.notes ?? '';
+  }
+
+  void resetData() {
+    transactionType.value = 0;
+    principalAmountController.clear();
+    startDate.value = NepaliDateTime.now();
+    interestRateType.value = 0;
+    rateValue.value = '';
+    rateValueController.clear();
+    partyNameController.clear();
+    notesController.clear();
+  }
 
   Future<void> insertLoan({
     required String transactionType,
@@ -96,6 +119,77 @@ class CreateLoanController extends GetxController {
           message: 'Failed to create loan.',
 
           /// change contentType to ContentType.success, ContentType.warning or ContentType.help for variants
+          contentType: ContentType.failure,
+        ),
+      );
+      ScaffoldMessenger.of(context!)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(snackBar);
+    }
+  }
+
+  Future<void> updateLoan({
+    required String id,
+    required String transactionType,
+    required int principalAmount,
+    required DateTime startDate,
+    required String interestType,
+    required double rateValue,
+    required String partyName,
+    String? notes,
+    required LedgerItemStatus loanStatus,
+    required DateTime createdAt,
+    BuildContext? context,
+  }) async {
+    final db = await DatabaseHelper.instance.database;
+
+    try {
+      final now = DateTime.now();
+
+      final loan = LoanModel(
+        id: id,
+        transactionType: transactionType,
+        principalAmount: principalAmount,
+        startDate: startDate,
+        interestType: interestType,
+        rateValue: rateValue,
+        partyName: partyName,
+        notes: notes,
+        createdAt: createdAt,
+        updatedAt: now,
+        syncStatus: 'pending',
+        loanStatus: loanStatus,
+      );
+
+      final result = await db.update(
+        'loans',
+        loan.toMap(),
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      debugPrint('Loan updated successfully: $result');
+      showTopSnackBar(
+        Overlay.of(context!),
+        dismissType: DismissType.onSwipe,
+        CustomSnackBar.success(
+          iconRotationAngle: 0,
+          icon: Icon(Icons.check_circle, color: Color(0x15000000), size: 120),
+          backgroundColor: DefaultColors.successGreen,
+          message: "Loan updated successfully",
+        ),
+      );
+      Get.find<LedgerController>().fetchLoans();
+      Navigator.pop(context);
+    } catch (e) {
+      debugPrint('Error updating loan: $e');
+      final snackBar = SnackBar(
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
+
+        content: AwesomeSnackbarContent(
+          title: 'Error!',
+          message: 'Failed to update loan.',
           contentType: ContentType.failure,
         ),
       );

@@ -3,11 +3,13 @@ import 'package:byaz_track/core/extension/extensions.dart';
 class ActionButtonsSection extends StatelessWidget {
   final VoidCallback onSave;
   final VoidCallback onCancel;
+  final String? buttonText;
 
   const ActionButtonsSection({
     super.key,
     required this.onSave,
     required this.onCancel,
+    this.buttonText,
   });
 
   @override
@@ -22,7 +24,7 @@ class ActionButtonsSection extends StatelessWidget {
             size: 22,
           ),
           label: Text(
-            'Save Transaction',
+            buttonText ?? 'Save Transaction',
             style: context.text.titleMedium?.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w500,
