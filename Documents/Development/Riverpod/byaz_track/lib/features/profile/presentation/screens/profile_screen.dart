@@ -35,109 +35,127 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Profile Header
-                Row(
-                  children: [
-                    Stack(
-                      children: [
-                        const CircleAvatar(
-                          radius: 36,
-                          backgroundColor: Color(0xFFE2CCB1),
-                          child: Icon(
-                            Icons.person,
-                            size: 48,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: colorScheme.primary,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.edit,
-                              size: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                Obx(() {
+                  final user = profileController.user.value;
+                  final fullName =
+                      user?.userMetadata?['full_name'] ??
+                      user?.userMetadata?['name'] ??
+                      'User';
+                  final email = user?.email ?? 'No email';
+                  final avatarUrl =
+                      user?.userMetadata?['avatar_url'] ??
+                      user?.userMetadata?['picture'];
+
+                  return Row(
+                    children: [
+                      Stack(
                         children: [
-                          Text(
-                            'Parbat Tamang',
-                            style: context.textTheme.headlineMedium?.copyWith(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                          CircleAvatar(
+                            radius: 36,
+                            backgroundColor: const Color(0xFFE2CCB1),
+                            backgroundImage:
+                                avatarUrl != null
+                                    ? NetworkImage(avatarUrl)
+                                    : null,
+                            child:
+                                avatarUrl == null
+                                    ? const Icon(
+                                      Icons.person,
+                                      size: 48,
+                                      color: Colors.white,
+                                    )
+                                    : null,
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: colorScheme.primary,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.edit,
+                                size: 14,
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Container(
-                                width: 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                  color: colorScheme.primary,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                LanguageController.instance.isNepali
-                                    ? '9815921293'.toNepali()
-                                    : '9815921293',
-                                style: context.textTheme.bodyMedium?.copyWith(
-                                  color: colorScheme.primary,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            'ryanlama@gmail.com',
-                            style: context.textTheme.bodyMedium,
                           ),
                         ],
                       ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder:
-                              (context) => Obx(
-                                () => ConfirmationDialog(
-                                  title: 'Log Out?',
-                                  message:
-                                      'Are you sure you want to log out? You will need to sign in again to sync your data.',
-                                  confirmText: 'Log Out',
-                                  cancelText: 'Cancel',
-                                  icon: Icons.logout,
-
-                                  isLoading:
-                                      profileController.logoutState.value ==
-                                      TheStates.loading,
-                                  onConfirm: () async {
-                                    profileController.logout();
-                                  },
-                                ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              fullName,
+                              style: context.textTheme.headlineMedium?.copyWith(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
-                        );
-                      },
-                      icon: const Icon(Icons.logout),
-                    ),
-                  ],
-                ),
+                            ),
+                            const SizedBox(height: 4),
+                            // Optional: Show phone if available, else maybe a placeholder or nothing
+                            if (user?.phone != null && user!.phone!.isNotEmpty)
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 8,
+                                    height: 8,
+                                    decoration: BoxDecoration(
+                                      color: colorScheme.primary,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    LanguageController.instance.isNepali
+                                        ? user.phone!.toNepali()
+                                        : user.phone!,
+                                    style: context.textTheme.bodyMedium
+                                        ?.copyWith(
+                                          color: colorScheme.primary,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            const SizedBox(height: 4),
+                            Text(email, style: context.textTheme.bodyMedium),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => Obx(
+                                  () => ConfirmationDialog(
+                                    title: 'Log Out?',
+                                    message:
+                                        'Are you sure you want to log out? You will need to sign in again to sync your data.',
+                                    confirmText: 'Log Out',
+                                    cancelText: 'Cancel',
+                                    icon: Icons.logout,
+
+                                    isLoading:
+                                        profileController.logoutState.value ==
+                                        TheStates.loading,
+                                    onConfirm: () async {
+                                      profileController.logout();
+                                    },
+                                  ),
+                                ),
+                          );
+                        },
+                        icon: const Icon(Icons.logout),
+                      ),
+                    ],
+                  );
+                }),
                 const SizedBox(height: 48),
 
                 // PREFERENCES

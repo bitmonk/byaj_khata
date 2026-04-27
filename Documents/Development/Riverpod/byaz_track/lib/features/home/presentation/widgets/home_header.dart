@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
@@ -7,6 +8,12 @@ class HomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textColor = theme.textTheme.bodyLarge?.color;
+    final user = Supabase.instance.client.auth.currentUser;
+    final fullName =
+        user?.userMetadata?['full_name'] ??
+        user?.userMetadata?['name'] ??
+        'User';
+    final firstName = fullName.split(' ').first;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -17,7 +24,7 @@ class HomeHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Namaste, Parbat',
+                'Namaste, $firstName',
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: textColor,
