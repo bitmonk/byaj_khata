@@ -15,6 +15,7 @@ class LoanModel {
   final LedgerItemStatus loanStatus;
   final DateTime? lastCollectedDate;
   final bool isDeleted;
+  final String? userId;
 
   LoanModel({
     required this.id,
@@ -31,6 +32,7 @@ class LoanModel {
     required this.loanStatus,
     this.lastCollectedDate,
     this.isDeleted = false,
+    this.userId,
   });
 
   Map<String, dynamic> toMap() {
@@ -49,6 +51,7 @@ class LoanModel {
       'loan_status': loanStatus.name,
       'last_collected_date': lastCollectedDate?.toIso8601String(),
       'is_deleted': isDeleted ? 1 : 0,
+      'user_id': userId,
     };
   }
 
@@ -74,6 +77,7 @@ class LoanModel {
               ? DateTime.parse(map['last_collected_date'] as String)
               : null,
       isDeleted: (map['is_deleted'] as int? ?? 0) == 1,
+      userId: map['user_id'] as String?,
     );
   }
 

@@ -21,7 +21,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 7,
+      version: 9,
       onCreate: _createDB,
       onUpgrade: _upgradeDB,
     );
@@ -43,7 +43,8 @@ class DatabaseHelper {
         sync_status TEXT,
         loan_status TEXT,
         last_collected_date TEXT,
-        is_deleted INTEGER DEFAULT 0
+        is_deleted INTEGER DEFAULT 0,
+        user_id TEXT
       )
     ''');
 
@@ -55,6 +56,7 @@ class DatabaseHelper {
         payment_date TEXT,
         created_at TEXT,
         sync_status TEXT DEFAULT 'pending',
+        user_id TEXT,
         FOREIGN KEY (loan_id) REFERENCES loans (id) ON DELETE CASCADE
       )
     ''');
@@ -111,6 +113,37 @@ class DatabaseHelper {
         )
       ''');
     }
+    if (oldVersion < 7) {
+      try {
+        await db.execute(
+          "ALTER TABLE payments ADD COLUMN sync_status TEXT DEFAULT 'pending'",
+        );
+      } catch (e) {
+        print("Migration to v7: sync_status might already exist: $e");
+      }
+    }
+    if (oldVersion < 8) {
+      try {
+        await db.execute("ALTER TABLE loans ADD COLUMN user_id TEXT");
+        await db.execute("ALTER TABLE payments ADD COLUMN user_id TEXT");
+      } catch (e) {
+        print("Migration to v8: user_id might already exist: $e");
+      }
+    }
+    if (oldVersion < 9) {
+      // Fixing potential missed columns from v8 bug
+      try {
+        await db.execute("ALTER TABLE loans ADD COLUMN user_id TEXT");
+      } catch (_) {}
+      try {
+        await db.execute("ALTER TABLE payments ADD COLUMN user_id TEXT");
+      } catch (_) {}
+      try {
+        await db.execute(
+          "ALTER TABLE payments ADD COLUMN sync_status TEXT DEFAULT 'pending'",
+        );
+      } catch (_) {}
+    }
   }
 
   Future<int> deleteLoan(String loanId) async {
@@ -142,6 +175,7 @@ class DatabaseHelper {
     final db = await instance.database;
     await db.delete('loans');
     await db.delete('payments');
+    await db.delete('interest_growth');
     print("Local database cleared");
   }
 
@@ -150,7 +184,7 @@ class DatabaseHelper {
     // Ensure sync_status is set to synced since it's coming from Supabase
     final loanToInsert = Map<String, dynamic>.from(loan);
     loanToInsert['sync_status'] = 'synced';
-    
+
     return await db.insert(
       'loans',
       loanToInsert,

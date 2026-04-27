@@ -14,6 +14,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:uuid/uuid.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CreateLoanController extends GetxController {
   CreateLoanController({required this.remoteSource});
@@ -76,6 +77,7 @@ class CreateLoanController extends GetxController {
     try {
       final id = Uuid().v4();
       final now = DateTime.now();
+      final userId = Supabase.instance.client.auth.currentUser?.id;
 
       final loan = LoanModel(
         id: id,
@@ -90,6 +92,7 @@ class CreateLoanController extends GetxController {
         updatedAt: now,
         syncStatus: 'pending',
         loanStatus: LedgerItemStatus.active,
+        userId: userId,
       );
 
       final result = await db.insert('loans', loan.toMap());
@@ -145,6 +148,7 @@ class CreateLoanController extends GetxController {
 
     try {
       final now = DateTime.now();
+      final userId = Supabase.instance.client.auth.currentUser?.id;
 
       final loan = LoanModel(
         id: id,
@@ -159,6 +163,7 @@ class CreateLoanController extends GetxController {
         updatedAt: now,
         syncStatus: 'pending',
         loanStatus: loanStatus,
+        userId: userId,
       );
 
       final result = await db.update(

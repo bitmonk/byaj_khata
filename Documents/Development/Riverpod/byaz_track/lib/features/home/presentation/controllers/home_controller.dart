@@ -52,9 +52,11 @@ class HomeController extends GetxController {
     isLoading.value = true;
     try {
       final db = await DatabaseHelper.instance.database;
+      final userId = Supabase.instance.client.auth.currentUser?.id;
       final List<Map<String, dynamic>> maps = await db.query(
         'loans',
-        where: 'is_deleted = 0',
+        where: 'is_deleted = 0 AND user_id = ?',
+        whereArgs: [userId],
       );
 
       final allLoans = maps.map((m) => LoanModel.fromMap(m)).toList();
@@ -332,7 +334,9 @@ class HomeController extends GetxController {
         final map = Map<String, dynamic>.from(row);
         map.remove('sync_status');
 
-        await supabase.from('interest_growth').upsert(map);
+        await supabase
+            .from('interest_growth')
+            .upsert(map, onConflict: 'user_id,month_year');
 
         await db.update(
           'interest_growth',

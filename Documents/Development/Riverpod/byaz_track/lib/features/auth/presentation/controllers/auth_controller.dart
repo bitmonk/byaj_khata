@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:byaz_track/features/auth/data/source/auth_remote_source.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:byaz_track/features/ledger/presentation/controllers/ledger_controller.dart';
 
 class AuthController extends GetxController {
   AuthController({required this.remoteSource});
@@ -21,8 +22,14 @@ class AuthController extends GetxController {
       (l) {
         googleAuthState.value = TheStates.error;
       },
-      (r) {
+      (r) async {
         googleAuthState.value = TheStates.success;
+        try {
+          final ledgerController = Get.find<LedgerController>();
+          await ledgerController.restoreDataFromSupabase();
+        } catch (e) {
+          debugPrint('LedgerController not found or error restoring: $e');
+        }
       },
     );
   }

@@ -107,7 +107,8 @@ class _DashboardScreenState extends State<DashboardScreen>
 
         if (_navigationStack.isNotEmpty) {
           setState(() {
-            dashboardController.currentIndex.value = _navigationStack.removeLast();
+            dashboardController.currentIndex.value =
+                _navigationStack.removeLast();
             _isShowingDefaultPage = true;
             if (widget.customPages != null) {
               _pages = _defaultPages;

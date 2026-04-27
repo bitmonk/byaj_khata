@@ -7,6 +7,7 @@ import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item
 import 'package:delightful_toast/delight_toast.dart';
 import 'package:delightful_toast/toast/components/toast_card.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:byaz_track/features/ledger/data/source/ledger_remote_source.dart';
@@ -50,9 +51,14 @@ class LedgerController extends GetxController {
     try {
       fetchLoanState.value = TheStates.loading;
       final db = await DatabaseHelper.instance.database;
+      final userId = Supabase.instance.client.auth.currentUser?.id;
 
       // --- Summary Calculation ---
-      final summaryData = await db.query('loans', where: 'is_deleted = 0');
+      final summaryData = await db.query(
+        'loans',
+        where: 'is_deleted = 0 AND user_id = ?',
+        whereArgs: [userId],
+      );
       final rawLoansForSummary =
           summaryData.map((json) => LoanModel.fromMap(json)).toList();
       calculateSummaries(rawLoansForSummary);
@@ -64,8 +70,8 @@ class LedgerController extends GetxController {
         // Fetch all active loans and sort by upcoming due date
         final data = await db.query(
           'loans',
-          where: 'is_deleted = 0 AND loan_status = ?',
-          whereArgs: ['active'],
+          where: 'is_deleted = 0 AND loan_status = ? AND user_id = ?',
+          whereArgs: ['active', userId],
         );
         final allActive = data.map((json) => LoanModel.fromMap(json)).toList();
 
@@ -102,35 +108,37 @@ class LedgerController extends GetxController {
   }
 
   Map<String, dynamic> _buildWhereClause(String query) {
-    String where = 'is_deleted = 0';
-    List<dynamic> whereArgs = [];
+    final where = StringBuffer('is_deleted = 0 AND user_id = ?');
+    final List<dynamic> whereArgs = [
+      Supabase.instance.client.auth.currentUser?.id,
+    ];
 
     if (query.isNotEmpty) {
-      where += ' AND party_name LIKE ?';
-      whereArgs.add('%$query%');
+      where.write(' AND (party_name LIKE ? OR principal_amount LIKE ?)');
+      whereArgs.addAll(['%$query%', '%$query%']);
     }
 
     switch (_selectedFilter.value) {
       case 'Active':
-        where += ' AND loan_status = ?';
+        where.write(' AND loan_status = ?');
         whereArgs.add('active');
         break;
       case 'Settled':
-        where += ' AND loan_status = ?';
+        where.write(' AND loan_status = ?');
         whereArgs.add('settled');
         break;
       // 'Upcoming' is handled specially in fetchLoans
       case 'Borrowed':
-        where += ' AND transaction_type = ?';
+        where.write(' AND transaction_type = ?');
         whereArgs.add('1');
         break;
       case 'Lent':
-        where += ' AND transaction_type = ?';
+        where.write(' AND transaction_type = ?');
         whereArgs.add('0');
         break;
     }
 
-    return {'where': where, 'whereArgs': whereArgs};
+    return {'where': where.toString(), 'whereArgs': whereArgs};
   }
 
   final RxInt selectedTabIndex = 0.obs;
@@ -152,7 +160,11 @@ class LedgerController extends GetxController {
       }
 
       // 1. Sync Loans
-      final loansToSync = await db.query('loans');
+      final loansToSync = await db.query(
+        'loans',
+        where: 'user_id = ?',
+        whereArgs: [userId],
+      );
       for (final loanJson in loansToSync) {
         final loanMap = Map<String, dynamic>.from(loanJson);
         loanMap.remove('sync_status');
@@ -166,7 +178,11 @@ class LedgerController extends GetxController {
       }
 
       // 2. Sync Payments
-      final paymentsToSync = await db.query('payments');
+      final paymentsToSync = await db.query(
+        'payments',
+        where: 'user_id = ?',
+        whereArgs: [userId],
+      );
       for (final paymentJson in paymentsToSync) {
         final paymentMap = Map<String, dynamic>.from(paymentJson);
         paymentMap.remove('sync_status');
@@ -188,7 +204,9 @@ class LedgerController extends GetxController {
       for (final row in growthToSync) {
         final map = Map<String, dynamic>.from(row);
         map.remove('sync_status');
-        await supabase.from('interest_growth').upsert(map);
+        await supabase
+            .from('interest_growth')
+            .upsert(map, onConflict: 'user_id,month_year');
         await db.update(
           'interest_growth',
           {'sync_status': 'synced'},
@@ -231,6 +249,74 @@ class LedgerController extends GetxController {
   Future<void> syncPendingLoans() async {
     // Keep this for background sync if needed, or point to syncAllData
     // For now, let's keep it minimal or just call syncAllData
+  }
+
+  Future<void> restoreDataFromSupabase() async {
+    try {
+      final db = await dbHelper.database;
+      final supabase = Supabase.instance.client;
+      final userId = supabase.auth.currentUser?.id;
+
+      if (userId == null) return;
+
+      // Clear local data for this user to avoid duplicates if any
+      await db.delete('loans', where: 'user_id = ?', whereArgs: [userId]);
+      await db.delete('payments', where: 'user_id = ?', whereArgs: [userId]);
+      await db.delete(
+        'interest_growth',
+        where: 'user_id = ?',
+        whereArgs: [userId],
+      );
+
+      // 1. Fetch Loans
+      final loansData = await supabase
+          .from('loans')
+          .select()
+          .eq('user_id', userId);
+      for (final loan in loansData) {
+        final map = _prepareMapForSqlite(loan);
+        map['sync_status'] = 'synced';
+        await db.insert('loans', map);
+      }
+
+      // 2. Fetch Payments
+      final paymentsData = await supabase
+          .from('payments')
+          .select()
+          .eq('user_id', userId);
+      for (final payment in paymentsData) {
+        final map = _prepareMapForSqlite(payment);
+        map['sync_status'] = 'synced';
+        await db.insert('payments', map);
+      }
+
+      // 3. Fetch Interest Growth
+      final growthData = await supabase
+          .from('interest_growth')
+          .select()
+          .eq('user_id', userId);
+      for (final growth in growthData) {
+        final map = _prepareMapForSqlite(growth);
+        map['sync_status'] = 'synced';
+        await db.insert('interest_growth', map);
+      }
+
+      await fetchLoans();
+      debugPrint('Successfully restored data from Supabase');
+    } catch (e) {
+      debugPrint('Error restoring data: $e');
+    }
+  }
+
+  Map<String, dynamic> _prepareMapForSqlite(Map<String, dynamic> map) {
+    final newMap = Map<String, dynamic>.from(map);
+    // SQLite doesn't support bool, convert to int
+    newMap.forEach((key, value) {
+      if (value is bool) {
+        newMap[key] = value ? 1 : 0;
+      }
+    });
+    return newMap;
   }
 
   Rx<TheStates> searchLoanState = TheStates.initial.obs;

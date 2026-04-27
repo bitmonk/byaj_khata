@@ -367,7 +367,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Obx(
                         () => ProfileTileWidget(
                           leadingIcon: Icons.upload,
-                          title: 'Upload Data',
+                          title: 'Backup Data',
                           trailing:
                               ledgerController.syncState.value ==
                                       TheStates.loading
