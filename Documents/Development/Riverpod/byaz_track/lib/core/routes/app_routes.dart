@@ -9,6 +9,7 @@ import 'package:byaz_track/features/dashboard/presentation/screens/dashboard_scr
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
 import 'package:byaz_track/features/interest_details/presentation/controllers/interest_details_bindings.dart';
 import 'package:byaz_track/features/interest_details/presentation/screens/interest_details_screen.dart';
+import 'package:byaz_track/features/interest_details/presentation/screens/loan_history_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/interest_type_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/language_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/theme_screen.dart';
@@ -33,6 +34,7 @@ class AppRoutes {
   static const String createLoan = '/createLoan';
   static const String interestDetails = '/interestDetails';
   static const String notifications = '/notifications';
+  static const String loanHistory = '/loanHistory';
 
   static List<GetPage<dynamic>>? appPages = [
     GetPage(
@@ -82,6 +84,13 @@ class AppRoutes {
       name: notifications,
       page: () => const NotificationScreen(),
       binding: NotificationBindings(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutCirc,
+    ),
+    GetPage(
+      name: loanHistory,
+      page: () => const LoanHistoryScreen(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 400),
       curve: Curves.easeOutCirc,

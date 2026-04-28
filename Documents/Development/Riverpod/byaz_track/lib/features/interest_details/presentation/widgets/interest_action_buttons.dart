@@ -30,7 +30,11 @@ class InterestActionButtons extends StatelessWidget {
       children: [
         Expanded(
           child: OutlinedButton.icon(
-            onPressed: () {},
+            onPressed:
+                () => showDialog(
+                  context: context,
+                  builder: (context) => AddPaymentDialog(loan: loan),
+                ),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 18),
               side: BorderSide(color: borderColor),
@@ -40,9 +44,9 @@ class InterestActionButtons extends StatelessWidget {
               backgroundColor:
                   isDark ? theme.colorScheme.surface : Colors.white,
             ),
-            icon: Icon(Icons.share, color: darkTextColor),
+            icon: Icon(Icons.add_circle_outline, color: darkTextColor),
             label: Text(
-              'Share',
+              'Add Payment',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: darkTextColor,

@@ -170,19 +170,21 @@ class _AddPaymentDialogState extends State<AddPaymentDialog> {
                             controller.addPaymentState.value ==
                                     TheStates.loading
                                 ? null
-                                : () {
+                                : () async {
                                   if (_formKey.currentState!.validate()) {
                                     final amount = double.tryParse(
                                       _amountController.text.trim(),
                                     );
                                     if (amount != null) {
-                                      controller.addPayment(
+                                      await controller.addPayment(
                                         loanId: widget.loan.id,
                                         amount: amount,
                                         date: _selectedDate.toDateTime(),
                                         context: context,
                                       );
-                                      Navigator.pop(context);
+                                      if (mounted) {
+                                        Navigator.pop(context);
+                                      }
                                     }
                                   }
                                 },

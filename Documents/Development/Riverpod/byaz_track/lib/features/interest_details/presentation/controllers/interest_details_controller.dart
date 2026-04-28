@@ -95,6 +95,8 @@ class InterestDetailsController extends GetxController {
   RxList<PaymentModel> payments = <PaymentModel>[].obs;
   Rx<TheStates> addPaymentState = TheStates.initial.obs;
 
+  double get totalPaid => payments.fold(0.0, (sum, item) => sum + item.amount);
+
   Future<void> addPayment({
     required String loanId,
     required double amount,
@@ -166,6 +168,7 @@ class InterestDetailsController extends GetxController {
 
       if (maps.isNotEmpty) {
         selectedLoan.value = LoanModel.fromMap(maps.first);
+        await fetchPayments(loanId);
         fetchLoanState.value = TheStates.success;
       } else {
         fetchLoanState.value = TheStates.error;

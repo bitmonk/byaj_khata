@@ -52,6 +52,8 @@ class _InterestDetailsScreenState extends State<InterestDetailsScreen> {
                   if (widget.loanId != null) {
                     interestDetailsController.fetchLoan(widget.loanId!);
                   }
+                } else if (result == 'History') {
+                  Get.toNamed(AppRoutes.loanHistory);
                 }
               },
               itemBuilder:
@@ -59,6 +61,16 @@ class _InterestDetailsScreenState extends State<InterestDetailsScreen> {
                     const PopupMenuItem<String>(
                       value: 'edit',
                       child: Text('Edit Loan'),
+                    ),
+                    const PopupMenuDivider(),
+                    const PopupMenuItem<String>(
+                      value: 'Share',
+                      child: Text('Share Loan'),
+                    ),
+                    const PopupMenuDivider(),
+                    const PopupMenuItem<String>(
+                      value: 'History',
+                      child: Text('History'),
                     ),
 
                     const PopupMenuDivider(),
