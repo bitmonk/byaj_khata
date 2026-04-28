@@ -14,6 +14,8 @@ import 'package:byaz_track/features/profile/presentation/screens/language_screen
 import 'package:byaz_track/features/profile/presentation/screens/theme_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/compound_frequency_screen.dart';
 import 'package:byaz_track/features/profile/presentation/screens/default_rate_screen.dart';
+import 'package:byaz_track/features/notifications/presentation/controllers/notification_bindings.dart';
+import 'package:byaz_track/features/notifications/presentation/screens/notification_screen.dart';
 import 'package:byaz_track/features/splash/presentation/controllers/splash_bindings.dart';
 import 'package:byaz_track/features/splash/presentation/screens/splash_screen.dart';
 import 'package:get/get.dart';
@@ -30,6 +32,7 @@ class AppRoutes {
   static const String defaultRate = '/defaultRate';
   static const String createLoan = '/createLoan';
   static const String interestDetails = '/interestDetails';
+  static const String notifications = '/notifications';
 
   static List<GetPage<dynamic>>? appPages = [
     GetPage(
@@ -73,6 +76,14 @@ class AppRoutes {
       binding: InterestDetailsBindings(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 500),
+      curve: Curves.easeOutCirc,
+    ),
+    GetPage(
+      name: notifications,
+      page: () => const NotificationScreen(),
+      binding: NotificationBindings(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
       curve: Curves.easeOutCirc,
     ),
   ];

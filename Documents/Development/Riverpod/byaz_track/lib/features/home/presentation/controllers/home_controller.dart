@@ -174,6 +174,51 @@ class HomeController extends GetxController {
       await _saveInterestGrowth(spots1y);
       await syncInterestGrowth();
 
+      // --- Growth Calculation ---
+      final now = DateTime.now();
+      final lastMonthEnd = DateTime(now.year, now.month, 0);
+
+      double previousLending = 0;
+      double previousBorrowing = 0;
+
+      for (var loan in allLoans) {
+        // Was it active at the end of last month?
+        bool wasActive = loan.startDate.isBefore(
+          lastMonthEnd.add(const Duration(days: 1)),
+        );
+        if (loan.loanStatus == LedgerItemStatus.settled &&
+            loan.lastCollectedDate != null &&
+            loan.lastCollectedDate!.isBefore(
+              lastMonthEnd.add(const Duration(days: 1)),
+            )) {
+          wasActive = false;
+        }
+
+        if (wasActive) {
+          if (loan.transactionType == '0') {
+            previousLending += loan.principalAmount;
+          } else {
+            previousBorrowing += loan.principalAmount;
+          }
+        }
+      }
+
+      double lendingGrowth = 0;
+      if (previousLending > 0) {
+        lendingGrowth =
+            ((totalLending - previousLending) / previousLending) * 100;
+      } else if (totalLending > 0) {
+        lendingGrowth = 100.0;
+      }
+
+      double borrowingGrowth = 0;
+      if (previousBorrowing > 0) {
+        borrowingGrowth =
+            ((totalBorrowing - previousBorrowing) / previousBorrowing) * 100;
+      } else if (totalBorrowing > 0) {
+        borrowingGrowth = 100.0;
+      }
+
       stats.value = HomeStats(
         totalLending: totalLending,
         totalBorrowing: totalBorrowing,
@@ -181,12 +226,13 @@ class HomeController extends GetxController {
         monthlyIncome: totalMonthlyInterest,
         avgRate: avgRate,
         nextCollection: nextCollectionStr,
-        lendingGrowth: 2.1,
-        borrowingGrowth: -1.5,
+        lendingGrowth: lendingGrowth,
+        borrowingGrowth: borrowingGrowth,
         upcomingCollections: upcomingList,
         chartSpots6m: spots6m,
         chartSpots1y: spots1y,
       );
+      print('stats.value: ${stats.value.netBalance}');
     } catch (e) {
       print('Error fetching home stats: $e');
     } finally {

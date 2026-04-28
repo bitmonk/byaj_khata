@@ -99,8 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             title: 'Lending',
                             amount:
                                 'रू ${(stats.totalLending / 1000).toStringAsFixed(1)}K',
-                            percentage: '+${stats.lendingGrowth}%',
-                            isPositive: true,
+                            percentage:
+                                '${stats.lendingGrowth >= 0 ? '+' : ''}${stats.lendingGrowth.toStringAsFixed(1)}%',
+                            isPositive: stats.lendingGrowth >= 0,
                             icon: Icons.call_made,
                           ),
                         ),
@@ -110,8 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             title: 'Borrowing',
                             amount:
                                 'रू ${(stats.totalBorrowing / 1000).toStringAsFixed(1)}K',
-                            percentage: '${stats.borrowingGrowth}%',
-                            isPositive: false,
+                            percentage:
+                                '${stats.borrowingGrowth >= 0 ? '+' : ''}${stats.borrowingGrowth.toStringAsFixed(1)}%',
+                            // For borrowing, increasing debt (+) is usually considered "negative" progress (red)
+                            // while decreasing debt (-) is "positive" progress (green).
+                            // But usually growth charts just follow the sign.
+                            // Let's follow the sign for consistency with "Lending".
+                            isPositive: stats.borrowingGrowth <= 0,
                             icon: Icons.call_received,
                           ),
                         ),

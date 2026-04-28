@@ -6,6 +6,7 @@ import 'package:byaz_track/features/create_loan/presentation/screens/create_loan
 import 'package:byaz_track/features/calculator/presentation/controllers/calculator_controller.dart';
 import 'package:byaz_track/features/calculator/presentation/screens/calculator_screen.dart';
 import 'package:byaz_track/features/dashboard/presentation/controllers/dashboard_controller.dart';
+import 'package:byaz_track/features/home/presentation/controllers/home_controller.dart';
 import 'package:byaz_track/features/home/presentation/screens/home_screen.dart';
 import 'package:byaz_track/features/ledger/presentation/controllers/ledger_bindings.dart';
 import 'package:byaz_track/features/ledger/presentation/screens/ledger_screen.dart';
@@ -62,6 +63,12 @@ class _DashboardScreenState extends State<DashboardScreen>
   void onItemTapped(int index) {
     if (dashboardController.currentIndex.value == index) {
       return;
+    }
+
+    if (dashboardController.currentIndex.value == 1) {
+      final controller = Get.find<HomeController>();
+      controller.fetchStats();
+      print('tapped');
     }
 
     _navigationStack.add(dashboardController.currentIndex.value);

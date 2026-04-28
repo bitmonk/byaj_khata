@@ -4,6 +4,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:byaz_track/core/db/database_helper.dart';
 import 'package:byaz_track/core/extension/extensions.dart';
 import 'package:byaz_track/features/create_loan/data/model/loan_model.dart';
+import 'package:byaz_track/features/home/presentation/controllers/home_controller.dart';
 import 'package:byaz_track/features/ledger/presentation/controllers/ledger_controller.dart';
 import 'package:byaz_track/features/ledger/presentation/widgets/ledger_list_item_card.dart';
 import 'package:fast_contacts/fast_contacts.dart';
@@ -108,6 +109,7 @@ class CreateLoanController extends GetxController {
         ),
       );
       Get.find<LedgerController>().fetchLoans();
+      Get.find<HomeController>().fetchStats();
       Navigator.pop(context);
     } catch (e) {
       debugPrint('Error inserting loan: $e');
@@ -184,6 +186,7 @@ class CreateLoanController extends GetxController {
         ),
       );
       Get.find<LedgerController>().fetchLoans();
+      Get.find<HomeController>().fetchStats();
       Navigator.pop(context);
     } catch (e) {
       debugPrint('Error updating loan: $e');

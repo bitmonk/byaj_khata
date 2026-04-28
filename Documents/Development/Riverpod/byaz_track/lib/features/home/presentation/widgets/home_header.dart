@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:byaz_track/core/routes/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeHeader extends StatelessWidget {
@@ -50,7 +52,9 @@ class HomeHeader extends StatelessWidget {
             ),
           ),
           child: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.toNamed(AppRoutes.notifications);
+            },
             icon: Icon(
               Icons.notifications_none,
               color: theme.iconTheme.color,

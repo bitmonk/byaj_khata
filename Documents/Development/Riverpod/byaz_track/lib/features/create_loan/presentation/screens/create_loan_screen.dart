@@ -6,6 +6,7 @@ import 'package:byaz_track/features/create_loan/presentation/screens/widgets/sta
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/interest_rate_type_section.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/action_buttons_section.dart';
 import 'package:byaz_track/features/create_loan/presentation/screens/widgets/contact_list_bottom_sheet.dart';
+import 'package:byaz_track/features/home/presentation/controllers/home_controller.dart';
 
 class CreateLoanScreen extends StatefulWidget {
   final LoanModel? loan;
@@ -161,7 +162,8 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
                             createLoanController.principalAmountController.text,
                           ),
                           startDate:
-                              createLoanController.startDate.value!.toDateTime(),
+                              createLoanController.startDate.value!
+                                  .toDateTime(),
                           interestType:
                               createLoanController.interestRateType.value
                                   .toString(),
@@ -184,7 +186,8 @@ class _CreateLoanScreenState extends State<CreateLoanScreen> {
                             createLoanController.principalAmountController.text,
                           ),
                           startDate:
-                              createLoanController.startDate.value!.toDateTime(),
+                              createLoanController.startDate.value!
+                                  .toDateTime(),
                           interestType:
                               createLoanController.interestRateType.value
                                   .toString(),
