@@ -227,6 +227,8 @@ class _InterestGrowthChartState extends State<InterestGrowthChart> {
                       LineChartBarData(
                         spots: spots,
                         isCurved: true,
+                        preventCurveOverShooting: true,
+                        // curveSmoothness: 0.6,
                         gradient: LinearGradient(
                           colors: [lineColorStart, lineColorEnd],
                         ),

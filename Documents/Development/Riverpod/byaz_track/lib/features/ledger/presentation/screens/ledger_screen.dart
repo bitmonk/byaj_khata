@@ -55,9 +55,15 @@ class _LedgerScreenState extends State<LedgerScreen> {
                     const LedgerHeader(),
                     const VerticalSpacing(16),
                     AppTextFormField(
-                      contentPadding: EdgeInsets.all(12),
-                      hintText: 'Search borrower or lender...',
-                      prefixIcon: const Icon(Icons.person_search_outlined),
+                      // contentPadding: EdgeInsets.all(16),
+                      labelText: 'Search borrower or lender...',
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 12,
+                          // right: 8,
+                        ),
+                        child: const Icon(Icons.person_search, size: 26),
+                      ),
                       onChanged: (value) {
                         ledgerController.searchLoan(value);
                       },
